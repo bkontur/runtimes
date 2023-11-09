@@ -397,10 +397,10 @@ dependencies = [
  "cumulus-pallet-xcmp-queue",
  "cumulus-primitives-core",
  "cumulus-primitives-utility",
- "frame-benchmarking",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "frame-executive",
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "frame-system-benchmarking",
  "frame-system-rpc-runtime-api",
  "frame-try-runtime",
@@ -422,7 +422,7 @@ dependencies = [
  "pallet-session",
  "pallet-state-trie-migration",
  "pallet-timestamp",
- "pallet-transaction-payment",
+ "pallet-transaction-payment 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "pallet-transaction-payment-rpc-runtime-api",
  "pallet-uniques",
  "pallet-utility",
@@ -430,29 +430,29 @@ dependencies = [
  "pallet-xcm-benchmarks",
  "parachains-common",
  "parity-scale-codec",
- "polkadot-core-primitives",
- "polkadot-parachain-primitives",
+ "polkadot-core-primitives 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "polkadot-parachain-primitives 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "polkadot-runtime-common",
  "primitive-types",
  "scale-info",
  "smallvec",
- "sp-api",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-block-builder",
  "sp-consensus-aura",
- "sp-core",
- "sp-inherents",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-inherents 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-offchain",
- "sp-runtime",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-session",
- "sp-std",
- "sp-storage",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-storage 15.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-transaction-pool",
- "sp-version",
- "sp-weights",
+ "sp-version 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-weights 22.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "staging-parachain-info",
- "staging-xcm",
- "staging-xcm-builder",
- "staging-xcm-executor",
+ "staging-xcm 2.0.0",
+ "staging-xcm-builder 2.0.1 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "staging-xcm-executor 2.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
  "substrate-wasm-builder",
 ]
 
@@ -470,10 +470,10 @@ dependencies = [
  "cumulus-pallet-xcmp-queue",
  "cumulus-primitives-core",
  "cumulus-primitives-utility",
- "frame-benchmarking",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "frame-executive",
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "frame-system-benchmarking",
  "frame-system-rpc-runtime-api",
  "frame-try-runtime",
@@ -491,7 +491,7 @@ dependencies = [
  "pallet-proxy",
  "pallet-session",
  "pallet-timestamp",
- "pallet-transaction-payment",
+ "pallet-transaction-payment 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "pallet-transaction-payment-rpc-runtime-api",
  "pallet-uniques",
  "pallet-utility",
@@ -499,29 +499,29 @@ dependencies = [
  "pallet-xcm-benchmarks",
  "parachains-common",
  "parity-scale-codec",
- "polkadot-core-primitives",
- "polkadot-parachain-primitives",
+ "polkadot-core-primitives 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "polkadot-parachain-primitives 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "polkadot-runtime-common",
  "polkadot-runtime-constants 1.0.0",
  "scale-info",
  "smallvec",
- "sp-api",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-block-builder",
  "sp-consensus-aura",
- "sp-core",
- "sp-inherents",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-inherents 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-offchain",
- "sp-runtime",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-session",
- "sp-std",
- "sp-storage",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-storage 15.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-transaction-pool",
- "sp-version",
- "sp-weights",
+ "sp-version 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-weights 22.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "staging-parachain-info",
- "staging-xcm",
- "staging-xcm-builder",
- "staging-xcm-executor",
+ "staging-xcm 2.0.0",
+ "staging-xcm-builder 2.0.1 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "staging-xcm-executor 2.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
  "substrate-wasm-builder",
 ]
 
@@ -538,8 +538,8 @@ dependencies = [
  "cumulus-primitives-core",
  "cumulus-primitives-parachain-inherent",
  "cumulus-test-relay-sproof-builder",
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "pallet-assets",
  "pallet-balances",
  "pallet-collator-selection",
@@ -548,15 +548,15 @@ dependencies = [
  "parachains-common",
  "parachains-runtimes-test-utils",
  "parity-scale-codec",
- "polkadot-parachain-primitives",
+ "polkadot-parachain-primitives 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-consensus-aura",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "staging-parachain-info",
- "staging-xcm",
- "staging-xcm-executor",
+ "staging-xcm 2.0.1",
+ "staging-xcm-executor 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "substrate-wasm-builder",
 ]
 
@@ -567,7 +567,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "29b1f6400a746207ff6e077b13103427c646914d49cc459977090a966908ff91"
 dependencies = [
  "cumulus-primitives-core",
- "frame-support",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "impl-trait-for-tuples",
  "log",
  "pallet-asset-conversion",
@@ -576,12 +576,12 @@ dependencies = [
  "parachains-common",
  "parity-scale-codec",
  "scale-info",
- "sp-api",
- "sp-runtime",
- "sp-std",
- "staging-xcm",
- "staging-xcm-builder",
- "staging-xcm-executor",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "staging-xcm 2.0.1",
+ "staging-xcm-builder 2.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "staging-xcm-executor 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "substrate-wasm-builder",
 ]
 
@@ -937,11 +937,11 @@ dependencies = [
  "bp-messages",
  "bp-polkadot-core",
  "bp-runtime",
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "polkadot-primitives",
- "sp-api",
- "sp-std",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -953,10 +953,10 @@ dependencies = [
  "bp-bridge-hub-cumulus",
  "bp-messages",
  "bp-runtime",
- "frame-support",
- "sp-api",
- "sp-runtime",
- "sp-std",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -968,10 +968,10 @@ dependencies = [
  "bp-bridge-hub-cumulus",
  "bp-messages",
  "bp-runtime",
- "frame-support",
- "sp-api",
- "sp-runtime",
- "sp-std",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -982,14 +982,14 @@ checksum = "842dd43f5229669efb74cdc909c0e9315a7cdbe4513b6225dc0ab0ec21e4a1b8"
 dependencies = [
  "bp-runtime",
  "finality-grandpa",
- "frame-support",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "parity-scale-codec",
  "scale-info",
  "serde",
  "sp-consensus-grandpa",
- "sp-core",
- "sp-runtime",
- "sp-std",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -1000,12 +1000,12 @@ checksum = "deb9128928257331dfb41c4c283549a7795447ca5dc5bc5b6753ee6118912651"
 dependencies = [
  "bp-header-chain",
  "bp-runtime",
- "frame-support",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "parity-scale-codec",
  "scale-info",
  "serde",
- "sp-core",
- "sp-std",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -1017,13 +1017,13 @@ dependencies = [
  "bp-header-chain",
  "bp-polkadot-core",
  "bp-runtime",
- "frame-support",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "impl-trait-for-tuples",
  "parity-scale-codec",
  "scale-info",
- "sp-core",
- "sp-runtime",
- "sp-std",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -1034,15 +1034,15 @@ checksum = "953c2ec80269860053085ac259da9ed7b1ad3b8985435255f7635000dbd3c440"
 dependencies = [
  "bp-messages",
  "bp-runtime",
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "parity-scale-codec",
  "parity-util-mem",
  "scale-info",
  "serde",
- "sp-core",
- "sp-runtime",
- "sp-std",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -1053,11 +1053,11 @@ checksum = "0d4c6316868f49602c4a011d850444181d2f1b837a238214f1e287a0e6d74710"
 dependencies = [
  "bp-messages",
  "bp-runtime",
- "frame-support",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "parity-scale-codec",
  "scale-info",
- "sp-runtime",
- "sp-std",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -1066,8 +1066,8 @@ version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6356e28b2d80b622e95914d130db0a4a9d2deb27863930228eb53b29bc6f28a5"
 dependencies = [
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "hash-db",
  "impl-trait-for-tuples",
  "log",
@@ -1075,12 +1075,12 @@ dependencies = [
  "parity-scale-codec",
  "scale-info",
  "serde",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-state-machine",
- "sp-std",
- "sp-trie",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-state-machine 0.30.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-trie 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "trie-db",
 ]
 
@@ -1097,12 +1097,12 @@ dependencies = [
  "ed25519-dalek 1.0.1",
  "finality-grandpa",
  "parity-scale-codec",
- "sp-application-crypto",
+ "sp-application-crypto 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-consensus-grandpa",
- "sp-core",
- "sp-runtime",
- "sp-std",
- "sp-trie",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-trie 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -1113,8 +1113,8 @@ checksum = "07e48a83f01c1469df3803773535052444c25ac050b070b1c18b48a378d913c8"
 dependencies = [
  "parity-scale-codec",
  "scale-info",
- "sp-core",
- "sp-runtime",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -1130,10 +1130,10 @@ dependencies = [
  "cumulus-pallet-xcmp-queue",
  "cumulus-primitives-core",
  "cumulus-primitives-utility",
- "frame-benchmarking",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "frame-executive",
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "frame-system-benchmarking",
  "frame-system-rpc-runtime-api",
  "frame-try-runtime",
@@ -1147,36 +1147,36 @@ dependencies = [
  "pallet-multisig",
  "pallet-session",
  "pallet-timestamp",
- "pallet-transaction-payment",
+ "pallet-transaction-payment 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "pallet-transaction-payment-rpc-runtime-api",
  "pallet-utility",
  "pallet-xcm",
  "pallet-xcm-benchmarks",
  "parachains-common",
  "parity-scale-codec",
- "polkadot-core-primitives",
- "polkadot-parachain-primitives",
+ "polkadot-core-primitives 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "polkadot-parachain-primitives 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "polkadot-runtime-common",
  "scale-info",
  "serde",
  "smallvec",
- "sp-api",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-block-builder",
  "sp-consensus-aura",
- "sp-core",
- "sp-inherents",
- "sp-io",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-inherents 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-offchain",
- "sp-runtime",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-session",
- "sp-std",
- "sp-storage",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-storage 15.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-transaction-pool",
- "sp-version",
+ "sp-version 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "staging-parachain-info",
- "staging-xcm",
- "staging-xcm-builder",
- "staging-xcm-executor",
+ "staging-xcm 2.0.0",
+ "staging-xcm-builder 2.0.1 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "staging-xcm-executor 2.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
  "substrate-wasm-builder",
 ]
 
@@ -1193,10 +1193,10 @@ dependencies = [
  "cumulus-pallet-xcmp-queue",
  "cumulus-primitives-core",
  "cumulus-primitives-utility",
- "frame-benchmarking",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "frame-executive",
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "frame-system-benchmarking",
  "frame-system-rpc-runtime-api",
  "frame-try-runtime",
@@ -1209,37 +1209,37 @@ dependencies = [
  "pallet-multisig",
  "pallet-session",
  "pallet-timestamp",
- "pallet-transaction-payment",
+ "pallet-transaction-payment 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "pallet-transaction-payment-rpc-runtime-api",
  "pallet-utility",
  "pallet-xcm",
  "pallet-xcm-benchmarks",
  "parachains-common",
  "parity-scale-codec",
- "polkadot-core-primitives",
- "polkadot-parachain-primitives",
+ "polkadot-core-primitives 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "polkadot-parachain-primitives 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "polkadot-runtime-common",
  "polkadot-runtime-constants 1.0.0",
  "scale-info",
  "serde",
  "smallvec",
- "sp-api",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-block-builder",
  "sp-consensus-aura",
- "sp-core",
- "sp-inherents",
- "sp-io",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-inherents 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-offchain",
- "sp-runtime",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-session",
- "sp-std",
- "sp-storage",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-storage 15.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-transaction-pool",
- "sp-version",
+ "sp-version 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "staging-parachain-info",
- "staging-xcm",
- "staging-xcm-builder",
- "staging-xcm-executor",
+ "staging-xcm 2.0.0",
+ "staging-xcm-builder 2.0.1 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "staging-xcm-executor 2.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
  "substrate-wasm-builder",
 ]
 
@@ -1264,10 +1264,10 @@ dependencies = [
  "cumulus-pallet-dmp-queue",
  "cumulus-pallet-parachain-system",
  "cumulus-pallet-xcmp-queue",
- "frame-benchmarking",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "frame-executive",
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "pallet-balances",
  "pallet-bridge-grandpa",
@@ -1282,14 +1282,14 @@ dependencies = [
  "parachains-common",
  "parachains-runtimes-test-utils",
  "parity-scale-codec",
- "sp-core",
- "sp-io",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-keyring",
- "sp-runtime",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "staging-parachain-info",
- "staging-xcm",
- "staging-xcm-builder",
- "staging-xcm-executor",
+ "staging-xcm 2.0.1",
+ "staging-xcm-builder 2.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "staging-xcm-executor 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -1305,26 +1305,26 @@ dependencies = [
  "bp-relayers",
  "bp-runtime",
  "bp-xcm-bridge-hub-router",
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "hash-db",
  "log",
  "pallet-bridge-grandpa",
  "pallet-bridge-messages",
  "pallet-bridge-parachains",
  "pallet-bridge-relayers",
- "pallet-transaction-payment",
+ "pallet-transaction-payment 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "pallet-utility",
  "parity-scale-codec",
  "scale-info",
- "sp-api",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
- "sp-trie",
- "staging-xcm",
- "staging-xcm-builder",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-trie 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "staging-xcm 2.0.1",
+ "staging-xcm-builder 2.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -1666,10 +1666,10 @@ dependencies = [
  "cumulus-pallet-xcmp-queue",
  "cumulus-primitives-core",
  "cumulus-primitives-utility",
- "frame-benchmarking",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "frame-executive",
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "frame-system-benchmarking",
  "frame-system-rpc-runtime-api",
  "frame-try-runtime",
@@ -1691,36 +1691,36 @@ dependencies = [
  "pallet-scheduler",
  "pallet-session",
  "pallet-timestamp",
- "pallet-transaction-payment",
+ "pallet-transaction-payment 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "pallet-transaction-payment-rpc-runtime-api",
  "pallet-utility",
  "pallet-xcm",
  "parachains-common",
  "parity-scale-codec",
- "polkadot-core-primitives",
- "polkadot-parachain-primitives",
+ "polkadot-core-primitives 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "polkadot-parachain-primitives 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "polkadot-runtime-common",
  "polkadot-runtime-constants 1.0.0",
  "scale-info",
  "smallvec",
- "sp-api",
- "sp-arithmetic",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-arithmetic 18.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-block-builder",
  "sp-consensus-aura",
- "sp-core",
- "sp-inherents",
- "sp-io",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-inherents 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-offchain",
- "sp-runtime",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-session",
- "sp-std",
- "sp-storage",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-storage 15.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-transaction-pool",
- "sp-version",
+ "sp-version 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "staging-parachain-info",
- "staging-xcm",
- "staging-xcm-builder",
- "staging-xcm-executor",
+ "staging-xcm 2.0.0",
+ "staging-xcm-builder 2.0.1 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "staging-xcm-executor 2.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
  "substrate-wasm-builder",
 ]
 
@@ -2108,16 +2108,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ffc007c63cdec6ce1f8e51cb98cce4631889881b9b9b763823164d362621afa0"
 dependencies = [
  "cumulus-pallet-parachain-system",
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "pallet-aura",
  "pallet-timestamp",
  "parity-scale-codec",
  "scale-info",
- "sp-application-crypto",
+ "sp-application-crypto 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-consensus-aura",
- "sp-runtime",
- "sp-std",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -2127,15 +2127,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "320bbaf34d68a20f48c20b751df15aad015d43f8089994761ff0234cdfc40e9a"
 dependencies = [
  "cumulus-primitives-core",
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "parity-scale-codec",
  "scale-info",
- "sp-io",
- "sp-runtime",
- "sp-std",
- "staging-xcm",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "staging-xcm 2.0.1",
 ]
 
 [[package]]
@@ -2149,23 +2149,23 @@ dependencies = [
  "cumulus-primitives-core",
  "cumulus-primitives-parachain-inherent",
  "environmental",
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "impl-trait-for-tuples",
  "log",
  "parity-scale-codec",
- "polkadot-parachain-primitives",
+ "polkadot-parachain-primitives 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "scale-info",
- "sp-core",
- "sp-externalities",
- "sp-inherents",
- "sp-io",
- "sp-runtime",
- "sp-state-machine",
- "sp-std",
- "sp-trie",
- "sp-version",
- "staging-xcm",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-externalities 0.21.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-inherents 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-state-machine 0.30.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-trie 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-version 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "staging-xcm 2.0.1",
  "trie-db",
 ]
 
@@ -2187,13 +2187,13 @@ version = "4.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2c5345c0370ae667404209f674b0d1e40c6a476ba4d8fce2cd645fa224394d35"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "pallet-session",
  "parity-scale-codec",
- "sp-runtime",
- "sp-std",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -2203,14 +2203,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "45dc968dcf8a41f72b1035f1ba1dc43d3577192e612bf4f19bbc6c34b73c8a1a"
 dependencies = [
  "cumulus-primitives-core",
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "parity-scale-codec",
  "scale-info",
- "sp-io",
- "sp-runtime",
- "sp-std",
- "staging-xcm",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "staging-xcm 2.0.1",
 ]
 
 [[package]]
@@ -2220,19 +2220,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b4c6c8e354bcfc7ca04f316e1d4ef8e33b17efaae8f15af3ed8d360fb2bf0589"
 dependencies = [
  "cumulus-primitives-core",
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "parity-scale-codec",
  "polkadot-runtime-common",
  "rand_chacha 0.3.1",
  "scale-info",
- "sp-io",
- "sp-runtime",
- "sp-std",
- "staging-xcm",
- "staging-xcm-executor",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "staging-xcm 2.0.1",
+ "staging-xcm-executor 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -2242,15 +2242,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "63861b6bfd937c5eaf60058147c036caf07c4462d3f5098af24a4a757b64fe29"
 dependencies = [
  "parity-scale-codec",
- "polkadot-core-primitives",
- "polkadot-parachain-primitives",
+ "polkadot-core-primitives 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "polkadot-parachain-primitives 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "polkadot-primitives",
  "scale-info",
- "sp-api",
- "sp-runtime",
- "sp-std",
- "sp-trie",
- "staging-xcm",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-trie 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "staging-xcm 2.0.1",
 ]
 
 [[package]]
@@ -2266,14 +2266,14 @@ dependencies = [
  "parity-scale-codec",
  "sc-client-api",
  "scale-info",
- "sp-api",
- "sp-core",
- "sp-inherents",
- "sp-runtime",
- "sp-state-machine",
- "sp-std",
- "sp-storage",
- "sp-trie",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-inherents 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-state-machine 0.30.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-storage 15.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-trie 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "tracing",
 ]
 
@@ -2284,16 +2284,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6e444b76437537a1e045b3d5e20b10117389eb865c60ce044c88dfd59261bff2"
 dependencies = [
  "cumulus-primitives-core",
- "frame-support",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "parity-scale-codec",
  "polkadot-runtime-common",
- "sp-io",
- "sp-runtime",
- "sp-std",
- "staging-xcm",
- "staging-xcm-builder",
- "staging-xcm-executor",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "staging-xcm 2.0.1",
+ "staging-xcm-builder 2.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "staging-xcm-executor 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -2309,9 +2309,9 @@ dependencies = [
  "parity-scale-codec",
  "polkadot-overseer",
  "sc-client-api",
- "sp-api",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-blockchain",
- "sp-state-machine",
+ "sp-state-machine 0.30.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "thiserror",
 ]
 
@@ -2324,10 +2324,10 @@ dependencies = [
  "cumulus-primitives-core",
  "parity-scale-codec",
  "polkadot-primitives",
- "sp-runtime",
- "sp-state-machine",
- "sp-std",
- "sp-trie",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-state-machine 0.30.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-trie 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -3271,23 +3271,48 @@ version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "949ba5b5c9d552c37d7ad39bd837394c1d21727281ef32882539bc2ec6687b2d"
 dependencies = [
- "frame-support",
- "frame-support-procedural",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support-procedural 18.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "linregress",
  "log",
  "parity-scale-codec",
  "paste",
  "scale-info",
  "serde",
- "sp-api",
- "sp-application-crypto",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-runtime-interface",
- "sp-std",
- "sp-storage",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-application-crypto 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime-interface 19.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-storage 15.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "static_assertions",
+]
+
+[[package]]
+name = "frame-benchmarking"
+version = "23.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "frame-support 23.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "frame-support-procedural 18.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "frame-system 23.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "linregress",
+ "log",
+ "parity-scale-codec",
+ "paste",
+ "scale-info",
+ "serde",
+ "sp-api 21.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-application-crypto 25.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-core 23.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-io 25.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-runtime 26.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-runtime-interface 19.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-std 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-storage 15.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
  "static_assertions",
 ]
 
@@ -3310,15 +3335,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e605b5c5ce6abeba8db09dda9ad74a6d781e5c5e722670096df48917f0a33d26"
 dependencies = [
  "frame-election-provider-solution-type",
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "parity-scale-codec",
  "scale-info",
- "sp-arithmetic",
- "sp-core",
+ "sp-arithmetic 18.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-npos-elections",
- "sp-runtime",
- "sp-std",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -3327,17 +3352,17 @@ version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "382016f6286f2b05a1f65dd97509bc70afd59e26dc8c7ab0126e4220c19abb58"
 dependencies = [
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "frame-try-runtime",
  "log",
  "parity-scale-codec",
  "scale-info",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
- "sp-tracing",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-tracing 12.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -3365,10 +3390,10 @@ dependencies = [
  "log",
  "parity-scale-codec",
  "serde",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-state-machine",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-state-machine 0.30.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "spinners",
  "substrate-rpc-client",
  "tokio",
@@ -3386,7 +3411,7 @@ dependencies = [
  "docify",
  "environmental",
  "frame-metadata",
- "frame-support-procedural",
+ "frame-support-procedural 18.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "impl-trait-for-tuples",
  "k256",
  "log",
@@ -3397,21 +3422,61 @@ dependencies = [
  "serde",
  "serde_json",
  "smallvec",
- "sp-api",
- "sp-arithmetic",
- "sp-core",
- "sp-core-hashing-proc-macro",
- "sp-debug-derive",
- "sp-genesis-builder",
- "sp-inherents",
- "sp-io",
- "sp-metadata-ir",
- "sp-runtime",
- "sp-staking",
- "sp-state-machine",
- "sp-std",
- "sp-tracing",
- "sp-weights",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-arithmetic 18.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core-hashing-proc-macro 11.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-debug-derive 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-genesis-builder 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-inherents 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-metadata-ir 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-staking 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-state-machine 0.30.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-tracing 12.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-weights 22.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "static_assertions",
+ "tt-call",
+]
+
+[[package]]
+name = "frame-support"
+version = "23.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "aquamarine",
+ "bitflags 1.3.2",
+ "docify",
+ "environmental",
+ "frame-metadata",
+ "frame-support-procedural 18.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "impl-trait-for-tuples",
+ "k256",
+ "log",
+ "macro_magic",
+ "parity-scale-codec",
+ "paste",
+ "scale-info",
+ "serde",
+ "serde_json",
+ "smallvec",
+ "sp-api 21.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-arithmetic 18.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-core 23.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-core-hashing-proc-macro 11.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-debug-derive 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-genesis-builder 0.2.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-inherents 21.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-io 25.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-metadata-ir 0.2.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-runtime 26.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-staking 21.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-state-machine 0.30.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-std 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-tracing 12.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-weights 22.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
  "static_assertions",
  "tt-call",
 ]
@@ -3426,7 +3491,25 @@ dependencies = [
  "cfg-expr",
  "derive-syn-parse",
  "expander 2.0.0",
- "frame-support-procedural-tools",
+ "frame-support-procedural-tools 7.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "itertools",
+ "macro_magic",
+ "proc-macro-warning",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.31",
+]
+
+[[package]]
+name = "frame-support-procedural"
+version = "18.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "Inflector",
+ "cfg-expr",
+ "derive-syn-parse",
+ "expander 2.0.0",
+ "frame-support-procedural-tools 7.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
  "itertools",
  "macro_magic",
  "proc-macro-warning",
@@ -3441,7 +3524,19 @@ version = "7.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "82858452d9332de312f5ff411fd8aecee2323a344b241078f565b8c3c2e47d38"
 dependencies = [
- "frame-support-procedural-tools-derive",
+ "frame-support-procedural-tools-derive 8.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "proc-macro-crate",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.31",
+]
+
+[[package]]
+name = "frame-support-procedural-tools"
+version = "7.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "frame-support-procedural-tools-derive 8.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
  "proc-macro-crate",
  "proc-macro2",
  "quote",
@@ -3460,23 +3555,52 @@ dependencies = [
 ]
 
 [[package]]
+name = "frame-support-procedural-tools-derive"
+version = "8.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.31",
+]
+
+[[package]]
 name = "frame-system"
 version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "40dc2f4182ad4c05275b0d3f38e3e74bd1cd17231f28ce1e879177fd9829887c"
 dependencies = [
  "cfg-if",
- "frame-support",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "parity-scale-codec",
  "scale-info",
  "serde",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
- "sp-version",
- "sp-weights",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-version 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-weights 22.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "frame-system"
+version = "23.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "cfg-if",
+ "frame-support 23.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "log",
+ "parity-scale-codec",
+ "scale-info",
+ "serde",
+ "sp-core 23.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-io 25.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-runtime 26.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-std 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-version 24.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-weights 22.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
 ]
 
 [[package]]
@@ -3485,14 +3609,14 @@ version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "097cc1f91dc52a648c6b983ebf7aa75bf395b038354772b47e190ecd4caac9a8"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "parity-scale-codec",
  "scale-info",
- "sp-core",
- "sp-runtime",
- "sp-std",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -3502,7 +3626,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "27a0f4c5811e962938b8f93787ae907eacf8312f6797d5efd53fd9d1f4590562"
 dependencies = [
  "parity-scale-codec",
- "sp-api",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -3511,11 +3635,11 @@ version = "0.29.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6becaab3f4648f9c5eeb8eb270614b7e4b5fd7d1deccab1d4a86cb41f8fb06d4"
 dependencies = [
- "frame-support",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "parity-scale-codec",
- "sp-api",
- "sp-runtime",
- "sp-std",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -3776,10 +3900,10 @@ dependencies = [
  "cumulus-pallet-parachain-system",
  "cumulus-pallet-xcm",
  "cumulus-primitives-core",
- "frame-benchmarking",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "frame-executive",
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "frame-system-benchmarking",
  "frame-system-rpc-runtime-api",
  "frame-try-runtime",
@@ -3788,21 +3912,21 @@ dependencies = [
  "parachains-common",
  "parity-scale-codec",
  "scale-info",
- "sp-api",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-block-builder",
- "sp-core",
- "sp-inherents",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-inherents 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-offchain",
- "sp-runtime",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-session",
- "sp-std",
- "sp-storage",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-storage 15.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-transaction-pool",
- "sp-version",
+ "sp-version 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "staging-parachain-info",
- "staging-xcm",
- "staging-xcm-builder",
- "staging-xcm-executor",
+ "staging-xcm 2.0.0",
+ "staging-xcm-builder 2.0.1 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "staging-xcm-executor 2.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
  "substrate-wasm-builder",
 ]
 
@@ -4548,13 +4672,13 @@ dependencies = [
 name = "kusama-runtime-constants"
 version = "1.0.0"
 dependencies = [
- "frame-support",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "polkadot-primitives",
  "polkadot-runtime-common",
  "smallvec",
- "sp-core",
- "sp-runtime",
- "sp-weights",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-weights 22.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -4563,13 +4687,13 @@ version = "2.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1a87fa26eba25489f17e493dd50a8b8f49448432bfd98ec06f730c83034a154e"
 dependencies = [
- "frame-support",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "polkadot-primitives",
  "polkadot-runtime-common",
  "smallvec",
- "sp-core",
- "sp-runtime",
- "sp-weights",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-weights 22.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -5917,19 +6041,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e332ac5e332a88494488e502425aab59fbb8aaa96068c5ec75020b0ddd5eecc8"
 dependencies = [
  "array-bytes",
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "pallet-collective",
  "pallet-identity",
  "parity-scale-codec",
  "scale-info",
- "sp-core",
- "sp-core-hashing",
- "sp-io",
- "sp-runtime",
- "sp-std",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core-hashing 11.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -5938,17 +6062,17 @@ version = "5.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1661ad646244fd155fae26799b9f12246aac8a18ed785550ceea6e4ac25cfbdc"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "parity-scale-codec",
  "scale-info",
- "sp-api",
- "sp-arithmetic",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-arithmetic 18.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -5957,14 +6081,14 @@ version = "5.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e47e76551d0029aa4e8d28d0108c4575fae812ff2c9e7a7fd79890a4c7a8223f"
 dependencies = [
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "pallet-asset-conversion",
- "pallet-transaction-payment",
+ "pallet-transaction-payment 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "parity-scale-codec",
  "scale-info",
- "sp-runtime",
- "sp-std",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -5973,17 +6097,17 @@ version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "64b0aea073ae2b627ddb7e775abb7872df8efb7fabd7c50dd05d3ca6ef0c72a4"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
- "pallet-transaction-payment",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "pallet-transaction-payment 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "parity-scale-codec",
  "scale-info",
  "serde",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -5992,15 +6116,15 @@ version = "24.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a2efdbd9727983844e1b82da41870829c0fd5d47ccb700fb27d734b3823d44ae"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "parity-scale-codec",
  "scale-info",
- "sp-core",
- "sp-runtime",
- "sp-std",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6009,16 +6133,16 @@ version = "22.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9d2cf20aa88b42b71e70d254db752673e0a67f4cefd070b33c1e42d8b7d25d9a"
 dependencies = [
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "pallet-timestamp",
  "parity-scale-codec",
  "scale-info",
- "sp-application-crypto",
+ "sp-application-crypto 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-consensus-aura",
- "sp-runtime",
- "sp-std",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6027,15 +6151,15 @@ version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a335fdce40d450adf27def590d1f1c1f42a49f6f91420063ae2391b9eb88b4d4"
 dependencies = [
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "pallet-session",
  "parity-scale-codec",
  "scale-info",
- "sp-application-crypto",
+ "sp-application-crypto 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-authority-discovery",
- "sp-runtime",
- "sp-std",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6044,13 +6168,13 @@ version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8cda9086337d01cdb509422cbe7290aa17edab7bf5677218faae30dab23205a6"
 dependencies = [
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "impl-trait-for-tuples",
  "parity-scale-codec",
  "scale-info",
- "sp-runtime",
- "sp-std",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6059,23 +6183,23 @@ version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "37d7e474e0f5e9987b315dabe11269520cec98b44131e51a342e6a9d3a3d3f36"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "pallet-authorship",
  "pallet-session",
  "pallet-timestamp",
  "parity-scale-codec",
  "scale-info",
- "sp-application-crypto",
+ "sp-application-crypto 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-consensus-babe",
- "sp-core",
- "sp-io",
- "sp-runtime",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-session",
- "sp-staking",
- "sp-std",
+ "sp-staking 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6086,19 +6210,19 @@ checksum = "dd87d03bd1aee46275df25838fc5ba8c01fdb8df8a6860daa3d0f0b973a74ace"
 dependencies = [
  "aquamarine",
  "docify",
- "frame-benchmarking",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "frame-election-provider-support",
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "pallet-balances",
  "parity-scale-codec",
  "scale-info",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
- "sp-tracing",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-tracing 12.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6107,14 +6231,14 @@ version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0486a52507072bd738dc851acf7b42def3645db10777f93dccdaa5933e41269b"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "parity-scale-codec",
  "scale-info",
- "sp-runtime",
- "sp-std",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6123,8 +6247,8 @@ version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e0a7b81cbf5d642ee2881f7860390e70a290e1f94afbc3b27d59f137e8fdeb69"
 dependencies = [
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "pallet-authorship",
  "pallet-session",
@@ -6132,10 +6256,10 @@ dependencies = [
  "scale-info",
  "serde",
  "sp-consensus-beefy",
- "sp-runtime",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-session",
- "sp-staking",
- "sp-std",
+ "sp-staking 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6146,8 +6270,8 @@ checksum = "60cca2fe7df196e41e2d43fcb97a76f68ff76dae38861b60e837d1a86ea9aa1a"
 dependencies = [
  "array-bytes",
  "binary-merkle-tree",
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "pallet-beefy",
  "pallet-mmr",
@@ -6155,13 +6279,13 @@ dependencies = [
  "parity-scale-codec",
  "scale-info",
  "serde",
- "sp-api",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-consensus-beefy",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-state-machine",
- "sp-std",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-state-machine 0.30.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6170,17 +6294,17 @@ version = "22.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bf8df1ab55bac70ea7a99794d7bace2a311cc3049654aef3965516b181654b88"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "pallet-treasury",
  "parity-scale-codec",
  "scale-info",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6193,16 +6317,16 @@ dependencies = [
  "bp-runtime",
  "bp-test-utils",
  "finality-grandpa",
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "parity-scale-codec",
  "scale-info",
  "sp-consensus-grandpa",
- "sp-runtime",
- "sp-std",
- "sp-trie",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-trie 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6213,16 +6337,16 @@ checksum = "f6c4b5a64fd5ea73836f03c04c290ec66b53aca8f5c714bd805508a6e84ef904"
 dependencies = [
  "bp-messages",
  "bp-runtime",
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "num-traits",
  "parity-scale-codec",
  "scale-info",
- "sp-core",
- "sp-runtime",
- "sp-std",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6235,16 +6359,16 @@ dependencies = [
  "bp-parachains",
  "bp-polkadot-core",
  "bp-runtime",
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "pallet-bridge-grandpa",
  "parity-scale-codec",
  "scale-info",
- "sp-runtime",
- "sp-std",
- "sp-trie",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-trie 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6256,16 +6380,16 @@ dependencies = [
  "bp-messages",
  "bp-relayers",
  "bp-runtime",
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "pallet-bridge-messages",
  "parity-scale-codec",
  "scale-info",
- "sp-arithmetic",
- "sp-runtime",
- "sp-std",
+ "sp-arithmetic 18.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6274,18 +6398,18 @@ version = "22.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "03417c311cb707b1f0994397856e9a3611dd358f0caf67ccff91ac4ae45a005b"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "pallet-bounties",
  "pallet-treasury",
  "parity-scale-codec",
  "scale-info",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6294,18 +6418,18 @@ version = "4.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2716f12bd4d379080b8d6de82c8293f6ba2a4b4268fdf690dd71e68d52ad4ab9"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "pallet-authorship",
  "pallet-session",
  "parity-scale-codec",
  "rand 0.8.5",
  "scale-info",
- "sp-runtime",
- "sp-staking",
- "sp-std",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-staking 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6314,16 +6438,16 @@ version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2afbe5f8793d4d01e88e39ad02c656333bafabd86f87e5699f2b4022d8057eaa"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "parity-scale-codec",
  "scale-info",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6333,15 +6457,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "520968f141a44b3dfd73ce4be80de07010c3847460bfbc5fb726d329f765f903"
 dependencies = [
  "assert_matches",
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "parity-scale-codec",
  "scale-info",
  "serde",
- "sp-io",
- "sp-runtime",
- "sp-std",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6350,17 +6474,17 @@ version = "7.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "13aeaa8fe18020ff64792b883e1be6cadf695556e44279893216cb48bc0d7270"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "parity-scale-codec",
  "scale-info",
- "sp-arithmetic",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
+ "sp-arithmetic 18.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6369,17 +6493,17 @@ version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "99d44914750d93d466020b7d90c1170ce3e3b1fe3876df428749f4896a37bb5a"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "parity-scale-codec",
  "scale-info",
  "serde",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6388,21 +6512,21 @@ version = "22.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2ed40f39a03e6734c60d760e6b7ad5f1e115ac1d36f02a3111e60421b9ba0d2e"
 dependencies = [
- "frame-benchmarking",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "frame-election-provider-support",
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "pallet-election-provider-support-benchmarking",
  "parity-scale-codec",
  "rand 0.8.5",
  "scale-info",
- "sp-arithmetic",
- "sp-core",
- "sp-io",
+ "sp-arithmetic 18.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-npos-elections",
- "sp-runtime",
- "sp-std",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "strum",
 ]
 
@@ -6412,13 +6536,13 @@ version = "22.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "56b31f394ea662fa9199c89c5712046fbd18e52211937332016b359ac81aef69"
 dependencies = [
- "frame-benchmarking",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "frame-election-provider-support",
- "frame-system",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "parity-scale-codec",
  "sp-npos-elections",
- "sp-runtime",
- "sp-std",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6427,18 +6551,18 @@ version = "24.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1373439465e6110ed0ab60905660d097df2d05736e008d6bc1d415b5fdb2386a"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "parity-scale-codec",
  "scale-info",
- "sp-core",
- "sp-io",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-npos-elections",
- "sp-runtime",
- "sp-staking",
- "sp-std",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-staking 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6448,17 +6572,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "87789ed95833afcface11a8048708dafa35951308d7de5e9aed666e8044b3cc6"
 dependencies = [
  "docify",
- "frame-benchmarking",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "frame-election-provider-support",
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "parity-scale-codec",
  "scale-info",
- "sp-io",
- "sp-runtime",
- "sp-staking",
- "sp-std",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-staking 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6468,16 +6592,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "06e705170005c5ebf054dae6252aea11082231e1d45ef4f54794313183b71bbc"
 dependencies = [
  "blake2",
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "parity-scale-codec",
  "scale-info",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6486,22 +6610,22 @@ version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b77a81a40b8f2cf6dcd49eaa69b882c1ebb651a381e959a62a875d782cac856a"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "pallet-authorship",
  "pallet-session",
  "parity-scale-codec",
  "scale-info",
- "sp-application-crypto",
+ "sp-application-crypto 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-consensus-grandpa",
- "sp-core",
- "sp-io",
- "sp-runtime",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-session",
- "sp-staking",
- "sp-std",
+ "sp-staking 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6511,14 +6635,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f7c9a8b0a02ae7650a8fd188b26fa0852152021fafb5da6d69e1d17f9d03e714"
 dependencies = [
  "enumflags2",
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "parity-scale-codec",
  "scale-info",
- "sp-io",
- "sp-runtime",
- "sp-std",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6527,19 +6651,19 @@ version = "22.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "70314914e290dbdb52adea50bf3e15965ca7b72c5a02d35dd6b9ded60bfb4877"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "pallet-authorship",
  "parity-scale-codec",
  "scale-info",
- "sp-application-crypto",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-staking",
- "sp-std",
+ "sp-application-crypto 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-staking 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6548,16 +6672,16 @@ version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7b23c5b95f9ef2fd17c01cc6948c88aa9e263a49a90e1a5665798d744e5f8956"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "parity-scale-codec",
  "scale-info",
- "sp-core",
- "sp-io",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-keyring",
- "sp-runtime",
- "sp-std",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6566,16 +6690,16 @@ version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b0a055f189d360aca0919b65b91ab0b701e6bac2143ac46a285a9faf9ec7208e"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "parity-scale-codec",
  "scale-info",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6584,18 +6708,18 @@ version = "26.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "faa98dc8e920cf04f55c8d5ee878477a5be826952b99fe106e72c847c3391d0e"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "parity-scale-codec",
  "scale-info",
- "sp-arithmetic",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
- "sp-weights",
+ "sp-arithmetic 18.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-weights 22.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6604,17 +6728,17 @@ version = "22.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a7596f59b17e1ee05040d4fc0070d3ae781de34e847be95423d7f5310c3a9d63"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "parity-scale-codec",
  "scale-info",
- "sp-core",
- "sp-io",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-mmr-primitives",
- "sp-runtime",
- "sp-std",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6623,15 +6747,15 @@ version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3e44176821dc2c2caface4303cfac8e8aa18ecf2bb15504f4a460abd2cb52dcd"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "parity-scale-codec",
  "scale-info",
- "sp-io",
- "sp-runtime",
- "sp-std",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6640,16 +6764,16 @@ version = "5.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3160a1cbdc2a28363bd2ff4cba72ccb96a98cbb86a81ab694b4e99b79a62fcee"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "pallet-assets",
  "pallet-nfts",
  "parity-scale-codec",
  "scale-info",
- "sp-runtime",
- "sp-std",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6659,16 +6783,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9f3650227e8678336e93b679e9eeafdb1e0ff04bffcca148c00e3fb906ff5b08"
 dependencies = [
  "enumflags2",
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "parity-scale-codec",
  "scale-info",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6679,7 +6803,7 @@ checksum = "4de7f6a1613d3391121afd73548f4f37bea22cd7d5ce269db83a497ccc286c86"
 dependencies = [
  "pallet-nfts",
  "parity-scale-codec",
- "sp-api",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6688,15 +6812,15 @@ version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "422715b4239456d73a78bae69a7411836c54bda35f69753524eff601ca910102"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "parity-scale-codec",
  "scale-info",
- "sp-arithmetic",
- "sp-core",
- "sp-runtime",
- "sp-std",
+ "sp-arithmetic 18.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6705,18 +6829,18 @@ version = "20.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "69ab7e472a983273ad52af65ac431769fda82a272e54631e451a47ea99c24b15"
 dependencies = [
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "pallet-balances",
  "parity-scale-codec",
  "scale-info",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-staking",
- "sp-std",
- "sp-tracing",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-staking 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-tracing 12.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6725,19 +6849,19 @@ version = "21.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "61f6f692dd7cab2ab8aeafe3a9dce645afe818712df62ac3ae432696731bb509"
 dependencies = [
- "frame-benchmarking",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "frame-election-provider-support",
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "pallet-bags-list",
  "pallet-nomination-pools",
  "pallet-staking",
  "parity-scale-codec",
  "scale-info",
- "sp-runtime",
- "sp-runtime-interface",
- "sp-staking",
- "sp-std",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime-interface 19.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-staking 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6748,8 +6872,8 @@ checksum = "48f5eb57e511e2d084b4d3b00b70cb36d0b8474222a86b2195da6b61503ac6f8"
 dependencies = [
  "pallet-nomination-pools",
  "parity-scale-codec",
- "sp-api",
- "sp-std",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6758,16 +6882,16 @@ version = "22.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "aa80a36a4d7d42d2aab354242dbd37c1d253f30255be2b3edc357dc9f2ad7916"
 dependencies = [
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "pallet-balances",
  "parity-scale-codec",
  "scale-info",
  "serde",
- "sp-runtime",
- "sp-staking",
- "sp-std",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-staking 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6776,10 +6900,10 @@ version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "07b4aabb1ea386486bd4a42ab3a067fdffae6716876d59c0e3fa1cf3e1040201"
 dependencies = [
- "frame-benchmarking",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "frame-election-provider-support",
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "pallet-babe",
  "pallet-balances",
@@ -6790,9 +6914,9 @@ dependencies = [
  "pallet-staking",
  "parity-scale-codec",
  "scale-info",
- "sp-runtime",
- "sp-staking",
- "sp-std",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-staking 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6801,16 +6925,16 @@ version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e00ea296ac3f7f543a409e177b771459b14c76b33145d1374eabf984ebc34f14"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "parity-scale-codec",
  "scale-info",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6819,14 +6943,14 @@ version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "186b0aa4c542217f8c6e0afaa1f5d9aea257019af6d426f591c2764e7b71d3c8"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "parity-scale-codec",
  "scale-info",
- "sp-io",
- "sp-runtime",
- "sp-std",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6835,17 +6959,17 @@ version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7c8cf8915fcdb60a6dffd6cc20eb4bf2f95bd1f9424f598d1e99d47be0d84fa0"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "parity-scale-codec",
  "scale-info",
- "sp-arithmetic",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
+ "sp-arithmetic 18.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6854,14 +6978,14 @@ version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c8c78735503c504465acf94b6ea3174f1a046bbbd8246d357fee0ed422e8a26b"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "parity-scale-codec",
  "scale-info",
- "sp-io",
- "sp-runtime",
- "sp-std",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6871,17 +6995,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "99bdb6d7fcdda9c4a85efbbc5ea5499e07e339491d25ac913649c196a78b6d31"
 dependencies = [
  "assert_matches",
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "parity-scale-codec",
  "scale-info",
  "serde",
- "sp-arithmetic",
- "sp-io",
- "sp-runtime",
- "sp-std",
+ "sp-arithmetic 18.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6890,17 +7014,17 @@ version = "8.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "477ba8329b1984377cd94d62b869ce976de2176c3126f58aa6efdcec808b236c"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "parity-scale-codec",
  "scale-info",
- "sp-arithmetic",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
+ "sp-arithmetic 18.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6910,16 +7034,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0cfdb4f02689fb9c4f22190f60be1acc5e6553d1c89b44272509bea2ebd1855a"
 dependencies = [
  "docify",
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "parity-scale-codec",
  "scale-info",
- "sp-io",
- "sp-runtime",
- "sp-std",
- "sp-weights",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-weights 22.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6928,21 +7052,21 @@ version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a4f6f04ae97b311aa20a91a8b0bf92f7e231cff993547d3e874c3e60020cfa96"
 dependencies = [
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "impl-trait-for-tuples",
  "log",
  "pallet-timestamp",
  "parity-scale-codec",
  "scale-info",
- "sp-core",
- "sp-io",
- "sp-runtime",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-session",
- "sp-staking",
- "sp-state-machine",
- "sp-std",
- "sp-trie",
+ "sp-staking 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-state-machine 0.30.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-trie 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6951,16 +7075,16 @@ version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a370a07dbfaa94bcc5e01f4e9cda1ad6fbca019bcb0a172a2ee26f61e736dbab"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "pallet-session",
  "pallet-staking",
  "parity-scale-codec",
  "rand 0.8.5",
- "sp-runtime",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-session",
- "sp-std",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6969,17 +7093,17 @@ version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "548b95cf82dd9caa346469a679cdef63a34d7105a009e33eb3930f41a70b2b64"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "parity-scale-codec",
  "rand_chacha 0.2.2",
  "scale-info",
- "sp-arithmetic",
- "sp-io",
- "sp-runtime",
- "sp-std",
+ "sp-arithmetic 18.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6988,10 +7112,10 @@ version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "66b9b137b78565e4012edf20a3c9fd10fa03e3b857dd3999239454da5d4d2431"
 dependencies = [
- "frame-benchmarking",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "frame-election-provider-support",
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "pallet-authorship",
  "pallet-session",
@@ -6999,11 +7123,11 @@ dependencies = [
  "rand_chacha 0.2.2",
  "scale-info",
  "serde",
- "sp-application-crypto",
- "sp-io",
- "sp-runtime",
- "sp-staking",
- "sp-std",
+ "sp-application-crypto 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-staking 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -7025,7 +7149,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e7d48988f4264ff9a8088d40e4f4bfdee9606a9abef1e432987f6e40aec76da6"
 dependencies = [
  "log",
- "sp-arithmetic",
+ "sp-arithmetic 18.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -7035,7 +7159,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0a3b908034f3c688deacd672a0c838826edb5a3c980c04faf8f5b84edabbc8a6"
 dependencies = [
  "parity-scale-codec",
- "sp-api",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -7044,16 +7168,16 @@ version = "24.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cb8084d2091a88147c1caad25bc03b15f3f7320c18087cfe037b8e21b13bd068"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "parity-scale-codec",
  "scale-info",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -7062,14 +7186,14 @@ version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f10e6b5329062c8d78a9d845ebd1201b9b505e2a4b5aa6b4fdceeeccde0c323c"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "parity-scale-codec",
  "scale-info",
- "sp-io",
- "sp-runtime",
- "sp-std",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -7078,17 +7202,17 @@ version = "22.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "924bc62e043df933e6067a2a70a71a16823253e46765e36800f0dc60a0a59018"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "parity-scale-codec",
  "scale-info",
- "sp-inherents",
- "sp-io",
- "sp-runtime",
- "sp-std",
- "sp-storage",
+ "sp-inherents 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-storage 15.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-timestamp",
 ]
 
@@ -7098,18 +7222,18 @@ version = "22.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8874f39912e560ea6de9c1e51d50dcd8e9fe7a68f2f9b89e5bf42bfc637cdf36"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "pallet-treasury",
  "parity-scale-codec",
  "scale-info",
  "serde",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -7118,15 +7242,31 @@ version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8eeaaeaf89f80fe3d19ff9ed60430423a7ea70ca91747b04be830499334d55d3"
 dependencies = [
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "parity-scale-codec",
  "scale-info",
  "serde",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "pallet-transaction-payment"
+version = "23.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "frame-support 23.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "frame-system 23.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "parity-scale-codec",
+ "scale-info",
+ "serde",
+ "sp-core 23.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-io 25.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-runtime 26.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-std 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
 ]
 
 [[package]]
@@ -7135,11 +7275,11 @@ version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5c8ee4c219399d7353548641d31aea760007f88223d6de72048fd9d13a9a6601"
 dependencies = [
- "pallet-transaction-payment",
+ "pallet-transaction-payment 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "parity-scale-codec",
- "sp-api",
- "sp-runtime",
- "sp-weights",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-weights 22.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -7148,16 +7288,16 @@ version = "22.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "14f099cd65be6adbd3602e5b3df680a5ab868b79c990c5c7b3977e849728632e"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "impl-trait-for-tuples",
  "pallet-balances",
  "parity-scale-codec",
  "scale-info",
  "serde",
- "sp-runtime",
- "sp-std",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -7166,14 +7306,14 @@ version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c6615e1af20293b33ec6c2bb30b9e1a9b4e0420c78b5f2aeed8afe244d9cdc6a"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "parity-scale-codec",
  "scale-info",
- "sp-runtime",
- "sp-std",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -7182,15 +7322,15 @@ version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d78c463bcdbe9b5f84b816ea4095d1aea776acd7bae0e9f6fe074acd84094ace"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "parity-scale-codec",
  "scale-info",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -7199,14 +7339,14 @@ version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d9fdc85285a6ced9b1ce722d4e7681b6b97ccf3a9ee439eeaf6bfc33c2022cbb"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "parity-scale-codec",
  "scale-info",
- "sp-runtime",
- "sp-std",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -7215,14 +7355,14 @@ version = "22.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a09403cca331027032f2ba9a992e8b6bcd27d95255dfc30f1f6da5fd32ef57bc"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "parity-scale-codec",
  "scale-info",
- "sp-api",
- "sp-runtime",
- "sp-std",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -7232,19 +7372,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b913e408dfd2e3b1a1834aa03965b1616bf2d4c24c635a1cdd3ae10335c97e48"
 dependencies = [
  "bounded-collections",
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "parity-scale-codec",
  "scale-info",
  "serde",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
- "staging-xcm",
- "staging-xcm-executor",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "staging-xcm 2.0.1",
+ "staging-xcm-executor 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -7253,18 +7393,18 @@ version = "2.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e49d6f43940cf0146a59ce21a495f32edb746ec16ec67f41d8a4ad4ada79afe1"
 dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "parity-scale-codec",
  "scale-info",
- "sp-io",
- "sp-runtime",
- "sp-std",
- "staging-xcm",
- "staging-xcm-builder",
- "staging-xcm-executor",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "staging-xcm 2.0.1",
+ "staging-xcm-builder 2.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "staging-xcm-executor 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -7275,8 +7415,8 @@ checksum = "75f61ccf16fd574bc10480b1a106bb8536b5dddd38a44de0ce20e6f44b0cb4e1"
 dependencies = [
  "cumulus-primitives-core",
  "cumulus-primitives-utility",
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "kusama-runtime-constants 2.0.0",
  "log",
  "num-traits",
@@ -7286,20 +7426,20 @@ dependencies = [
  "pallet-balances",
  "pallet-collator-selection",
  "parity-scale-codec",
- "polkadot-core-primitives",
+ "polkadot-core-primitives 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "polkadot-primitives",
  "polkadot-runtime-constants 2.0.0",
  "rococo-runtime-constants",
  "scale-info",
  "smallvec",
  "sp-consensus-aura",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
- "staging-xcm",
- "staging-xcm-builder",
- "staging-xcm-executor",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "staging-xcm 2.0.1",
+ "staging-xcm-builder 2.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "staging-xcm-executor 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "substrate-wasm-builder",
  "westend-runtime-constants",
 ]
@@ -7317,8 +7457,8 @@ dependencies = [
  "cumulus-primitives-core",
  "cumulus-primitives-parachain-inherent",
  "cumulus-test-relay-sproof-builder",
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "pallet-assets",
  "pallet-balances",
  "pallet-collator-selection",
@@ -7326,16 +7466,16 @@ dependencies = [
  "pallet-xcm",
  "parachains-common",
  "parity-scale-codec",
- "polkadot-parachain-primitives",
+ "polkadot-parachain-primitives 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-consensus-aura",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
- "sp-tracing",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-tracing 12.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "staging-parachain-info",
- "staging-xcm",
- "staging-xcm-executor",
+ "staging-xcm 2.0.1",
+ "staging-xcm-executor 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "substrate-wasm-builder",
 ]
 
@@ -7629,9 +7769,21 @@ checksum = "960aeac8618063cd9eca2a3551a92234a4c9007a970df7bf61d6fc2f9b4b85ff"
 dependencies = [
  "parity-scale-codec",
  "scale-info",
- "sp-core",
- "sp-runtime",
- "sp-std",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "polkadot-core-primitives"
+version = "2.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "parity-scale-codec",
+ "scale-info",
+ "sp-core 23.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-runtime 26.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-std 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
 ]
 
 [[package]]
@@ -7648,7 +7800,7 @@ dependencies = [
  "polkadot-node-primitives",
  "polkadot-primitives",
  "sc-network",
- "sp-core",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "thiserror",
  "tokio",
 ]
@@ -7707,16 +7859,16 @@ dependencies = [
  "bounded-vec",
  "futures",
  "parity-scale-codec",
- "polkadot-parachain-primitives",
+ "polkadot-parachain-primitives 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "polkadot-primitives",
  "schnorrkel",
  "serde",
- "sp-application-crypto",
+ "sp-application-crypto 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-consensus-babe",
- "sp-core",
- "sp-keystore",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-keystore 0.29.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-maybe-compressed-blob",
- "sp-runtime",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "thiserror",
  "zstd 0.12.4",
 ]
@@ -7739,7 +7891,7 @@ dependencies = [
  "sc-network",
  "sc-transaction-pool-api",
  "smallvec",
- "sp-api",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-authority-discovery",
  "sp-consensus-babe",
  "substrate-prometheus-endpoint",
@@ -7764,8 +7916,8 @@ dependencies = [
  "polkadot-primitives",
  "sc-client-api",
  "schnellru",
- "sp-api",
- "sp-core",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "tikv-jemalloc-ctl",
  "tracing-gum",
 ]
@@ -7778,14 +7930,31 @@ checksum = "8be23c13fd44bab7ed83eea35e1b68bcd21d61cbc6bb15451a8b0a00e627f0ab"
 dependencies = [
  "bounded-collections",
  "derive_more",
- "frame-support",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "parity-scale-codec",
- "polkadot-core-primitives",
+ "polkadot-core-primitives 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "scale-info",
  "serde",
- "sp-core",
- "sp-runtime",
- "sp-std",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "polkadot-parachain-primitives"
+version = "1.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "bounded-collections",
+ "derive_more",
+ "frame-support 23.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "parity-scale-codec",
+ "polkadot-core-primitives 2.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "scale-info",
+ "serde",
+ "sp-core 23.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-runtime 26.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-std 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
 ]
 
 [[package]]
@@ -7797,22 +7966,22 @@ dependencies = [
  "bitvec",
  "hex-literal",
  "parity-scale-codec",
- "polkadot-core-primitives",
- "polkadot-parachain-primitives",
+ "polkadot-core-primitives 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "polkadot-parachain-primitives 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "scale-info",
  "serde",
- "sp-api",
- "sp-application-crypto",
- "sp-arithmetic",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-application-crypto 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-arithmetic 18.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-authority-discovery",
  "sp-consensus-slots",
- "sp-core",
- "sp-inherents",
- "sp-io",
- "sp-keystore",
- "sp-runtime",
- "sp-staking",
- "sp-std",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-inherents 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-keystore 0.29.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-staking 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -7820,12 +7989,12 @@ name = "polkadot-runtime"
 version = "1.0.0"
 dependencies = [
  "bitvec",
- "frame-benchmarking",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "frame-election-provider-support",
  "frame-executive",
  "frame-remote-externalities",
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "frame-system-benchmarking",
  "frame-system-rpc-runtime-api",
  "frame-try-runtime",
@@ -7869,7 +8038,7 @@ dependencies = [
  "pallet-staking-runtime-api",
  "pallet-timestamp",
  "pallet-tips",
- "pallet-transaction-payment",
+ "pallet-transaction-payment 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "pallet-transaction-payment-rpc-runtime-api",
  "pallet-treasury",
  "pallet-utility",
@@ -7889,31 +8058,31 @@ dependencies = [
  "serde_derive",
  "serde_json",
  "smallvec",
- "sp-api",
- "sp-arithmetic",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-arithmetic 18.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-authority-discovery",
  "sp-block-builder",
  "sp-consensus-babe",
  "sp-consensus-beefy",
- "sp-core",
- "sp-inherents",
- "sp-io",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-inherents 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-keyring",
  "sp-mmr-primitives",
  "sp-npos-elections",
  "sp-offchain",
- "sp-runtime",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-session",
- "sp-staking",
- "sp-std",
- "sp-storage",
- "sp-tracing",
+ "sp-staking 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-storage 15.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-tracing 12.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-transaction-pool",
- "sp-trie",
- "sp-version",
- "staging-xcm",
- "staging-xcm-builder",
- "staging-xcm-executor",
+ "sp-trie 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-version 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "staging-xcm 2.0.1",
+ "staging-xcm-builder 2.0.1 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "staging-xcm-executor 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "static_assertions",
  "substrate-wasm-builder",
  "tiny-keccak",
@@ -7927,10 +8096,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a92ab9a0a68d66e0541a150e00e90480e94992d5d7e0494248a4661b1f355ee8"
 dependencies = [
  "bitvec",
- "frame-benchmarking",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "frame-election-provider-support",
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "impl-trait-for-tuples",
  "libsecp256k1",
  "log",
@@ -7943,7 +8112,7 @@ dependencies = [
  "pallet-staking",
  "pallet-staking-reward-fn",
  "pallet-timestamp",
- "pallet-transaction-payment",
+ "pallet-transaction-payment 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "pallet-treasury",
  "pallet-vesting",
  "parity-scale-codec",
@@ -7954,16 +8123,16 @@ dependencies = [
  "serde",
  "serde_derive",
  "slot-range-helper",
- "sp-api",
- "sp-core",
- "sp-inherents",
- "sp-io",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-inherents 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-npos-elections",
- "sp-runtime",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-session",
- "sp-staking",
- "sp-std",
- "staging-xcm",
+ "sp-staking 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "staging-xcm 2.0.1",
  "static_assertions",
 ]
 
@@ -7971,13 +8140,13 @@ dependencies = [
 name = "polkadot-runtime-constants"
 version = "1.0.0"
 dependencies = [
- "frame-support",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "polkadot-primitives",
  "polkadot-runtime-common",
  "smallvec",
- "sp-core",
- "sp-runtime",
- "sp-weights",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-weights 22.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -7986,13 +8155,13 @@ version = "2.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9006804184f3f06e5c513d125aebb7764ab8116a340d71ff07ea266c2ae5b159"
 dependencies = [
- "frame-support",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "polkadot-primitives",
  "polkadot-runtime-common",
  "smallvec",
- "sp-core",
- "sp-runtime",
- "sp-weights",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-weights 22.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -8002,11 +8171,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2f4bb4e450cc3683d3e583067549c292db2c153a80da0af9717e41549a0a9979"
 dependencies = [
  "bs58 0.5.0",
- "frame-benchmarking",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "parity-scale-codec",
  "polkadot-primitives",
- "sp-std",
- "sp-tracing",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-tracing 12.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -8018,9 +8187,9 @@ dependencies = [
  "bitflags 1.3.2",
  "bitvec",
  "derive_more",
- "frame-benchmarking",
- "frame-support",
- "frame-system",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "impl-trait-for-tuples",
  "log",
  "pallet-authority-discovery",
@@ -8033,7 +8202,7 @@ dependencies = [
  "pallet-timestamp",
  "pallet-vesting",
  "parity-scale-codec",
- "polkadot-parachain-primitives",
+ "polkadot-parachain-primitives 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "polkadot-primitives",
  "polkadot-runtime-metrics",
  "rand 0.8.5",
@@ -8041,19 +8210,19 @@ dependencies = [
  "rustc-hex",
  "scale-info",
  "serde",
- "sp-api",
- "sp-application-crypto",
- "sp-core",
- "sp-inherents",
- "sp-io",
- "sp-keystore",
- "sp-runtime",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-application-crypto 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-inherents 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-keystore 0.29.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-session",
- "sp-staking",
- "sp-std",
- "sp-tracing",
- "staging-xcm",
- "staging-xcm-executor",
+ "sp-staking 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-tracing 12.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "staging-xcm 2.0.1",
+ "staging-xcm-executor 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "static_assertions",
 ]
 
@@ -8065,7 +8234,7 @@ checksum = "2b55bf808133addad3d826c344681cf6272acba60a2b9a007f4e4076c2e77eda"
 dependencies = [
  "parity-scale-codec",
  "polkadot-primitives",
- "sp-core",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -8754,13 +8923,13 @@ version = "2.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "26f5a684888cc4995b2916f22014e0356f0a81fd8086079b4c1c11aaf62a8965"
 dependencies = [
- "frame-support",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "polkadot-primitives",
  "polkadot-runtime-common",
  "smallvec",
- "sp-core",
- "sp-runtime",
- "sp-weights",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-weights 22.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -9027,8 +9196,8 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f75d11155f65cf4e548b916a95fd3c1193d3fa89cbece489e3627cb5cd93e77c"
 dependencies = [
  "log",
- "sp-core",
- "sp-wasm-interface",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-wasm-interface 16.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "thiserror",
 ]
 
@@ -9051,12 +9220,12 @@ dependencies = [
  "rand 0.8.5",
  "sc-client-api",
  "sc-network",
- "sp-api",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-authority-discovery",
  "sp-blockchain",
- "sp-core",
- "sp-keystore",
- "sp-runtime",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-keystore 0.29.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "substrate-prometheus-endpoint",
  "thiserror",
 ]
@@ -9069,12 +9238,12 @@ checksum = "2d5dc368497d940a5744cf427253a4b2f8d2a2cad9b2fbb897a270a939e54b5f"
 dependencies = [
  "parity-scale-codec",
  "sc-client-api",
- "sp-api",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-block-builder",
  "sp-blockchain",
- "sp-core",
- "sp-inherents",
- "sp-runtime",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-inherents 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -9092,9 +9261,9 @@ dependencies = [
  "serde",
  "serde_json",
  "sp-blockchain",
- "sp-core",
- "sp-runtime",
- "sp-state-machine",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-state-machine 0.30.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -9138,12 +9307,12 @@ dependencies = [
  "serde",
  "serde_json",
  "sp-blockchain",
- "sp-core",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-keyring",
- "sp-keystore",
- "sp-panic-handler",
- "sp-runtime",
- "sp-version",
+ "sp-keystore 0.29.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-panic-handler 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-version 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "thiserror",
  "tiny-bip39",
  "tokio",
@@ -9163,16 +9332,16 @@ dependencies = [
  "sc-executor",
  "sc-transaction-pool-api",
  "sc-utils",
- "sp-api",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-blockchain",
  "sp-consensus",
- "sp-core",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-database",
- "sp-externalities",
- "sp-runtime",
- "sp-state-machine",
+ "sp-externalities 0.21.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-state-machine 0.30.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-statement-store",
- "sp-storage",
+ "sp-storage 15.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "substrate-prometheus-endpoint",
 ]
 
@@ -9194,13 +9363,13 @@ dependencies = [
  "sc-client-api",
  "sc-state-db",
  "schnellru",
- "sp-arithmetic",
+ "sp-arithmetic 18.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-blockchain",
- "sp-core",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-database",
- "sp-runtime",
- "sp-state-machine",
- "sp-trie",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-state-machine 0.30.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-trie 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -9219,12 +9388,12 @@ dependencies = [
  "sc-client-api",
  "sc-utils",
  "serde",
- "sp-api",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-blockchain",
  "sp-consensus",
- "sp-core",
- "sp-runtime",
- "sp-state-machine",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-state-machine 0.30.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "substrate-prometheus-endpoint",
  "thiserror",
 ]
@@ -9240,15 +9409,15 @@ dependencies = [
  "sc-executor-common",
  "sc-executor-wasmtime",
  "schnellru",
- "sp-api",
- "sp-core",
- "sp-externalities",
- "sp-io",
- "sp-panic-handler",
- "sp-runtime-interface",
- "sp-trie",
- "sp-version",
- "sp-wasm-interface",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-externalities 0.21.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-panic-handler 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime-interface 19.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-trie 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-version 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-wasm-interface 16.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "tracing",
 ]
 
@@ -9260,7 +9429,7 @@ checksum = "7023e1d9c86b817995a72e294b98f196cc3eb9c162f0b69ba95c3b0bd841ef32"
 dependencies = [
  "sc-allocator",
  "sp-maybe-compressed-blob",
- "sp-wasm-interface",
+ "sp-wasm-interface 16.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "thiserror",
  "wasm-instrument",
 ]
@@ -9278,8 +9447,8 @@ dependencies = [
  "rustix 0.36.15",
  "sc-allocator",
  "sc-executor-common",
- "sp-runtime-interface",
- "sp-wasm-interface",
+ "sp-runtime-interface 19.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-wasm-interface 16.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "wasmtime",
 ]
 
@@ -9297,7 +9466,7 @@ dependencies = [
  "sc-network",
  "sc-network-common",
  "sp-blockchain",
- "sp-runtime",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -9309,9 +9478,9 @@ dependencies = [
  "array-bytes",
  "parking_lot 0.12.1",
  "serde_json",
- "sp-application-crypto",
- "sp-core",
- "sp-keystore",
+ "sp-application-crypto 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-keystore 0.29.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "thiserror",
 ]
 
@@ -9346,10 +9515,10 @@ dependencies = [
  "serde",
  "serde_json",
  "smallvec",
- "sp-arithmetic",
+ "sp-arithmetic 18.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-blockchain",
- "sp-core",
- "sp-runtime",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "substrate-prometheus-endpoint",
  "thiserror",
  "unsigned-varint",
@@ -9373,7 +9542,7 @@ dependencies = [
  "sc-client-api",
  "sc-network",
  "sp-blockchain",
- "sp-runtime",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "thiserror",
  "unsigned-varint",
 ]
@@ -9393,7 +9562,7 @@ dependencies = [
  "sc-consensus",
  "sp-consensus",
  "sp-consensus-grandpa",
- "sp-runtime",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -9413,8 +9582,8 @@ dependencies = [
  "sc-client-api",
  "sc-network",
  "sp-blockchain",
- "sp-core",
- "sp-runtime",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "thiserror",
 ]
 
@@ -9443,12 +9612,12 @@ dependencies = [
  "sc-utils",
  "schnellru",
  "smallvec",
- "sp-arithmetic",
+ "sp-arithmetic 18.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-blockchain",
  "sp-consensus",
  "sp-consensus-grandpa",
- "sp-core",
- "sp-runtime",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "substrate-prometheus-endpoint",
  "thiserror",
 ]
@@ -9468,7 +9637,7 @@ dependencies = [
  "sc-network-common",
  "sc-utils",
  "sp-consensus",
- "sp-runtime",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "substrate-prometheus-endpoint",
 ]
 
@@ -9491,16 +9660,16 @@ dependencies = [
  "sc-transaction-pool-api",
  "sc-utils",
  "serde_json",
- "sp-api",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-blockchain",
- "sp-core",
- "sp-keystore",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-keystore 0.29.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-offchain",
  "sp-rpc",
- "sp-runtime",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-session",
  "sp-statement-store",
- "sp-version",
+ "sp-version 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "tokio",
 ]
 
@@ -9517,10 +9686,10 @@ dependencies = [
  "scale-info",
  "serde",
  "serde_json",
- "sp-core",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-rpc",
- "sp-runtime",
- "sp-version",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-version 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "thiserror",
 ]
 
@@ -9559,11 +9728,11 @@ dependencies = [
  "sc-transaction-pool-api",
  "sc-utils",
  "serde",
- "sp-api",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-blockchain",
- "sp-core",
- "sp-runtime",
- "sp-version",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-version 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "thiserror",
  "tokio",
  "tokio-stream",
@@ -9611,20 +9780,20 @@ dependencies = [
  "sc-utils",
  "serde",
  "serde_json",
- "sp-api",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-blockchain",
  "sp-consensus",
- "sp-core",
- "sp-externalities",
- "sp-keystore",
- "sp-runtime",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-externalities 0.21.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-keystore 0.29.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-session",
- "sp-state-machine",
- "sp-storage",
+ "sp-state-machine 0.30.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-storage 15.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-transaction-pool",
  "sp-transaction-storage-proof",
- "sp-trie",
- "sp-version",
+ "sp-trie 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-version 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "static_init",
  "substrate-prometheus-endpoint",
  "tempfile",
@@ -9643,7 +9812,7 @@ dependencies = [
  "log",
  "parity-scale-codec",
  "parking_lot 0.12.1",
- "sp-core",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -9661,9 +9830,9 @@ dependencies = [
  "sc-telemetry",
  "serde",
  "serde_json",
- "sp-core",
- "sp-io",
- "sp-std",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -9704,12 +9873,12 @@ dependencies = [
  "sc-client-api",
  "sc-tracing-proc-macro",
  "serde",
- "sp-api",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-blockchain",
- "sp-core",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-rpc",
- "sp-runtime",
- "sp-tracing",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-tracing 12.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "thiserror",
  "tracing",
  "tracing-log",
@@ -9745,11 +9914,11 @@ dependencies = [
  "sc-transaction-pool-api",
  "sc-utils",
  "serde",
- "sp-api",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-blockchain",
- "sp-core",
- "sp-runtime",
- "sp-tracing",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-tracing 12.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-transaction-pool",
  "substrate-prometheus-endpoint",
  "thiserror",
@@ -9767,8 +9936,8 @@ dependencies = [
  "parity-scale-codec",
  "serde",
  "sp-blockchain",
- "sp-core",
- "sp-runtime",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "thiserror",
 ]
 
@@ -9785,7 +9954,7 @@ dependencies = [
  "log",
  "parking_lot 0.12.1",
  "prometheus",
- "sp-arithmetic",
+ "sp-arithmetic 18.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -10201,8 +10370,8 @@ dependencies = [
  "enumn",
  "parity-scale-codec",
  "paste",
- "sp-runtime",
- "sp-std",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -10281,15 +10450,36 @@ dependencies = [
  "log",
  "parity-scale-codec",
  "scale-info",
- "sp-api-proc-macro",
- "sp-core",
- "sp-externalities",
- "sp-metadata-ir",
- "sp-runtime",
- "sp-state-machine",
- "sp-std",
- "sp-trie",
- "sp-version",
+ "sp-api-proc-macro 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-externalities 0.21.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-metadata-ir 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-state-machine 0.30.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-trie 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-version 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "thiserror",
+]
+
+[[package]]
+name = "sp-api"
+version = "21.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "hash-db",
+ "log",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-api-proc-macro 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-core 23.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-externalities 0.21.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-metadata-ir 0.2.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-runtime 26.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-state-machine 0.30.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-std 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-trie 24.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-version 24.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
  "thiserror",
 ]
 
@@ -10309,6 +10499,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "sp-api-proc-macro"
+version = "10.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "Inflector",
+ "blake2",
+ "expander 2.0.0",
+ "proc-macro-crate",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.31",
+]
+
+[[package]]
 name = "sp-application-crypto"
 version = "25.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -10317,9 +10521,22 @@ dependencies = [
  "parity-scale-codec",
  "scale-info",
  "serde",
- "sp-core",
- "sp-io",
- "sp-std",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "sp-application-crypto"
+version = "25.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "parity-scale-codec",
+ "scale-info",
+ "serde",
+ "sp-core 23.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-io 25.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-std 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
 ]
 
 [[package]]
@@ -10333,7 +10550,21 @@ dependencies = [
  "parity-scale-codec",
  "scale-info",
  "serde",
- "sp-std",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "static_assertions",
+]
+
+[[package]]
+name = "sp-arithmetic"
+version = "18.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "integer-sqrt",
+ "num-traits",
+ "parity-scale-codec",
+ "scale-info",
+ "serde",
+ "sp-std 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
  "static_assertions",
 ]
 
@@ -10345,10 +10576,10 @@ checksum = "06a92d2af502f53c11c4656f58a1f49856b633f455433c6e0c94e59039f560f0"
 dependencies = [
  "parity-scale-codec",
  "scale-info",
- "sp-api",
- "sp-application-crypto",
- "sp-runtime",
- "sp-std",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-application-crypto 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -10357,10 +10588,10 @@ version = "21.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "149acca1cfe20a2fc888e2e04b2811f7fd04a5bc47630a5d6191664f4ed7b224"
 dependencies = [
- "sp-api",
- "sp-inherents",
- "sp-runtime",
- "sp-std",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-inherents 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -10374,11 +10605,11 @@ dependencies = [
  "parity-scale-codec",
  "parking_lot 0.12.1",
  "schnellru",
- "sp-api",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-consensus",
  "sp-database",
- "sp-runtime",
- "sp-state-machine",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-state-machine 0.30.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "thiserror",
 ]
 
@@ -10391,10 +10622,10 @@ dependencies = [
  "async-trait",
  "futures",
  "log",
- "sp-core",
- "sp-inherents",
- "sp-runtime",
- "sp-state-machine",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-inherents 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-state-machine 0.30.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "thiserror",
 ]
 
@@ -10407,12 +10638,12 @@ dependencies = [
  "async-trait",
  "parity-scale-codec",
  "scale-info",
- "sp-api",
- "sp-application-crypto",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-application-crypto 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-consensus-slots",
- "sp-inherents",
- "sp-runtime",
- "sp-std",
+ "sp-inherents 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-timestamp",
 ]
 
@@ -10426,13 +10657,13 @@ dependencies = [
  "parity-scale-codec",
  "scale-info",
  "serde",
- "sp-api",
- "sp-application-crypto",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-application-crypto 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-consensus-slots",
- "sp-core",
- "sp-inherents",
- "sp-runtime",
- "sp-std",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-inherents 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-timestamp",
 ]
 
@@ -10446,13 +10677,13 @@ dependencies = [
  "parity-scale-codec",
  "scale-info",
  "serde",
- "sp-api",
- "sp-application-crypto",
- "sp-core",
- "sp-io",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-application-crypto 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-mmr-primitives",
- "sp-runtime",
- "sp-std",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "strum",
 ]
 
@@ -10467,12 +10698,12 @@ dependencies = [
  "parity-scale-codec",
  "scale-info",
  "serde",
- "sp-api",
- "sp-application-crypto",
- "sp-core",
- "sp-keystore",
- "sp-runtime",
- "sp-std",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-application-crypto 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-keystore 0.29.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -10484,7 +10715,7 @@ dependencies = [
  "parity-scale-codec",
  "scale-info",
  "serde",
- "sp-std",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-timestamp",
 ]
 
@@ -10521,12 +10752,58 @@ dependencies = [
  "secp256k1",
  "secrecy",
  "serde",
- "sp-core-hashing",
- "sp-debug-derive",
- "sp-externalities",
- "sp-runtime-interface",
- "sp-std",
- "sp-storage",
+ "sp-core-hashing 11.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-debug-derive 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-externalities 0.21.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime-interface 19.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-storage 15.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "ss58-registry",
+ "substrate-bip39",
+ "thiserror",
+ "tiny-bip39",
+ "tracing",
+ "zeroize",
+]
+
+[[package]]
+name = "sp-core"
+version = "23.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "array-bytes",
+ "arrayvec 0.7.4",
+ "bitflags 1.3.2",
+ "blake2",
+ "bounded-collections",
+ "bs58 0.5.0",
+ "dyn-clonable",
+ "ed25519-zebra",
+ "futures",
+ "hash-db",
+ "hash256-std-hasher",
+ "impl-serde",
+ "lazy_static",
+ "libsecp256k1",
+ "log",
+ "merlin",
+ "parity-scale-codec",
+ "parking_lot 0.12.1",
+ "paste",
+ "primitive-types",
+ "rand 0.8.5",
+ "regex",
+ "scale-info",
+ "schnorrkel",
+ "secp256k1",
+ "secrecy",
+ "serde",
+ "sp-core-hashing 11.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-debug-derive 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-externalities 0.21.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-runtime-interface 19.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-std 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-storage 15.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
  "ss58-registry",
  "substrate-bip39",
  "thiserror",
@@ -10550,13 +10827,36 @@ dependencies = [
 ]
 
 [[package]]
+name = "sp-core-hashing"
+version = "11.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "blake2b_simd",
+ "byteorder",
+ "digest 0.10.7",
+ "sha2 0.10.7",
+ "sha3",
+ "twox-hash",
+]
+
+[[package]]
 name = "sp-core-hashing-proc-macro"
 version = "11.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5d8681fa136cf504ba2b722fcb10d78df147c15d201b997e06c4c8c72258001a"
 dependencies = [
  "quote",
- "sp-core-hashing",
+ "sp-core-hashing 11.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "syn 2.0.31",
+]
+
+[[package]]
+name = "sp-core-hashing-proc-macro"
+version = "11.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "quote",
+ "sp-core-hashing 11.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
  "syn 2.0.31",
 ]
 
@@ -10582,6 +10882,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "sp-debug-derive"
+version = "10.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.31",
+]
+
+[[package]]
 name = "sp-externalities"
 version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -10589,8 +10899,19 @@ checksum = "588cf40c36de918f545d712ad1a70631ae71653e4a321506dfcd8fa6fd26453c"
 dependencies = [
  "environmental",
  "parity-scale-codec",
- "sp-std",
- "sp-storage",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-storage 15.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "sp-externalities"
+version = "0.21.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "environmental",
+ "parity-scale-codec",
+ "sp-std 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-storage 15.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
 ]
 
 [[package]]
@@ -10600,9 +10921,20 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1ae51f8a24e1be6593be94581f3465a10d7c86ce403cbf9dcf703d14f35309d1"
 dependencies = [
  "serde_json",
- "sp-api",
- "sp-runtime",
- "sp-std",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "sp-genesis-builder"
+version = "0.2.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "serde_json",
+ "sp-api 21.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-runtime 26.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-std 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
 ]
 
 [[package]]
@@ -10615,8 +10947,22 @@ dependencies = [
  "impl-trait-for-tuples",
  "parity-scale-codec",
  "scale-info",
- "sp-runtime",
- "sp-std",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "thiserror",
+]
+
+[[package]]
+name = "sp-inherents"
+version = "21.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "async-trait",
+ "impl-trait-for-tuples",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-runtime 26.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-std 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
  "thiserror",
 ]
 
@@ -10633,14 +10979,38 @@ dependencies = [
  "parity-scale-codec",
  "rustversion",
  "secp256k1",
- "sp-core",
- "sp-externalities",
- "sp-keystore",
- "sp-runtime-interface",
- "sp-state-machine",
- "sp-std",
- "sp-tracing",
- "sp-trie",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-externalities 0.21.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-keystore 0.29.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime-interface 19.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-state-machine 0.30.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-tracing 12.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-trie 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "tracing",
+ "tracing-core",
+]
+
+[[package]]
+name = "sp-io"
+version = "25.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "bytes",
+ "ed25519-dalek 2.0.0",
+ "libsecp256k1",
+ "log",
+ "parity-scale-codec",
+ "rustversion",
+ "secp256k1",
+ "sp-core 23.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-externalities 0.21.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-keystore 0.29.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-runtime-interface 19.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-state-machine 0.30.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-std 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-tracing 12.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-trie 24.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
  "tracing",
  "tracing-core",
 ]
@@ -10652,8 +11022,8 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9dfcca2fad349d5fd197a56b4deef229b872c9172a8267d77c81a9f45a38f18a"
 dependencies = [
  "lazy_static",
- "sp-core",
- "sp-runtime",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "strum",
 ]
 
@@ -10665,8 +11035,20 @@ checksum = "44f0f9546dd151881c60e75355806f1cbbc893f64aa465fc5bf87a47de59467b"
 dependencies = [
  "parity-scale-codec",
  "parking_lot 0.12.1",
- "sp-core",
- "sp-externalities",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-externalities 0.21.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "thiserror",
+]
+
+[[package]]
+name = "sp-keystore"
+version = "0.29.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "parity-scale-codec",
+ "parking_lot 0.12.1",
+ "sp-core 23.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-externalities 0.21.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
  "thiserror",
 ]
 
@@ -10689,7 +11071,18 @@ dependencies = [
  "frame-metadata",
  "parity-scale-codec",
  "scale-info",
- "sp-std",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "sp-metadata-ir"
+version = "0.2.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "frame-metadata",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-std 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
 ]
 
 [[package]]
@@ -10703,11 +11096,11 @@ dependencies = [
  "parity-scale-codec",
  "scale-info",
  "serde",
- "sp-api",
- "sp-core",
- "sp-debug-derive",
- "sp-runtime",
- "sp-std",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-debug-derive 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "thiserror",
 ]
 
@@ -10720,10 +11113,10 @@ dependencies = [
  "parity-scale-codec",
  "scale-info",
  "serde",
- "sp-arithmetic",
- "sp-core",
- "sp-runtime",
- "sp-std",
+ "sp-arithmetic 18.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -10732,9 +11125,9 @@ version = "21.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c1e1b9996004e6a39c06e6d66bd7684c8a07e73dd9137a2b6f2bbfde675d636a"
 dependencies = [
- "sp-api",
- "sp-core",
- "sp-runtime",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -10749,6 +11142,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "sp-panic-handler"
+version = "10.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "backtrace",
+ "lazy_static",
+ "regex",
+]
+
+[[package]]
 name = "sp-rpc"
 version = "21.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -10756,7 +11159,7 @@ checksum = "5828020dd51228aeee12a571720f3354deb95bc159f5edf4b7f2ffb3e023a12e"
 dependencies = [
  "rustc-hash",
  "serde",
- "sp-core",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -10774,12 +11177,34 @@ dependencies = [
  "rand 0.8.5",
  "scale-info",
  "serde",
- "sp-application-crypto",
- "sp-arithmetic",
- "sp-core",
- "sp-io",
- "sp-std",
- "sp-weights",
+ "sp-application-crypto 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-arithmetic 18.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-weights 22.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "sp-runtime"
+version = "26.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "either",
+ "hash256-std-hasher",
+ "impl-trait-for-tuples",
+ "log",
+ "parity-scale-codec",
+ "paste",
+ "rand 0.8.5",
+ "scale-info",
+ "serde",
+ "sp-application-crypto 25.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-arithmetic 18.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-core 23.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-io 25.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-std 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-weights 22.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
 ]
 
 [[package]]
@@ -10792,12 +11217,30 @@ dependencies = [
  "impl-trait-for-tuples",
  "parity-scale-codec",
  "primitive-types",
- "sp-externalities",
- "sp-runtime-interface-proc-macro",
- "sp-std",
- "sp-storage",
- "sp-tracing",
- "sp-wasm-interface",
+ "sp-externalities 0.21.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime-interface-proc-macro 13.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-storage 15.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-tracing 12.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-wasm-interface 16.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "static_assertions",
+]
+
+[[package]]
+name = "sp-runtime-interface"
+version = "19.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "bytes",
+ "impl-trait-for-tuples",
+ "parity-scale-codec",
+ "primitive-types",
+ "sp-externalities 0.21.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-runtime-interface-proc-macro 13.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-std 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-storage 15.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-tracing 12.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-wasm-interface 16.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
  "static_assertions",
 ]
 
@@ -10815,6 +11258,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "sp-runtime-interface-proc-macro"
+version = "13.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "Inflector",
+ "proc-macro-crate",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.31",
+]
+
+[[package]]
 name = "sp-session"
 version = "22.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -10822,12 +11277,12 @@ checksum = "ff5d53ba296b793574fc12b6ebf49d6755d24439979290682ca58d759db5bb73"
 dependencies = [
  "parity-scale-codec",
  "scale-info",
- "sp-api",
- "sp-core",
- "sp-keystore",
- "sp-runtime",
- "sp-staking",
- "sp-std",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-keystore 0.29.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-staking 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -10840,9 +11295,23 @@ dependencies = [
  "parity-scale-codec",
  "scale-info",
  "serde",
- "sp-core",
- "sp-runtime",
- "sp-std",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "sp-staking"
+version = "21.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "impl-trait-for-tuples",
+ "parity-scale-codec",
+ "scale-info",
+ "serde",
+ "sp-core 23.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-runtime 26.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-std 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
 ]
 
 [[package]]
@@ -10857,11 +11326,32 @@ dependencies = [
  "parking_lot 0.12.1",
  "rand 0.8.5",
  "smallvec",
- "sp-core",
- "sp-externalities",
- "sp-panic-handler",
- "sp-std",
- "sp-trie",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-externalities 0.21.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-panic-handler 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-trie 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "thiserror",
+ "tracing",
+ "trie-db",
+]
+
+[[package]]
+name = "sp-state-machine"
+version = "0.30.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "hash-db",
+ "log",
+ "parity-scale-codec",
+ "parking_lot 0.12.1",
+ "rand 0.8.5",
+ "smallvec",
+ "sp-core 23.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-externalities 0.21.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-panic-handler 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-std 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-trie 24.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
  "thiserror",
  "tracing",
  "trie-db",
@@ -10881,13 +11371,13 @@ dependencies = [
  "rand 0.8.5",
  "scale-info",
  "sha2 0.10.7",
- "sp-api",
- "sp-application-crypto",
- "sp-core",
- "sp-externalities",
- "sp-runtime",
- "sp-runtime-interface",
- "sp-std",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-application-crypto 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-externalities 0.21.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime-interface 19.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "thiserror",
  "x25519-dalek 2.0.0",
 ]
@@ -10899,6 +11389,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3ed09ef1760e8be9b64b7f739f1cf9a94528130be475d8e4f2d1be1e690c9f9c"
 
 [[package]]
+name = "sp-std"
+version = "10.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+
+[[package]]
 name = "sp-storage"
 version = "15.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -10908,8 +11403,21 @@ dependencies = [
  "parity-scale-codec",
  "ref-cast",
  "serde",
- "sp-debug-derive",
- "sp-std",
+ "sp-debug-derive 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "sp-storage"
+version = "15.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "impl-serde",
+ "parity-scale-codec",
+ "ref-cast",
+ "serde",
+ "sp-debug-derive 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-std 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
 ]
 
 [[package]]
@@ -10920,9 +11428,9 @@ checksum = "00d60953f7fc9b4f51bbcbac8f0cd8d6e6266a7cc18f661330308bbcec1eb053"
 dependencies = [
  "async-trait",
  "parity-scale-codec",
- "sp-inherents",
- "sp-runtime",
- "sp-std",
+ "sp-inherents 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "thiserror",
 ]
 
@@ -10933,7 +11441,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ebabec43485ebdb2fdb5c6f9b388590d4797a3888024d74724ada2f16b2113b8"
 dependencies = [
  "parity-scale-codec",
- "sp-std",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "tracing",
+ "tracing-core",
+ "tracing-subscriber",
+]
+
+[[package]]
+name = "sp-tracing"
+version = "12.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "parity-scale-codec",
+ "sp-std 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
  "tracing",
  "tracing-core",
  "tracing-subscriber",
@@ -10945,8 +11465,8 @@ version = "21.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "aa16493e2b8f84b03167c901f4ef7af8fe3e58c4c3426d41cc48dc10597d255d"
 dependencies = [
- "sp-api",
- "sp-runtime",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -10958,11 +11478,11 @@ dependencies = [
  "async-trait",
  "parity-scale-codec",
  "scale-info",
- "sp-core",
- "sp-inherents",
- "sp-runtime",
- "sp-std",
- "sp-trie",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-inherents 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-trie 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -10981,8 +11501,31 @@ dependencies = [
  "parking_lot 0.12.1",
  "scale-info",
  "schnellru",
- "sp-core",
- "sp-std",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "thiserror",
+ "tracing",
+ "trie-db",
+ "trie-root",
+]
+
+[[package]]
+name = "sp-trie"
+version = "24.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "ahash 0.8.3",
+ "hash-db",
+ "hashbrown 0.13.2",
+ "lazy_static",
+ "memory-db",
+ "nohash-hasher",
+ "parity-scale-codec",
+ "parking_lot 0.12.1",
+ "scale-info",
+ "schnellru",
+ "sp-core 23.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-std 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
  "thiserror",
  "tracing",
  "trie-db",
@@ -11000,10 +11543,27 @@ dependencies = [
  "parity-wasm",
  "scale-info",
  "serde",
- "sp-core-hashing-proc-macro",
- "sp-runtime",
- "sp-std",
- "sp-version-proc-macro",
+ "sp-core-hashing-proc-macro 11.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-version-proc-macro 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "thiserror",
+]
+
+[[package]]
+name = "sp-version"
+version = "24.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "impl-serde",
+ "parity-scale-codec",
+ "parity-wasm",
+ "scale-info",
+ "serde",
+ "sp-core-hashing-proc-macro 11.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-runtime 26.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-std 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-version-proc-macro 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
  "thiserror",
 ]
 
@@ -11012,6 +11572,17 @@ name = "sp-version-proc-macro"
 version = "10.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6de7bbf860de93bb9b0ccd8e4a74e0dc40089e7192c397bac2b357d4da74e20c"
+dependencies = [
+ "parity-scale-codec",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.31",
+]
+
+[[package]]
+name = "sp-version-proc-macro"
+version = "10.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
 dependencies = [
  "parity-scale-codec",
  "proc-macro2",
@@ -11029,7 +11600,20 @@ dependencies = [
  "impl-trait-for-tuples",
  "log",
  "parity-scale-codec",
- "sp-std",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "wasmtime",
+]
+
+[[package]]
+name = "sp-wasm-interface"
+version = "16.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "anyhow",
+ "impl-trait-for-tuples",
+ "log",
+ "parity-scale-codec",
+ "sp-std 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
  "wasmtime",
 ]
 
@@ -11043,10 +11627,25 @@ dependencies = [
  "scale-info",
  "serde",
  "smallvec",
- "sp-arithmetic",
- "sp-core",
- "sp-debug-derive",
- "sp-std",
+ "sp-arithmetic 18.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-debug-derive 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "sp-weights"
+version = "22.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "parity-scale-codec",
+ "scale-info",
+ "serde",
+ "smallvec",
+ "sp-arithmetic 18.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-core 23.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-debug-derive 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-std 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
 ]
 
 [[package]]
@@ -11113,12 +11712,12 @@ version = "1.0.0"
 dependencies = [
  "binary-merkle-tree",
  "bitvec",
- "frame-benchmarking",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "frame-election-provider-support",
  "frame-executive",
  "frame-remote-externalities",
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "frame-system-benchmarking",
  "frame-system-rpc-runtime-api",
  "frame-try-runtime",
@@ -11169,7 +11768,7 @@ dependencies = [
  "pallet-state-trie-migration",
  "pallet-timestamp",
  "pallet-tips",
- "pallet-transaction-payment",
+ "pallet-transaction-payment 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "pallet-transaction-payment-rpc-runtime-api",
  "pallet-treasury",
  "pallet-utility",
@@ -11188,32 +11787,32 @@ dependencies = [
  "serde_derive",
  "serde_json",
  "smallvec",
- "sp-api",
- "sp-application-crypto",
- "sp-arithmetic",
+ "sp-api 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-application-crypto 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-arithmetic 18.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-authority-discovery",
  "sp-block-builder",
  "sp-consensus-babe",
  "sp-consensus-beefy",
- "sp-core",
- "sp-inherents",
- "sp-io",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-inherents 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-keyring",
  "sp-mmr-primitives",
  "sp-npos-elections",
  "sp-offchain",
- "sp-runtime",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-session",
- "sp-staking",
- "sp-std",
- "sp-storage",
- "sp-tracing",
+ "sp-staking 21.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-storage 15.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-tracing 12.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-transaction-pool",
- "sp-trie",
- "sp-version",
- "staging-xcm",
- "staging-xcm-builder",
- "staging-xcm-executor",
+ "sp-trie 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-version 24.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "staging-xcm 2.0.1",
+ "staging-xcm-builder 2.0.1 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "staging-xcm-executor 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "static_assertions",
  "substrate-wasm-builder",
  "tiny-keccak",
@@ -11227,12 +11826,29 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cd1938a5d4938701c5a1ffd9c6cac6e906e219d85557f061f55f9f41e8d886c6"
 dependencies = [
  "cumulus-primitives-core",
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "parity-scale-codec",
  "scale-info",
- "sp-runtime",
- "sp-std",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "staging-xcm"
+version = "2.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "bounded-collections",
+ "derivative",
+ "environmental",
+ "impl-trait-for-tuples",
+ "log",
+ "parity-scale-codec",
+ "scale-info",
+ "serde",
+ "sp-weights 22.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "xcm-procedural 2.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
 ]
 
 [[package]]
@@ -11249,8 +11865,8 @@ dependencies = [
  "parity-scale-codec",
  "scale-info",
  "serde",
- "sp-weights",
- "xcm-procedural",
+ "sp-weights 22.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "xcm-procedural 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -11259,21 +11875,43 @@ version = "2.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "07c1ca6d8f2b7fcbfe8866c1a1cb8105b62c72a74e727dd8c9943e8ac0c410eb"
 dependencies = [
- "frame-support",
- "frame-system",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-system 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "impl-trait-for-tuples",
  "log",
- "pallet-transaction-payment",
+ "pallet-transaction-payment 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "parity-scale-codec",
- "polkadot-parachain-primitives",
+ "polkadot-parachain-primitives 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "scale-info",
- "sp-arithmetic",
- "sp-io",
- "sp-runtime",
- "sp-std",
- "sp-weights",
- "staging-xcm",
- "staging-xcm-executor",
+ "sp-arithmetic 18.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-weights 22.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "staging-xcm 2.0.1",
+ "staging-xcm-executor 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "staging-xcm-builder"
+version = "2.0.1"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "frame-support 23.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "frame-system 23.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "impl-trait-for-tuples",
+ "log",
+ "pallet-transaction-payment 23.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "parity-scale-codec",
+ "polkadot-parachain-primitives 1.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "scale-info",
+ "sp-arithmetic 18.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-io 25.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-runtime 26.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-std 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-weights 22.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "staging-xcm 2.0.0",
+ "staging-xcm-executor 2.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
 ]
 
 [[package]]
@@ -11283,18 +11921,38 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "23b2ab1d434de75fb698d07d863ebede9745bd500d0284c659055201024627ca"
 dependencies = [
  "environmental",
- "frame-benchmarking",
- "frame-support",
+ "frame-benchmarking 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "impl-trait-for-tuples",
  "log",
  "parity-scale-codec",
- "sp-arithmetic",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
- "sp-weights",
- "staging-xcm",
+ "sp-arithmetic 18.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io 25.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std 10.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-weights 22.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "staging-xcm 2.0.1",
+]
+
+[[package]]
+name = "staging-xcm-executor"
+version = "2.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
+dependencies = [
+ "environmental",
+ "frame-benchmarking 23.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "frame-support 23.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "impl-trait-for-tuples",
+ "log",
+ "parity-scale-codec",
+ "sp-arithmetic 18.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-core 23.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-io 25.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-runtime 26.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-std 10.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "sp-weights 22.0.0 (git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix)",
+ "staging-xcm 2.0.0",
 ]
 
 [[package]]
@@ -11415,7 +12073,7 @@ dependencies = [
  "log",
  "sc-rpc-api",
  "serde",
- "sp-runtime",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -12893,13 +13551,13 @@ version = "2.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "75c4085403f25dda1eb8ce8859a118f9681c35687e893a8a2511179f7436643a"
 dependencies = [
- "frame-support",
+ "frame-support 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "polkadot-primitives",
  "polkadot-runtime-common",
  "smallvec",
- "sp-core",
- "sp-runtime",
- "sp-weights",
+ "sp-core 23.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 26.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-weights 22.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -13237,6 +13895,17 @@ name = "xcm-procedural"
 version = "2.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9bde452a547dd6926f94539b113171419b10d2b642a59cad296754259733bca6"
+dependencies = [
+ "Inflector",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.31",
+]
+
+[[package]]
+name = "xcm-procedural"
+version = "2.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk?branch=bko-settopic-fix#a1e0c2d1227e8b299338d65667c2840ca059d61f"
 dependencies = [
  "Inflector",
  "proc-macro2",

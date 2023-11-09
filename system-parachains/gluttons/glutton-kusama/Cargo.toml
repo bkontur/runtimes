@@ -35,9 +35,9 @@ sp-transaction-pool = { default-features = false, version = "21.0.0" }
 sp-version = { default-features = false, version = "24.0.0" }
 
 # Polkadot
-xcm = { package = "staging-xcm", default-features = false, version = "2.0.1" }
-xcm-builder = { package = "staging-xcm-builder", default-features = false, version = "2.0.1" }
-xcm-executor = { package = "staging-xcm-executor", default-features = false, version = "2.0.0" }
+xcm = { package = "staging-xcm", default-features = false, git = "https://github.com/paritytech/polkadot-sdk", branch = "bko-settopic-fix" }
+xcm-builder = { package = "staging-xcm-builder", default-features = false, git = "https://github.com/paritytech/polkadot-sdk", branch = "bko-settopic-fix" }
+xcm-executor = { package = "staging-xcm-executor", default-features = false, git = "https://github.com/paritytech/polkadot-sdk", branch = "bko-settopic-fix" }
 
 # Cumulus
 cumulus-pallet-parachain-system = { default-features = false, features = ["parameterized-consensus-hook",] , version = "0.2.0" }
