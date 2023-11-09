@@ -18,16 +18,20 @@
 
 use crate::*;
 use frame_support::{
-	dispatch::GetDispatchInfo, traits::WhitelistedStorageKeys, weights::WeightToFee as WeightToFeeT,
+	assert_ok, dispatch::GetDispatchInfo, traits::WhitelistedStorageKeys,
+	weights::WeightToFee as WeightToFeeT,
 };
 use keyring::Sr25519Keyring::Charlie;
 use pallet_transaction_payment::Multiplier;
 use parity_scale_codec::Encode;
 use runtime_common::MinimumMultiplier;
+use runtime_parachains::configuration::HostConfiguration;
 use separator::Separatable;
 use sp_core::hexdisplay::HexDisplay;
 use sp_runtime::FixedPointNumber;
 use std::collections::HashSet;
+use xcm::latest::prelude::*;
+use xcm_executor::{traits::ConvertLocation, XcmExecutor};
 
 #[test]
 fn nis_hold_reason_encoding_is_correct() {
@@ -174,4 +178,103 @@ fn check_whitelist() {
 	assert!(whitelist.contains("1405f2411d0af5a7ff397e7c9dc68d194a222ba0333561192e474c59ed8e30e1"));
 	// XcmPallet SafeXcmVersion
 	assert!(whitelist.contains("1405f2411d0af5a7ff397e7c9dc68d196323ae84c43568be0d1394d5d0d522c4"));
+}
+
+// https://kusama.subscan.io/xcm_message/kusama-98082ccbd5ae3e416b17276a0aaaeadd85aecb7a
+// https://forum.moonbeam.network/t/proposal-mr38-hotfix-for-kusama-fails-to-convert-xcm-from-v3-v2/1366
+#[test]
+fn xcm_router_for_xcm_version_2_or_3_as_mangata_kusama_moonriver_test() {
+	let manganta = MultiLocation { parents: 0, interior: X1(Parachain(2110)) };
+	let manganta_sa = xcm_config::SovereignAccountOf::convert_location(&manganta).unwrap();
+	let moonriver = MultiLocation { parents: 0, interior: X1(Parachain(2023)) };
+	let moonriver_sa = xcm_config::SovereignAccountOf::convert_location(&moonriver).unwrap();
+
+	let native_asset_amount_to_transfer = 20000473873659;
+	let buy_execution_fee_amount_eta1 = 10000236936829;
+	let buy_execution_fee_amount_eta2 = 10000236936829;
+
+	// setup ext
+	let mut t = frame_system::GenesisConfig::<Runtime>::default().build_storage().unwrap();
+	pallet_balances::GenesisConfig::<Runtime> {
+		balances: vec![
+			(manganta_sa, ExistentialDeposit::get() + native_asset_amount_to_transfer * 2),
+			(moonriver_sa, ExistentialDeposit::get()),
+		],
+	}
+	.assimilate_storage(&mut t)
+	.unwrap();
+	parachains_configuration::GenesisConfig::<Runtime> {
+		// for `ChildParachainRouter` to pass
+		config: HostConfiguration { max_downward_message_size: 2024, ..Default::default() },
+	}
+	.assimilate_storage(&mut t)
+	.unwrap();
+
+	// test case fn simulating: https://kusama.subscan.io/xcm_message/kusama-98082ccbd5ae3e416b17276a0aaaeadd85aecb7a
+	let process_xcm = || -> Outcome {
+		// 1. process received teleported assets from relaychain
+		let xcm = Xcm(vec![
+			WithdrawAsset(MultiAssets::from(vec![MultiAsset {
+				id: Concrete(Here.into_location()),
+				fun: Fungible(native_asset_amount_to_transfer),
+			}])),
+			ClearOrigin,
+			BuyExecution {
+				fees: MultiAsset {
+					id: Concrete(Here.into_location()),
+					fun: Fungible(buy_execution_fee_amount_eta1),
+				},
+				weight_limit: Unlimited,
+			},
+			DepositReserveAsset {
+				assets: Wild(AllCounted(1)),
+				dest: moonriver,
+				xcm: Xcm(vec![
+					BuyExecution {
+						fees: MultiAsset {
+							id: Concrete(Parent.into()),
+							fun: Fungible(buy_execution_fee_amount_eta2),
+						},
+						weight_limit: Unlimited,
+					},
+					DepositAsset {
+						assets: Wild(AllCounted(1)),
+						beneficiary: MultiLocation {
+							parents: 0,
+							interior: X1(AccountKey20 {
+								network: None,
+								key: hex_literal::hex!("f8b497a64b1216b8caaaadcc710b99d22d4b38d2"),
+							}),
+						},
+					},
+				]),
+			},
+		]);
+
+		let hash = xcm.using_encoded(sp_io::hashing::blake2_256);
+		XcmExecutor::<xcm_config::XcmConfig>::execute_xcm(
+			manganta, // Mangata
+			xcm,
+			hash,
+			MessageQueueServiceWeight::get(),
+		)
+	};
+
+	// execute test
+	sp_io::TestExternalities::new(t).execute_with(|| {
+		// set xcm version for Kusama
+		assert_ok!(XcmPallet::force_default_xcm_version(RuntimeOrigin::root(), Some(2),));
+
+		// set xcm version `3` for Moonriver
+		assert_ok!(XcmPallet::force_xcm_version(RuntimeOrigin::root(), Box::new(moonriver), 3,));
+
+		// xcm should work
+		assert_eq!(process_xcm().ensure_complete(), Ok(()));
+
+		// set xcm version `2` for Moonriver
+		assert_ok!(XcmPallet::force_xcm_version(RuntimeOrigin::root(), Box::new(moonriver), 2,));
+
+		// xcm should work
+		assert_eq!(process_xcm().ensure_complete(), Ok(()));
+	});
 }
