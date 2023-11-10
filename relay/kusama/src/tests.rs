@@ -278,3 +278,92 @@ fn xcm_router_for_xcm_version_2_or_3_as_mangata_kusama_moonriver_test() {
 		assert_eq!(process_xcm().ensure_complete(), Ok(()));
 	});
 }
+
+// https://kusama.subscan.io/xcm_message/kusama-360aabeeab32fb7406725efb3e1c479307c64c00
+#[test]
+fn mangata_kusama_test() {
+	let manganta = MultiLocation { parents: 0, interior: X1(Parachain(2110)) };
+	let manganta_sa = xcm_config::SovereignAccountOf::convert_location(&manganta).unwrap();
+
+	let native_asset_amount_to_transfer = 2000000000000;
+	let buy_execution_fee_amount_eta1 = 2000000000000;
+
+	// setup ext
+	let mut t = frame_system::GenesisConfig::<Runtime>::default().build_storage().unwrap();
+	pallet_balances::GenesisConfig::<Runtime> {
+		balances: vec![(
+			manganta_sa,
+			ExistentialDeposit::get() + native_asset_amount_to_transfer * 2,
+		)],
+	}
+	.assimilate_storage(&mut t)
+	.unwrap();
+	parachains_configuration::GenesisConfig::<Runtime> {
+		// for `ChildParachainRouter` to pass
+		config: HostConfiguration { max_downward_message_size: 2024, ..Default::default() },
+	}
+	.assimilate_storage(&mut t)
+	.unwrap();
+
+	// test case fn simulating: https://kusama.subscan.io/xcm_message/kusama-360aabeeab32fb7406725efb3e1c479307c64c00
+	let process_xcm = |weight_limit| -> Outcome {
+		// 1. process received teleported assets from relaychain
+		let xcm = Xcm(vec![
+			WithdrawAsset(MultiAssets::from(vec![MultiAsset {
+				id: Concrete(Here.into_location()),
+				fun: Fungible(native_asset_amount_to_transfer),
+			}])),
+			ClearOrigin,
+			BuyExecution {
+				fees: MultiAsset {
+					id: Concrete(Here.into_location()),
+					fun: Fungible(buy_execution_fee_amount_eta1),
+				},
+				weight_limit,
+			},
+			DepositAsset {
+				assets: Wild(AllCounted(1)),
+				beneficiary: MultiLocation {
+					parents: 0,
+					interior: X1(AccountId32 {
+						network: None,
+						id: hex_literal::hex!(
+							"aee65bf22cdf1f98c91b6c176854d8072f1328e027d2e84d23607b517b1b9429"
+						),
+					}),
+				},
+			},
+		]);
+
+		let hash = xcm.using_encoded(sp_io::hashing::blake2_256);
+		XcmExecutor::<xcm_config::XcmConfig>::execute_xcm(
+			manganta,
+			xcm,
+			hash,
+			MessageQueueServiceWeight::get(),
+		)
+	};
+
+	// execute test
+	sp_io::TestExternalities::new(t).execute_with(|| {
+		sp_tracing::try_init_simple();
+
+		// set xcm version for Kusama
+		assert_ok!(XcmPallet::force_default_xcm_version(RuntimeOrigin::root(), Some(2),));
+
+		// xcm fails on Barrier
+		assert_eq!(
+			process_xcm(Limited(Weight::from_parts(300000000, 0))).ensure_complete(),
+			Err(XcmError::Barrier)
+		);
+
+		// xcm works
+		assert_eq!(
+			process_xcm(Limited(Weight::from_parts(305952000, 7186))).ensure_complete(),
+			Ok(())
+		);
+
+		// xcm works
+		assert_eq!(process_xcm(Unlimited).ensure_complete(), Ok(()));
+	});
+}
