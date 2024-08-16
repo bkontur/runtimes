@@ -25,6 +25,7 @@ use frame_support::{
 		tokens::{Fortitude, Preservation},
 		DefensiveResult, OnUnbalanced,
 	},
+	weights::constants::{WEIGHT_PROOF_SIZE_PER_KB, WEIGHT_REF_TIME_PER_MICROS},
 };
 use frame_system::Pallet as System;
 use pallet_broker::{CoreAssignment, CoreIndex, CoretimeInterface, PartsOf57600, RCBlockNumberOf};
@@ -139,8 +140,10 @@ impl CoretimeInterface for CoretimeAllocator {
 		// Weight for `request_core_count` from Polkadot runtime benchmarks:
 		// `ref_time`, `proof_size`, reads, writes
 		// 9_660_000, 1640, 3, 1
-		// Use overestimates for reads and writes, add 10% and round to 3sf.
-		let call_weight = Weight::from_parts(203_000_000, 1800);
+		// Use overestimates for reads and writes, add 30% to each component with a healthy round
+		// up.
+		let call_weight =
+			Weight::from_parts(250 * WEIGHT_REF_TIME_PER_MICROS, 3 * WEIGHT_PROOF_SIZE_PER_KB);
 
 		let message = Xcm(vec![
 			Instruction::UnpaidExecution {
@@ -175,8 +178,10 @@ impl CoretimeInterface for CoretimeAllocator {
 		// Weight for `request_revenue_at` from Polkadot runtime benchmarks:
 		// `ref_time`, `proof_size`, reads, writes
 		// 93_731_000, 6313, 7, 5
-		// Use overestimates for reads and writes, add 10% and round to 3sf.
-		let call_weight = Weight::from_parts(846_000_000, 6940);
+		// Use overestimates for reads and writes, add 30% to each component with a healthy round
+		// up.
+		let call_weight =
+			Weight::from_parts(1000 * WEIGHT_REF_TIME_PER_MICROS, 9 * WEIGHT_PROOF_SIZE_PER_KB);
 
 		let message = Xcm(vec![
 			Instruction::UnpaidExecution {
@@ -224,8 +229,10 @@ impl CoretimeInterface for CoretimeAllocator {
 		// Weight for `assign_core` from Polkadot runtime benchmarks:
 		// `ref_time`, `proof_size`, reads, writes
 		// 12_201_135 + 80 * 13_556, 3579, 1, 2
-		// Use overestimates for reads and writes, add 10% and round to 3sf.
-		let call_weight = Weight::from_parts(262_000_000, 3940);
+		// Use overestimates for reads and writes, add 30% to each component with a healthy round
+		// up.
+		let call_weight =
+			Weight::from_parts(350 * WEIGHT_REF_TIME_PER_MICROS, 5 * WEIGHT_PROOF_SIZE_PER_KB);
 
 		// The relay chain currently only allows `assign_core` to be called with a complete mask
 		// and only ever with increasing `begin`. The assignments must be truncated to avoid
