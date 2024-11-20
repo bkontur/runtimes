@@ -30,7 +30,7 @@ use bp_messages::{
 use bp_parachains::SingleParaStoredHeaderDataBuilder;
 use bp_runtime::Chain;
 use bridge_hub_common::xcm_version::XcmVersionOfDestAndRemoteBridge;
-use frame_support::{parameter_types, traits::PalletInfoAccess};
+use frame_support::{parameter_types, traits::{ConstU128, PalletInfoAccess}};
 use frame_system::{EnsureNever, EnsureRoot};
 use pallet_bridge_messages::LaneIdOf;
 use pallet_bridge_relayers::extension::{
@@ -141,8 +141,6 @@ parameter_types! {
 	pub PriorityBoostPerParachainHeader: u64 = 9_182_241_758_241;
 	// see the `FEE_BOOST_PER_MESSAGE` constant to get the meaning of this value
 	pub PriorityBoostPerMessage: u64 = 1_820_444_444_444;
-	// TODO: @acatangiu, is there any specs about the deposit cost?
-	pub storage BridgeDeposit: Balance = 10 * constants::currency::UNITS;
 }
 
 /// Proof of messages, coming from Kusama.
@@ -247,7 +245,8 @@ impl pallet_xcm_bridge_hub::Config<XcmOverBridgeHubKusamaInstance> for Runtime {
 	type BridgeOriginAccountIdConverter =
 		(ParentIsPreset<AccountId>, SiblingParachainConvertsVia<Sibling, AccountId>);
 
-	type BridgeDeposit = BridgeDeposit;
+	// We do not allow creating bridges here (see `T::OpenBridgeOrigin` above), so there is no need to set a deposit.
+	type BridgeDeposit = ConstU128<0>;
 	type Currency = Balances;
 	type RuntimeHoldReason = RuntimeHoldReason;
 	type AllowWithoutBridgeDeposit =

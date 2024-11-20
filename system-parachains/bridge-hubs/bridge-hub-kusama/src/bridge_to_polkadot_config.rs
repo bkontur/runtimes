@@ -29,7 +29,7 @@ use bp_messages::{
 use bp_parachains::SingleParaStoredHeaderDataBuilder;
 use bp_runtime::Chain;
 use bridge_hub_common::xcm_version::XcmVersionOfDestAndRemoteBridge;
-use frame_support::{parameter_types, traits::PalletInfoAccess};
+use frame_support::{parameter_types, traits::{ConstU128, PalletInfoAccess}};
 use frame_system::{EnsureNever, EnsureRoot};
 use kusama_runtime_constants as constants;
 use pallet_bridge_messages::LaneIdOf;
@@ -140,8 +140,6 @@ parameter_types! {
 	pub PriorityBoostPerParachainHeader: u64 = 920_224_664_224_664;
 	// see the `FEE_BOOST_PER_MESSAGE` constant to get the meaning of this value
 	pub PriorityBoostPerMessage: u64 = 182_044_444_444_444;
-	// TODO: What's the correct value? - FAIL-CI
-	pub storage BridgeDeposit: Balance = constants::currency::UNITS;
 }
 
 /// Proof of messages, coming from Polkadot.
@@ -246,7 +244,8 @@ impl pallet_xcm_bridge_hub::Config<XcmOverBridgeHubPolkadotInstance> for Runtime
 	type BridgeOriginAccountIdConverter =
 		(ParentIsPreset<AccountId>, SiblingParachainConvertsVia<Sibling, AccountId>);
 
-	type BridgeDeposit = BridgeDeposit;
+	// We do not allow creating bridges here (see `T::OpenBridgeOrigin` above), so there is no need to set a deposit.
+	type BridgeDeposit = ConstU128<0>;
 	type Currency = Balances;
 	type RuntimeHoldReason = RuntimeHoldReason;
 	// Do not require deposit from system parachains or relay chain
