@@ -17,8 +17,8 @@
 //! Genesis configs presets for the BridgeHubKusama runtime
 
 use crate::*;
-use alloc::vec::Vec;
 use sp_genesis_builder::PresetId;
+use sp_std::vec::Vec;
 use system_parachains_constants::genesis_presets::*;
 
 const BRIDGE_HUB_KUSAMA_ED: Balance = ExistentialDeposit::get();
@@ -28,6 +28,7 @@ fn bridge_hub_kusama_genesis(
 	endowed_accounts: Vec<AccountId>,
 	id: ParaId,
 	opened_bridges: Vec<(Location, InteriorLocation, Option<bp_messages::LegacyLaneId>)>,
+	bridges_pallet_owner: Option<AccountId>,
 ) -> serde_json::Value {
 	serde_json::json!({
 		"balances": BalancesConfig {
@@ -36,7 +37,6 @@ fn bridge_hub_kusama_genesis(
 				.cloned()
 				.map(|k| (k, BRIDGE_HUB_KUSAMA_ED * 4096 * 4096))
 				.collect(),
-			dev_accounts: None,
 		},
 		"parachainInfo": ParachainInfoConfig {
 			parachain_id: id,
@@ -64,6 +64,7 @@ fn bridge_hub_kusama_genesis(
 			"safeXcmVersion": Some(SAFE_XCM_VERSION),
 		},
 		"xcmOverBridgeHubPolkadot": XcmOverBridgeHubPolkadotConfig { opened_bridges, ..Default::default() },
+		"bridgePolkadotGrandpa": BridgePolkadotGrandpaConfig { owner: bridges_pallet_owner, ..Default::default() },
 		// no need to pass anything to aura, in fact it will panic if we do. Session will take care
 		// of this. `aura: Default::default()`
 	})
@@ -75,18 +76,16 @@ pub fn preset_names() -> Vec<PresetId> {
 }
 
 /// Provides the JSON representation of predefined genesis config for given `id`.
-pub fn get_preset(id: &sp_genesis_builder::PresetId) -> Option<alloc::vec::Vec<u8>> {
-	let patch = match id.as_ref() {
-		sp_genesis_builder::DEV_RUNTIME_PRESET => bridge_hub_kusama_genesis(
+pub fn get_preset(id: &sp_genesis_builder::PresetId) -> Option<sp_std::vec::Vec<u8>> {
+	let patch = match id.try_into() {
+		Ok("development") => bridge_hub_kusama_genesis(
 			invulnerables(),
-			testnet_accounts_with([
-				// Make sure `StakingPot` is funded for benchmarking purposes.
-				StakingPot::get(),
-			]),
+			testnet_accounts(),
 			1002.into(),
 			vec![],
+			None,
 		),
-		sp_genesis_builder::LOCAL_TESTNET_RUNTIME_PRESET => bridge_hub_kusama_genesis(
+		Ok("local_testnet") => bridge_hub_kusama_genesis(
 			invulnerables(),
 			testnet_accounts(),
 			1002.into(),
@@ -95,6 +94,7 @@ pub fn get_preset(id: &sp_genesis_builder::PresetId) -> Option<alloc::vec::Vec<u
 				Junctions::from([GlobalConsensus(Polkadot), Parachain(1000)]),
 				Some(bp_messages::LegacyLaneId([0, 0, 0, 1])),
 			)],
+			Some(sp_keyring::Sr25519Keyring::Bob.to_account_id()),
 		),
 		_ => return None,
 	};

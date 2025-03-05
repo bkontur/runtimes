@@ -54,6 +54,7 @@ sp-core = { workspace = true }
 sp-genesis-builder = { workspace = true }
 sp-inherents = { workspace = true }
 sp-io = { workspace = true }
+sp-keyring = { workspace = true }
 sp-offchain = { workspace = true }
 sp-runtime = { workspace = true }
 sp-session = { workspace = true }
@@ -123,7 +124,6 @@ bridge-runtime-common = { features = [
 	"integrity-test",
 ], workspace = true, default-features = true }
 pallet-bridge-relayers = { workspace = true, features = ["integrity-test"] }
-sp-keyring = { workspace = true }
 snowbridge-runtime-test-common = { workspace = true }
 snowbridge-pallet-ethereum-client-fixtures = { workspace = true }
 parachains-runtimes-test-utils = { workspace = true }
@@ -210,6 +210,7 @@ std = [
 	"sp-genesis-builder/std",
 	"sp-inherents/std",
 	"sp-io/std",
+	"sp-keyring/std",
 	"sp-offchain/std",
 	"sp-runtime/std",
 	"sp-session/std",
