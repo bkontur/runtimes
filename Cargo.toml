@@ -224,7 +224,7 @@ sp-debug-derive = { version = "14.0.0", default-features = false }
 sp-genesis-builder = { version = "0.15.1", default-features = false }
 sp-inherents = { version = "34.0.0", default-features = false }
 sp-io = { version = "38.0.0", default-features = false }
-sp-keyring = { version = "39.0.0" }
+sp-keyring = { version = "39.0.0", default-features = false }
 sp-npos-elections = { version = "34.0.0", default-features = false }
 sp-offchain = { version = "34.0.0", default-features = false }
 sp-runtime = { version = "39.0.5", default-features = false }

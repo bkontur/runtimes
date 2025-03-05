@@ -28,6 +28,7 @@ fn bridge_hub_polkadot_genesis(
 	endowed_accounts: Vec<AccountId>,
 	id: ParaId,
 	opened_bridges: Vec<(Location, InteriorLocation, Option<bp_messages::LegacyLaneId>)>,
+	bridges_pallet_owner: Option<AccountId>,
 ) -> serde_json::Value {
 	serde_json::json!({
 		"balances": BalancesConfig {
@@ -63,6 +64,7 @@ fn bridge_hub_polkadot_genesis(
 			"safeXcmVersion": Some(SAFE_XCM_VERSION),
 		},
 		"xcmOverBridgeHubKusama": XcmOverBridgeHubKusamaConfig { opened_bridges, ..Default::default() },
+		"bridgeKusamaGrandpa": BridgeKusamaGrandpaConfig { owner: bridges_pallet_owner, ..Default::default() },
 		"ethereumSystem": EthereumSystemConfig {
 			para_id: id,
 			asset_hub_para_id: polkadot_runtime_constants::system_parachain::ASSET_HUB_ID.into(),
@@ -81,8 +83,13 @@ pub fn preset_names() -> Vec<PresetId> {
 /// Provides the JSON representation of predefined genesis config for given `id`.
 pub fn get_preset(id: &sp_genesis_builder::PresetId) -> Option<sp_std::vec::Vec<u8>> {
 	let patch = match id.try_into() {
-		Ok("development") =>
-			bridge_hub_polkadot_genesis(invulnerables(), testnet_accounts(), 1002.into(), vec![]),
+		Ok("development") => bridge_hub_polkadot_genesis(
+			invulnerables(),
+			testnet_accounts(),
+			1002.into(),
+			vec![],
+			None,
+		),
 		Ok("local_testnet") => bridge_hub_polkadot_genesis(
 			invulnerables(),
 			testnet_accounts(),
@@ -92,6 +99,7 @@ pub fn get_preset(id: &sp_genesis_builder::PresetId) -> Option<sp_std::vec::Vec<
 				Junctions::from([GlobalConsensus(Kusama), Parachain(1000)]),
 				Some(bp_messages::LegacyLaneId([0, 0, 0, 1])),
 			)],
+			Some(sp_keyring::Sr25519Keyring::Bob.to_account_id()),
 		),
 		_ => return None,
 	};
