@@ -3252,7 +3252,7 @@ mod staking_tests {
 			let stake = ExistentialDeposit::get() * 10;
 			// Given a solo staker
 			let solo_staker = AccountId::from([1u8; 32]);
-			Balances::set_balance(&solo_staker, 2 * stake);
+			Balances::set_balance(&solo_staker, 3 * stake);
 			assert_ok!(Staking::bond(
 				RuntimeOrigin::signed(solo_staker.clone()),
 				stake,
@@ -3261,7 +3261,7 @@ mod staking_tests {
 
 			// And a pooled staker
 			let pooled_staker = AccountId::from([2u8; 32]);
-			Balances::set_balance(&pooled_staker, 2 * stake);
+			Balances::set_balance(&pooled_staker, 3 * stake);
 			assert_ok!(NominationPools::create(
 				RuntimeOrigin::signed(pooled_staker.clone()),
 				stake,
@@ -3272,7 +3272,7 @@ mod staking_tests {
 
 			// Then the solo staker cannot join a pool.
 			assert_noop!(
-				NominationPools::join(RuntimeOrigin::signed(solo_staker), 90, 1),
+				NominationPools::join(RuntimeOrigin::signed(solo_staker), stake, 1),
 				// Note: with sdk stable2503 onwards, this error would be
 				// `pallet_nomination_pools::Error::<Runtime>::Restricted`
 				pallet_delegated_staking::Error::<Runtime>::AlreadyStaking
@@ -3282,7 +3282,7 @@ mod staking_tests {
 			assert_noop!(
 				pallet_staking::Pallet::<Runtime>::bond(
 					RuntimeOrigin::signed(pooled_staker),
-					10,
+					stake,
 					pallet_staking::RewardDestination::Stash,
 				),
 				// Note: with sdk stable2503 onwards, this error would be
