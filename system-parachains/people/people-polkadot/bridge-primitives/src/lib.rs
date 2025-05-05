@@ -92,18 +92,3 @@ pub const WITH_PEOPLE_POLKADOT_TO_BULLETIN_MESSAGES_PALLET_INDEX: u8 = 61;
 
 decl_bridge_finality_runtime_apis!(people_hub_polkadot);
 decl_bridge_messages_runtime_apis!(people_hub_polkadot, LegacyLaneId);
-
-frame_support::parameter_types! {
-	/// The XCM fee that is paid for executing XCM program (with `ExportMessage` instruction) at the Polkadot
-	/// PeopleHub.
-	/// (initially was calculated by test `PeopleHubPolkadot::can_calculate_weight_for_paid_export_message_with_reserve_transfer` + `33%`)
-	pub const PeopleHubPolkadotBaseXcmFeeInDots: Balance = 90_433_350;
-
-	/// Transaction fee that is paid at the Polkadot PeopleHub for delivering single inbound message.
-	/// (initially was calculated by test `PeopleHubPolkadot::can_calculate_fee_for_standalone_message_delivery_transaction` + `33%`)
-	pub const PeopleHubPolkadotBaseDeliveryFeeInDots: Balance = 471_317_032;
-
-	/// Transaction fee that is paid at the Polkadot PeopleHub for delivering single outbound message confirmation.
-	/// (initially was calculated by test `PeopleHubPolkadot::can_calculate_fee_for_standalone_message_confirmation_transaction` + `33%`)
-	pub const PeopleHubPolkadotBaseConfirmationFeeInDots: Balance = 86_255_432;
-}
