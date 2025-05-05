@@ -77,6 +77,26 @@ parachain-info = { workspace = true }
 parachains-common = { workspace = true }
 system-parachains-constants = { workspace = true }
 
+# Bridges
+bp-messages = { workspace = true }
+bp-polkadot-bulletin = { workspace = true }
+bp-header-chain = { workspace = true }
+bp-runtime = { workspace = true }
+bp-parachains = { workspace = true }
+bp-relayers = { workspace = true }
+bp-polkadot-core = { workspace = true }
+bp-bridge-hub-polkadot = { workspace = true }
+bp-people-hub-polkadot = { workspace = true }
+pallet-bridge-grandpa = { workspace = true }
+pallet-bridge-messages = { workspace = true }
+pallet-bridge-relayers = { workspace = true }
+pallet-bridge-parachains = { workspace = true }
+
+pallet-xcm-bridge-hub = { workspace = true }
+bridge-runtime-common = { workspace = true }	
+
+pallet-sudo = { workspace = true }
+
 [dev-dependencies]
 parachains-runtimes-test-utils = { workspace = true }
 
@@ -147,6 +167,25 @@ std = [
 	"xcm-executor/std",
 	"xcm-runtime-apis/std",
 	"xcm/std",
+    "bp-messages/std",
+	"bp-polkadot-bulletin/std",
+	"bp-header-chain/std",
+	"bp-runtime/std",
+	"bp-parachains/std",
+	"bp-relayers/std",
+	"bp-polkadot-core/std",
+	"bp-bridge-hub-polkadot/std",
+	"bp-people-hub-polkadot/std",
+	"pallet-bridge-grandpa/std",
+	"pallet-bridge-messages/std",
+	"pallet-bridge-relayers/std",
+	"pallet-bridge-parachains/std",
+	"pallet-xcm-bridge-hub/std",
+	"bridge-runtime-common/std",
+	"pallet-sudo/std",
+
+
+
 ]
 
 runtime-benchmarks = [

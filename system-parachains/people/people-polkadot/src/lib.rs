@@ -28,6 +28,8 @@ mod tests;
 mod weights;
 pub mod xcm_config;
 
+pub mod bridge_common_config;
+pub mod bridge_to_bulletin_config;
 use alloc::{borrow::Cow, vec, vec::Vec};
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use cumulus_pallet_parachain_system::RelayNumberMonotonicallyIncreases;
@@ -44,6 +46,7 @@ use frame_support::{
 	weights::{ConstantMultiplier, Weight},
 	PalletId,
 };
+use pallet_bridge_messages::LaneIdOf;
 use frame_system::{
 	limits::{BlockLength, BlockWeights},
 	EnsureRoot,
@@ -80,6 +83,7 @@ use xcm::{
 use xcm_config::{
 	FellowshipLocation, GovernanceLocation, PriceForSiblingParachainDelivery, StakingPot,
 	XcmConfig, XcmOriginToTransactDispatchOrigin,
+	XcmRouter,
 };
 use xcm_runtime_apis::{
 	dry_run::{CallDryRunEffects, Error as XcmDryRunApiError, XcmDryRunEffects},
@@ -199,6 +203,8 @@ parameter_types! {
 		.avg_block_initialization(AVERAGE_ON_INITIALIZE_RATIO)
 		.build_or_panic();
 	pub const SS58Prefix: u8 = 0;
+
+	pub const BridgePolkadotBulletinMessagesPalletName: &'static str = "BridgePolkadotBulletinMessages";
 }
 
 #[derive_impl(frame_system::config_preludes::ParaChainDefaultConfig as frame_system::DefaultConfig)]
@@ -644,6 +650,19 @@ construct_runtime!(
 
 		// The main stage.
 		Identity: pallet_identity = 50,
+
+		// For bridging to Bulletin
+
+		// With-Polkadot Bulletin GRANDPA bridge module.
+		BridgePolkadotBulletinGrandpa: pallet_bridge_grandpa::<Instance1> = 60,
+		// With-Polkadot Bulletin messaging bridge module.
+		BridgePolkadotBulletinMessages: pallet_bridge_messages::<Instance1> = 61,
+		// With-Polkadot Bulletin bridge hub pallet.
+		BridgeRelayers: pallet_bridge_relayers = 47,
+		XcmOverPolkadotBulletin: pallet_xcm_bridge_hub::<Instance1> = 62,
+	
+
+
 	}
 );
 
@@ -852,6 +871,7 @@ mod benches {
 	pub use pallet_xcm::benchmarking::Pallet as PalletXcmExtrinsicsBenchmark;
 	pub type XcmBalances = pallet_xcm_benchmarks::fungible::Pallet<Runtime>;
 	pub type XcmGeneric = pallet_xcm_benchmarks::generic::Pallet<Runtime>;
+	
 	pub use frame_support::traits::WhitelistedStorageKeys;
 	pub use sp_storage::TrackedStorageKey;
 }
@@ -1107,6 +1127,49 @@ impl_runtime_apis! {
 			// NOTE: intentional unwrap: we don't want to propagate the error backwards, and want to
 			// have a backtrace here.
 			Executive::try_execute_block(block, state_root_check, signature_check, select).unwrap()
+		}
+	}
+
+	impl bp_polkadot_bulletin::PolkadotBulletinFinalityApi<Block> for Runtime {
+		fn best_finalized() -> Option<bp_runtime::HeaderId<bp_polkadot_bulletin::Hash, bp_polkadot_bulletin::BlockNumber>> {
+			BridgePolkadotBulletinGrandpa::best_finalized()
+		}
+
+		fn free_headers_interval() -> Option<bp_polkadot_bulletin::BlockNumber> {
+			// <Runtime as pallet_bridge_grandpa::Config<
+			// 	bridge_common_config::BridgeGrandpaPolkadotBulletinInstance
+			// >>::FreeHeadersInterval::get()
+			Some(bp_polkadot_bulletin::BlockNumber::from(5u32))
+		}
+
+		fn synced_headers_grandpa_info(
+		) -> Vec<bp_header_chain::StoredHeaderGrandpaInfo<bp_polkadot_bulletin::Header>> {
+			BridgePolkadotBulletinGrandpa::synced_headers_grandpa_info()
+		}
+	}
+
+	impl bp_polkadot_bulletin::FromPolkadotBulletinInboundLaneApi<Block> for Runtime {
+		fn message_details(
+			lane: LaneIdOf<Runtime, bridge_to_bulletin_config::WithPolkadotBulletinMessagesInstance>,
+			messages: Vec<(bp_messages::MessagePayload, bp_messages::OutboundMessageDetails)>,
+		) -> Vec<bp_messages::InboundMessageDetails> {
+			bridge_runtime_common::messages_api::inbound_message_details::<
+				Runtime,
+				bridge_to_bulletin_config::WithPolkadotBulletinMessagesInstance,
+			>(lane, messages)
+		}
+	}
+
+	impl bp_polkadot_bulletin::ToPolkadotBulletinOutboundLaneApi<Block> for Runtime {
+		fn message_details(
+			lane: LaneIdOf<Runtime, bridge_to_bulletin_config::WithPolkadotBulletinMessagesInstance>,
+			begin: bp_messages::MessageNonce,
+			end: bp_messages::MessageNonce,
+		) -> Vec<bp_messages::OutboundMessageDetails> {
+			bridge_runtime_common::messages_api::outbound_message_details::<
+				Runtime,
+				bridge_to_bulletin_config::WithPolkadotBulletinMessagesInstance,
+			>(lane, begin, end)
 		}
 	}
 

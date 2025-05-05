@@ -1,0 +1,81 @@
+// Copyright (C) Parity Technologies (UK) Ltd.
+// This file is part of Cumulus.
+// SPDX-License-Identifier: Apache-2.0
+
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// 	http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+//! Bridge definitions that can be used by multiple BridgeHub flavors.
+//! All configurations here should be dedicated to a single chain; in other words, we don't need two
+//! chains for a single pallet configuration.
+//!
+//! For example, the messaging pallet needs to know the sending and receiving chains, but the
+//! GRANDPA tracking pallet only needs to be aware of one chain.
+
+use super::{AccountId, Balance, Balances, BlockNumber, Runtime, RuntimeEvent};
+use frame_support::{parameter_types, traits::ConstU32};
+
+parameter_types! {
+	pub const RelayChainHeadersToKeep: u32 = 1024;
+	pub const ParachainHeadsToKeep: u32 = 64;
+
+	pub const PolkadotBridgeParachainPalletName: &'static str = bp_bridge_hub_polkadot::bp_polkadot::PARAS_PALLET_NAME;
+	pub const MaxPolkadotParaHeadDataSize: u32 = bp_bridge_hub_polkadot::bp_polkadot::MAX_NESTED_PARACHAIN_HEAD_DATA_SIZE;
+
+	pub storage RequiredStakeForStakeAndSlash: Balance = 1_000_000;
+	pub const RelayerStakeLease: u32 = 8;
+	pub const RelayerStakeReserveId: [u8; 8] = *b"brdgrlrs";
+
+	pub storage DeliveryRewardInBalance: u64 = 1_000_000;
+}
+
+
+/// Allows collect and claim rewards for relayers
+pub type RelayersForLegacyLaneIdsMessagesInstance = ();
+impl pallet_bridge_relayers::Config<RelayersForLegacyLaneIdsMessagesInstance> for Runtime {
+	type LaneId = bp_messages::LegacyLaneId;
+	type RuntimeEvent = RuntimeEvent;
+	type Reward = Balance;
+	type PaymentProcedure = bp_relayers::PayRewardFromAccount<
+		pallet_balances::Pallet<Runtime>,
+		AccountId,
+		bp_messages::LegacyLaneId,
+	>;
+	type StakeAndSlash = pallet_bridge_relayers::StakeAndSlashNamed<
+		AccountId,
+		BlockNumber,
+		Balances,
+		RelayerStakeReserveId,
+		RequiredStakeForStakeAndSlash,
+		RelayerStakeLease,
+	>;
+	type WeightInfo = ();
+}
+
+/// Add GRANDPA bridge pallet to track Polkadot Bulletin chain.
+pub type BridgeGrandpaPolkadotBulletinInstance = pallet_bridge_grandpa::Instance1;
+impl pallet_bridge_grandpa::Config<BridgeGrandpaPolkadotBulletinInstance> for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type BridgedChain = bp_polkadot_bulletin::PolkadotBulletin;
+	type MaxFreeHeadersPerBlock = ConstU32<4>;
+	type FreeHeadersInterval = ConstU32<5>;
+	type HeadersToKeep = RelayChainHeadersToKeep;
+	// Technically this is incorrect - we have two pallet instances and ideally we shall
+	// benchmark every instance separately. But the benchmarking engine has a flaw - it
+	// messes with components. E.g. in Kusama maximal validators count is 1024 and in
+	// Bulletin chain it is 100. But benchmarking engine runs Bulletin benchmarks using
+	// components range, computed for Kusama => it causes an error.
+	//
+	// In practice, however, GRANDPA pallet works the same way for all bridged chains, so
+	// weights are also the same for both bridges.
+	type WeightInfo = ();
+}
