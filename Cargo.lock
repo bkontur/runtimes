@@ -1806,7 +1806,6 @@ dependencies = [
  "bp-runtime",
  "frame-support",
  "polkadot-runtime-constants",
- "snowbridge-core",
  "sp-api",
  "sp-runtime",
  "sp-std",
@@ -1816,9 +1815,7 @@ dependencies = [
 
 [[package]]
 name = "bp-polkadot-bulletin"
-version = "0.19.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6d1cbd8d5fa9239d7af20a46cec72f5994a9e6fec471f601b8fb1b4b45fdc5bd"
+version = "0.4.0"
 dependencies = [
  "bp-header-chain",
  "bp-messages",

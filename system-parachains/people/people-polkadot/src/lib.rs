@@ -643,6 +643,12 @@ construct_runtime!(
 		CumulusXcm: cumulus_pallet_xcm = 32,
 		MessageQueue: pallet_message_queue = 34,
 
+		// For bridging to Bulletin
+		BridgeRelayers: pallet_bridge_relayers = 47,
+		BridgePolkadotBulletinGrandpa: pallet_bridge_grandpa::<Instance1> = 60,
+		BridgePolkadotBulletinMessages: pallet_bridge_messages::<Instance1> = 61,
+		XcmOverPolkadotBulletin: pallet_xcm_bridge_hub::<Instance1> = 62,
+	
 		// Handy utilities.
 		Utility: pallet_utility = 40,
 		Multisig: pallet_multisig = 41,
@@ -650,18 +656,6 @@ construct_runtime!(
 
 		// The main stage.
 		Identity: pallet_identity = 50,
-
-		// For bridging to Bulletin
-
-		// With-Polkadot Bulletin GRANDPA bridge module.
-		BridgePolkadotBulletinGrandpa: pallet_bridge_grandpa::<Instance1> = 60,
-		// With-Polkadot Bulletin messaging bridge module.
-		BridgePolkadotBulletinMessages: pallet_bridge_messages::<Instance1> = 61,
-		// With-Polkadot Bulletin bridge hub pallet.
-		BridgeRelayers: pallet_bridge_relayers = 47,
-		XcmOverPolkadotBulletin: pallet_xcm_bridge_hub::<Instance1> = 62,
-	
-
 
 	}
 );
@@ -1139,6 +1133,7 @@ impl_runtime_apis! {
 			// <Runtime as pallet_bridge_grandpa::Config<
 			// 	bridge_common_config::BridgeGrandpaPolkadotBulletinInstance
 			// >>::FreeHeadersInterval::get()
+			// TODO fix this
 			Some(bp_polkadot_bulletin::BlockNumber::from(5u32))
 		}
 

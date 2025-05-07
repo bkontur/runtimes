@@ -26,7 +26,7 @@ use crate::{
 	XcmRouter,
 };
 use bp_messages::{
-	source_chain::FromBridgedChainMessagesDeliveryProof, target_chain::FromBridgedChainMessagesProof, HashedLaneId,
+	source_chain::FromBridgedChainMessagesDeliveryProof, target_chain::FromBridgedChainMessagesProof, LegacyLaneId,
 };
 
 use frame_support::{
@@ -119,7 +119,7 @@ impl pallet_bridge_messages::Config<WithPolkadotBulletinMessagesInstance> for Ru
 
 	type OutboundPayload = XcmAsPlainPayload;
 	type InboundPayload = XcmAsPlainPayload;
-	type LaneId = HashedLaneId;
+	type LaneId = LegacyLaneId;
 
 	type DeliveryPayments = ();
 	type DeliveryConfirmationPayments = ();
