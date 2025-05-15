@@ -218,7 +218,7 @@ impl xcm_executor::Config for XcmConfig {
 		DotRelayLocation,
 		AccountId,
 		Balances,
-		ResolveTo<StakingPotAccountId<Runtime>, Balances>,
+		system_parachains_common::ResolveTo2<StakingPotAccountId<Runtime>, Balances>,
 	>;
 	type ResponseHandler = PolkadotXcm;
 	type AssetTrap = PolkadotXcm;

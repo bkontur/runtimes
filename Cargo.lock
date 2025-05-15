@@ -15299,6 +15299,7 @@ name = "system-parachains-common"
 version = "1.0.0"
 dependencies = [
  "frame-support",
+ "log",
  "polkadot-primitives",
  "polkadot-runtime-common",
  "staging-xcm",
