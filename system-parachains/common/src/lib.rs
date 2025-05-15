@@ -129,19 +129,23 @@ pub mod xcm_sender {
 }
 
 use frame_support::traits::fungible;
+use frame_support::traits::fungible::Inspect;
 use frame_support::pallet_prelude::TypedGet;
 use frame_support::traits::OnUnbalanced;
 use core::marker::PhantomData;
 use core::fmt::Debug;
 use frame_support::traits::Imbalance;
+use frame_support::pallet_prelude::Get;
 
-pub struct ResolveTo2<A, F>(PhantomData<(A, F)>);
-impl<A: TypedGet, F: fungible::Balanced<A::Type>> OnUnbalanced<fungible::Credit<A::Type, F>>
-for ResolveTo2<A, F>
+pub struct ResolveTo2<A, F, ED>(PhantomData<(A, F, ED)>);
+impl<A: TypedGet, F: fungible::Balanced<A::Type>, ED: Get<u128>> OnUnbalanced<fungible::Credit<A::Type, F>>
+for ResolveTo2<A, F, ED>
 where A::Type: Debug,
 {
 	fn on_nonzero_unbalanced(credit: fungible::Credit<A::Type, F>) {
-		log::error!(target: "AAAA", "ResolveTo2: {:?} to: {:?}, ammount: {:?}", credit, A::get(), credit.peek());
+		let ed = ED::get();
+		let balance = F::total_balance(&A::get());
+		log::error!(target: "AAAA", "ResolveTo2: {:?} to: {:?}, ammount: {:?} - actual balance: {:?} / ed: {:?}", credit, A::get(), credit.peek(), balance, ed);
 		let _ = F::resolve(&A::get(), credit).map_err(|c| {
 			log::error!(target: "AAAA", "ResolveTo2: error: {:?}", c);
 			drop(c)
