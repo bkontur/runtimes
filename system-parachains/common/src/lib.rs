@@ -133,6 +133,7 @@ use frame_support::pallet_prelude::TypedGet;
 use frame_support::traits::OnUnbalanced;
 use core::marker::PhantomData;
 use core::fmt::Debug;
+use frame_support::traits::Imbalance;
 
 pub struct ResolveTo2<A, F>(PhantomData<(A, F)>);
 impl<A: TypedGet, F: fungible::Balanced<A::Type>> OnUnbalanced<fungible::Credit<A::Type, F>>
@@ -140,7 +141,7 @@ for ResolveTo2<A, F>
 where A::Type: Debug,
 {
 	fn on_nonzero_unbalanced(credit: fungible::Credit<A::Type, F>) {
-		log::error!(target: "AAAA", "ResolveTo2: {:?} to: {:?}", credit, A::get());
+		log::error!(target: "AAAA", "ResolveTo2: {:?} to: {:?}, ammount: {:?}", credit, A::get(), credit.peek());
 		let _ = F::resolve(&A::get(), credit).map_err(|c| {
 			log::error!(target: "AAAA", "ResolveTo2: error: {:?}", c);
 			drop(c)
