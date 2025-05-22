@@ -174,6 +174,7 @@ pub mod proxy {
 		PartialOrd,
 		codec::Encode,
 		codec::Decode,
+		codec::DecodeWithMemTracking,
 		core::fmt::Debug,
 		codec::MaxEncodedLen,
 		scale_info::TypeInfo,
@@ -218,7 +219,7 @@ pub mod proxy {
 		type RemoteHasher = BlakeTwo256;
 
 		fn block_to_storage_root(
-			validation_data: &polkadot_primitives::PersistedValidationData,
+			validation_data: &pallet_remote_proxy::PersistedValidationData,
 		) -> Option<(Self::RemoteBlockNumber, <Self::RemoteHasher as sp_core::Hasher>::Out)> {
 			Some((validation_data.relay_parent_number, validation_data.relay_parent_storage_root))
 		}
