@@ -1,0 +1,6 @@
+Description: User is able to store data on Bulletin via PeopleHub
+Network: {{ENV_PATH}}/bridge_hub_polkadot_local_network.toml
+Creds: config
+
+# Store some random data on Bulletin
+asset-hub-polkadot-collator-1: run {{ENV_PATH}}/helper.sh with "store-data "ws://127.0.0.1:9010" "//Alice" {{DATA_FOR_BULLETIN}}" within 120 seconds

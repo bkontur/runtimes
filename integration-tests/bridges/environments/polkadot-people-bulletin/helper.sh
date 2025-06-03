@@ -1,3 +1,3 @@
 #!/bin/bash
 
-$ENV_PATH/bridges_polkadot_kusama.sh "$@"
+$ENV_PATH/bridges_people_bulletin.sh "$@"

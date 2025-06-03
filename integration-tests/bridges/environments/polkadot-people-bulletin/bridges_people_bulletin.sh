@@ -4,7 +4,7 @@
 source "$(dirname "$0")"/bridges_common.sh
 
 function init_bulletin_polkadot() {
-    ensure_relayer
+    local RELAYER_BINARY_PATH=$(ensure_relayer)
 
     RUST_LOG=runtime=trace,rpc=trace,bridge=trace \
         $RELAYER_BINARY_PATH init-bridge polkadot-bulletin-to-people-hub-polkadot \
@@ -17,7 +17,7 @@ function init_bulletin_polkadot() {
 }
 
 function init_polkadot_bulletin() {
-    ensure_relayer
+    local RELAYER_BINARY_PATH=$(ensure_relayer)
 
     RUST_LOG=runtime=trace,rpc=trace,bridge=trace \
         $RELAYER_BINARY_PATH init-bridge polkadot-to-polkadot-bulletin \
@@ -30,31 +30,31 @@ function init_polkadot_bulletin() {
 }
 
 function run_finality_relay() {
-  ensure_relayer
+  local RELAYER_BINARY_PATH=$(ensure_relayer)
 
-    RUST_LOG=rpc=trace,bridge=trace \
-        $RELAYER_BINARY_PATH relay-headers polkadot-bulletin-to-people-hub-polkadot \
-        --only-free-headers \
-        --source-uri ws://localhost:10000 \
-        --source-version-mode Auto \
-        --target-uri ws://localhost:8943 \
-        --target-version-mode Auto \
-        --target-signer //Bob \
-        --target-transactions-mortality 4 &
+  RUST_LOG=rpc=trace,bridge=trace \
+      $RELAYER_BINARY_PATH relay-headers polkadot-bulletin-to-people-hub-polkadot \
+      --only-free-headers \
+      --source-uri ws://localhost:10000 \
+      --source-version-mode Auto \
+      --target-uri ws://localhost:8943 \
+      --target-version-mode Auto \
+      --target-signer //Bob \
+      --target-transactions-mortality 4 &
 
-    RUST_LOG=rpc=trace,bridge=trace \
-        $RELAYER_BINARY_PATH relay-headers polkadot-to-polkadot-bulletin \
-        --only-free-headers \
-        --source-uri ws://localhost:9942 \
-        --source-version-mode Auto \
-        --target-uri ws://localhost:10000 \
-        --target-version-mode Auto \
-        --target-signer //Alice \
-        --target-transactions-mortality 4
+  RUST_LOG=rpc=trace,bridge=trace \
+      $RELAYER_BINARY_PATH relay-headers polkadot-to-polkadot-bulletin \
+      --only-free-headers \
+      --source-uri ws://localhost:9942 \
+      --source-version-mode Auto \
+      --target-uri ws://localhost:10000 \
+      --target-version-mode Auto \
+      --target-signer //Alice \
+      --target-transactions-mortality 4
 }
 
 function run_parachains_relay() {
-    ensure_relayer
+    local RELAYER_BINARY_PATH=$(ensure_relayer)
 
     RUST_LOG=rpc=trace,bridge=trace \
         $RELAYER_BINARY_PATH relay-parachains polkadot-to-polkadot-bulletin \
@@ -68,7 +68,7 @@ function run_parachains_relay() {
 }
 
 function run_messages_relay() {
-    ensure_relayer
+    local RELAYER_BINARY_PATH=$(ensure_relayer)
 
     RUST_LOG=runtime=trace,rpc=trace,bridge=trace \
         $RELAYER_BINARY_PATH relay-messages polkadot-bulletin-to-people-hub-polkadot \
@@ -97,7 +97,7 @@ function run_messages_relay() {
 
 function run_relay() {
     echo OK
-    ensure_relayer
+    local RELAYER_BINARY_PATH=$(ensure_relayer)
 
     RUST_LOG=rpc=trace,bridge=trace \
         $RELAYER_BINARY_PATH relay-headers-and-messages polkadot-bulletin-people-hub-polkadot \
@@ -115,6 +115,24 @@ function run_relay() {
         --people-hub-polkadot-signer //Charlie \
         --people-hub-polkadot-transactions-mortality 4 \
         --lane 00000000
+}
+
+function store_data_with_bulletin() {
+    local url=$1
+    local seed=$2
+    local data=$3
+    echo "  calling store_data_with_bulletin:"
+    echo "      url: ${url}"
+    echo "      seed: ${seed}"
+    echo "      data: ${data}"
+    echo ""
+    echo "--------------------------------------------------"
+
+    call_polkadot_js_api \
+        --ws "${url?}" \
+        --seed "${seed?}" \
+        tx.transactionStorage.store \
+            "${data}"
 }
 
 case "$1" in
@@ -143,6 +161,13 @@ case "$1" in
     pkill -f polkadot
     pkill -f polkadot-parachain
     pkill -f substrate-relay
+    ;;
+  store-data)
+    # store data in the bulletin
+    url=$2
+    seed=$3
+    data=$4
+    store_data_with_bulletin "$url" "$seed" "$data"
     ;;
   *)
     echo "A command is require. Supported commands for:
