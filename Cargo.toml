@@ -27,10 +27,13 @@ bp-header-chain = { git = "https://github.com/paritytech/polkadot-sdk.git", bran
 bp-messages = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "bko-permlanes-on-ahs-4-local-dispatch", default-features = false }
 bp-parachains = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "bko-permlanes-on-ahs-4-local-dispatch", default-features = false }
 bp-polkadot-core = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "bko-permlanes-on-ahs-4-local-dispatch", default-features = false }
+bp-proof-root-store = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "bko-permlanes-on-ahs-4-local-dispatch", default-features = false }
 bp-relayers = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "bko-permlanes-on-ahs-4-local-dispatch", default-features = false }
 bp-runtime = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "bko-permlanes-on-ahs-4-local-dispatch", default-features = false }
+bp-xcm-bridge = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "bko-permlanes-on-ahs-4-local-dispatch", default-features = false }
 bp-xcm-bridge-hub = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "bko-permlanes-on-ahs-4-local-dispatch", default-features = false }
 bp-xcm-bridge-hub-router = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "bko-permlanes-on-ahs-4-local-dispatch", default-features = false }
+bp-xcm-bridge-router = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "bko-permlanes-on-ahs-4-local-dispatch", default-features = false }
 bridge-hub-common = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "bko-permlanes-on-ahs-4-local-dispatch", default-features = false }
 bridge-hub-kusama-emulated-chain = { path = "integration-tests/emulated/chains/parachains/bridges/bridge-hub-kusama" }
 bridge-hub-kusama-runtime = { path = "system-parachains/bridge-hubs/bridge-hub-kusama" }
@@ -97,6 +100,8 @@ pallet-bounties = { git = "https://github.com/paritytech/polkadot-sdk.git", bran
 pallet-bridge-grandpa = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "bko-permlanes-on-ahs-4-local-dispatch", default-features = false }
 pallet-bridge-messages = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "bko-permlanes-on-ahs-4-local-dispatch", default-features = false }
 pallet-bridge-parachains = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "bko-permlanes-on-ahs-4-local-dispatch", default-features = false }
+pallet-bridge-proof-root-store = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "bko-permlanes-on-ahs-4-local-dispatch", default-features = false }
+pallet-bridge-proof-root-sync = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "bko-permlanes-on-ahs-4-local-dispatch", default-features = false }
 pallet-bridge-relayers = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "bko-permlanes-on-ahs-4-local-dispatch", default-features = false }
 pallet-broker = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "bko-permlanes-on-ahs-4-local-dispatch", default-features = false }
 pallet-child-bounties = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "bko-permlanes-on-ahs-4-local-dispatch", default-features = false }
@@ -168,8 +173,10 @@ pallet-vesting = { git = "https://github.com/paritytech/polkadot-sdk.git", branc
 pallet-whitelist = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "bko-permlanes-on-ahs-4-local-dispatch", default-features = false }
 pallet-xcm = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "bko-permlanes-on-ahs-4-local-dispatch", default-features = false }
 pallet-xcm-benchmarks = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "bko-permlanes-on-ahs-4-local-dispatch", default-features = false }
+pallet-xcm-bridge = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "bko-permlanes-on-ahs-4-local-dispatch", default-features = false }
 pallet-xcm-bridge-hub = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "bko-permlanes-on-ahs-4-local-dispatch", default-features = false }
 pallet-xcm-bridge-hub-router = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "bko-permlanes-on-ahs-4-local-dispatch", default-features = false }
+pallet-xcm-bridge-router = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "bko-permlanes-on-ahs-4-local-dispatch", default-features = false }
 parachain-info = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "bko-permlanes-on-ahs-4-local-dispatch", default-features = false, package = "staging-parachain-info" }
 parachains-common = {git = "https://github.com/paritytech/polkadot-sdk.git", branch = "bko-permlanes-on-ahs-4-local-dispatch", default-features = false }
 parachains-runtimes-test-utils = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "bko-permlanes-on-ahs-4-local-dispatch" }

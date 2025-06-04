@@ -16,8 +16,9 @@
 use super::{
 	AccountId, AllPalletsWithSystem, AssetConversion, Assets, Balance, Balances, CollatorSelection,
 	ForeignAssets, NativeAndAssets, ParachainInfo, ParachainSystem, PolkadotXcm, PoolAssets,
-	PriceForParentDelivery, Runtime, RuntimeCall, RuntimeEvent, RuntimeOrigin, ToKusamaXcmRouter,
-	WeightToFee, XcmpQueue,
+	PriceForParentDelivery, Runtime, RuntimeCall, RuntimeEvent, RuntimeOrigin,
+	ToKusamaOverAssetHubKusamaXcmRouter, ToKusamaXcmRouter, TransactionByteFee, Uniques,
+	WeightToFee, XcmOverAssetHubKusama, XcmpQueue,
 };
 use alloc::{collections::BTreeSet, vec, vec::Vec};
 use assets_common::{
@@ -48,25 +49,25 @@ use xcm_builder::{
 	AccountId32Aliases, AliasChildLocation, AllowExplicitUnpaidExecutionFrom,
 	AllowKnownQueryResponses, AllowSubscriptionsFrom, AllowTopLevelPaidExecutionFrom,
 	DenyReserveTransferToRelayChain, DenyThenTry, DescribeAllTerminal, DescribeFamily,
-	EnsureXcmOrigin, FrameTransactionalProcessor, FungibleAdapter, FungiblesAdapter,
-	GlobalConsensusParachainConvertsFor, HashedDescription, IsConcrete, LocalMint,
-	MatchedConvertedConcreteId, NoChecking, ParentAsSuperuser, ParentIsPreset, RelayChainAsNative,
-	SendXcmFeeToAccount, SiblingParachainAsNative, SiblingParachainConvertsVia,
-	SignedAccountId32AsNative, SignedToAccountId32, SingleAssetExchangeAdapter,
-	SovereignPaidRemoteExporter, SovereignSignedViaLocation, StartsWith,
-	StartsWithExplicitGlobalConsensus, TakeWeightCredit, TrailingSetTopicAsId, UsingComponents,
-	WeightInfoBounds, WithComputedOrigin, WithLatestLocationConverter, WithUniqueTopic,
-	XcmFeeManagerFromComponents, ExternalConsensusLocationsConverterFor,
+	EnsureXcmOrigin, ExternalConsensusLocationsConverterFor, FrameTransactionalProcessor,
+	FungibleAdapter, FungiblesAdapter, GlobalConsensusParachainConvertsFor, HashedDescription,
+	IsConcrete, LocalMint, MatchedConvertedConcreteId, NoChecking, ParentAsSuperuser,
+	ParentIsPreset, RelayChainAsNative, SendXcmFeeToAccount, SiblingParachainAsNative,
+	SiblingParachainConvertsVia, SignedAccountId32AsNative, SignedToAccountId32,
+	SingleAssetExchangeAdapter, SovereignPaidRemoteExporter, SovereignSignedViaLocation,
+	StartsWith, StartsWithExplicitGlobalConsensus, TakeWeightCredit, TrailingSetTopicAsId,
+	UsingComponents, WeightInfoBounds, WithComputedOrigin, WithLatestLocationConverter,
+	WithUniqueTopic, XcmFeeManagerFromComponents,
 };
 use xcm_executor::{traits::ConvertLocation, XcmExecutor};
 
 parameter_types! {
 	pub const DotLocation: Location = Location::parent();
 	pub const DotLocationV4: xcm::v4::Location = xcm::v4::Location::parent();
-	pub const RelayNetwork: Option<NetworkId> = Some(NetworkId::Polkadot);
+	pub const RelayNetwork: NetworkId = NetworkId::Polkadot;
 	pub RelayChainOrigin: RuntimeOrigin = cumulus_pallet_xcm::Origin::Relay.into();
 	pub UniversalLocation: InteriorLocation =
-		[GlobalConsensus(RelayNetwork::get().unwrap()), Parachain(ParachainInfo::parachain_id().into())].into();
+		[GlobalConsensus(RelayNetwork::get()), Parachain(ParachainInfo::parachain_id().into())].into();
 	pub UniversalLocationNetworkId: NetworkId = UniversalLocation::get().global_consensus().unwrap();
 	pub TrustBackedAssetsPalletIndex: u8 = <Assets as PalletInfoAccess>::index() as u8;
 	pub TrustBackedAssetsPalletLocation: Location =
@@ -438,7 +439,10 @@ impl xcm_executor::Config for XcmConfig {
 		WaivedLocations,
 		SendXcmFeeToAccount<Self::AssetTransactor, RelayTreasuryPalletAccount>,
 	>;
-	type MessageExporter = ();
+	type MessageExporter = (
+		// AH's permissionless lanes support exporting to Kusama.
+		XcmOverAssetHubKusama,
+	);
 	type UniversalAliases =
 		(bridging::to_kusama::UniversalAliases, bridging::to_ethereum::UniversalAliases);
 	type CallDispatcher = RuntimeCall;
@@ -455,7 +459,7 @@ impl xcm_executor::Config for XcmConfig {
 pub type LocalSignedOriginToLocation = SignedToAccountId32<RuntimeOrigin, AccountId, RelayNetwork>;
 
 /// For routing XCM messages which do not cross local consensus boundary.
-type LocalXcmRouter = (
+pub(crate) type LocalXcmRouter = (
 	// Two routers - use UMP to communicate with the relay chain:
 	cumulus_primitives_utility::ParentAsUmp<ParachainSystem, PolkadotXcm, PriceForParentDelivery>,
 	// ..and XCMP to communicate with the sibling chains.
@@ -468,8 +472,15 @@ pub type XcmRouter = WithUniqueTopic<(
 	// The means for routing XCM messages which are not for local execution into the right message
 	// queues.
 	LocalXcmRouter,
-	// Router which wraps and sends xcm to BridgeHub to be delivered to the Kusama
-	// GlobalConsensus
+	// Router that exports messages to be delivered to the Kusama GlobalConsensus,
+	// when a permissionless lane is created between the origin and destination.
+	//
+	// Note: `ToKusamaOverAssetHubKusamaXcmRouter` must come before `ToKusamaXcmRouter`
+	// because it checks if the lane is created dynamically, whereas `ToKusamaXcmRouter` has a
+	// static configuration.
+	ToKusamaOverAssetHubKusamaXcmRouter,
+	// Router which wraps (`ExportMessage`) and sends xcm to BridgeHub to be delivered to the
+	// Kusama GlobalConsensus
 	ToKusamaXcmRouter,
 	// Router which wraps and sends xcm to BridgeHub to be delivered to the Ethereum
 	// GlobalConsensus
@@ -542,11 +553,43 @@ pub mod bridging {
 	use xcm_builder::NetworkExportTableItem;
 
 	parameter_types! {
+		/// (for AH -> <ExportMessage> -> BH -> BH -> AH route)
+		///
 		/// Base price of every Polkadot -> Kusama message. Can be adjusted via
 		/// governance `set_storage` call.
+		///
+		/// The default value is our estimation of the:
+		///
+		/// 1) an approximate cost of XCM execution (`ExportMessage` and surroundings) at Polkadot bridge hub;
+		///
+		/// 2) the approximate cost of Polkadot -> Kusama message delivery transaction on Kusama Bridge Hub,
+		///    converted into WNDs using 1:1 conversion rate;
+		///
+		/// 3) the approximate cost of Polkadot -> Kusama message confirmation transaction on Polkadot Bridge Hub.
 		pub storage XcmBridgeHubRouterBaseFee: Balance = bp_bridge_hub_polkadot::estimate_polkadot_to_kusama_message_fee(
 			bp_bridge_hub_kusama::BridgeHubKusamaBaseDeliveryFeeInKsms::get()
 		);
+
+		/// (for direct AH -> AH route)
+		///
+		/// Base price of every byte of the Polkadot -> Kusama message. Can be adjusted via
+		/// governance `set_storage` call.
+		///
+		/// The default value is our estimation of the:
+		///
+		/// 1) the approximate cost of Polkadot -> Kusama message delivery transaction on Kusama Asset Hub,
+		///    converted into WNDs using 1:1 conversion rate;
+		///
+		/// 2) the approximate cost of Polkadot -> Kusama message confirmation transaction on Polkadot Asset Hub.
+		///
+		/// Note: We do not account for `ExportMessage`, because we are doing direct `ExportXcm`,
+		/// which should be already accounted for benchmarked extrinsic cost.
+		pub storage ToKusamaOverAssetHubKusamaXcmRouterBaseFee: Balance = DefaultToKusamaOverAssetHubKusamaXcmRouterBaseFee::get();
+		pub const DefaultToKusamaOverAssetHubKusamaXcmRouterBaseFee: Balance =
+			bp_asset_hub_kusama::AssetHubKusamaBaseDeliveryFeeInKsms::get()
+				.saturating_add(bp_asset_hub_polkadot::AssetHubPolkadotBaseConfirmationFeeInDots::get());
+
+
 		/// Price of every byte of the Polkadot -> Kusama message. Can be adjusted via
 		/// governance `set_storage` call.
 		pub storage XcmBridgeHubRouterByteFee: Balance = bp_bridge_hub_polkadot::estimate_polkadot_to_kusama_byte_fee();
@@ -556,14 +599,7 @@ pub mod bridging {
 		/// Router expects payment with this `AssetId`.
 		/// (`AssetId` has to be aligned with `BridgeTable`)
 		pub XcmBridgeHubRouterFeeAssetId: AssetId = DotLocation::get().into();
-
-		pub BridgeTable: Vec<NetworkExportTableItem> =
-			Vec::new().into_iter()
-			.chain(to_kusama::BridgeTable::get())
-			.collect();
 	}
-
-	pub type NetworkExportTable = xcm_builder::NetworkExportTable<BridgeTable>;
 
 	pub mod to_kusama {
 		use super::*;
@@ -574,6 +610,12 @@ pub mod bridging {
 				[
 					Parachain(SiblingBridgeHubParaId::get()),
 					PalletInstance(bp_bridge_hub_polkadot::WITH_BRIDGE_POLKADOT_TO_KUSAMA_MESSAGES_PALLET_INDEX),
+				]
+			);
+			pub LocalBridge: Location = Location::new(
+				0,
+				[
+					PalletInstance(bp_asset_hub_polkadot::WITH_BRIDGE_POLKADOT_TO_KUSAMA_MESSAGES_PALLET_INDEX)
 				]
 			);
 
@@ -607,7 +649,10 @@ pub mod bridging {
 			/// Universal aliases
 			pub UniversalAliases: BTreeSet<(Location, Junction)> = BTreeSet::from_iter(
 				vec![
-					(SiblingBridgeHubWithBridgeHubKusamaInstance::get(), GlobalConsensus(KusamaNetwork::get()))
+					// The bridge over BridgeHubs (legacy).
+					(SiblingBridgeHubWithBridgeHubKusamaInstance::get(), GlobalConsensus(KusamaNetwork::get())),
+					// The direct bridge over AssetHubs.
+					(LocalBridge::get(), GlobalConsensus(KusamaNetwork::get()))
 				]
 			);
 		}

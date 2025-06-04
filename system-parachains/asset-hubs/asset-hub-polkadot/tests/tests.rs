@@ -18,31 +18,38 @@
 //! Tests for the Polkadot Asset Hub (previously known as Statemint) chain.
 
 use asset_hub_polkadot_runtime::{
+	bridge_common_config::{BridgeRelayersInstance, BridgeReward},
+	bridge_to_kusama_config, xcm_config,
 	xcm_config::{
 		bridging::{self, XcmBridgeHubRouterFeeAssetId},
-		CheckingAccount, DotLocation, ForeignCreatorsSovereignAccountOf, LocationToAccountId,
-		RelayTreasuryLocation, RelayTreasuryPalletAccount, StakingPot,
-		TrustBackedAssetsPalletLocation, XcmConfig, GovernanceLocation,
+		CheckingAccount, DotLocation, ForeignCreatorsSovereignAccountOf, GovernanceLocation,
+		LocationToAccountId, RelayTreasuryLocation, RelayTreasuryPalletAccount, StakingPot,
+		TrustBackedAssetsPalletLocation, XcmConfig,
 	},
 	AllPalletsWithoutSystem, AssetConversion, AssetDeposit, Assets, Balances, Block,
-	ExistentialDeposit, ForeignAssets, ForeignAssetsInstance, MetadataDepositBase,
-	MetadataDepositPerByte, ParachainSystem, PolkadotXcm, Runtime, RuntimeCall, RuntimeEvent,
-	RuntimeOrigin, SessionKeys, ToKusamaXcmRouterInstance, TrustBackedAssetsInstance, XcmpQueue,
-	SLOT_DURATION,
+	BridgeRejectObsoleteHeadersAndMessages, BridgeRelayers, Executive, ExistentialDeposit,
+	ForeignAssets, ForeignAssetsInstance, MetadataDepositBase, MetadataDepositPerByte,
+	ParachainSystem, PolkadotXcm, Runtime, RuntimeCall, RuntimeEvent, RuntimeOrigin, SessionKeys,
+	ToKusamaXcmRouterInstance, TrustBackedAssetsInstance, TxExtension, UncheckedExtrinsic,
+	XcmpQueue, SLOT_DURATION,
 };
 use asset_test_utils::{
 	test_cases_over_bridge::TestBridgingConfig, CollatorSessionKey, CollatorSessionKeys,
-	ExtBuilder, SlotDurations, GovernanceOrigin,
+	ExtBuilder, GovernanceOrigin, SlotDurations,
 };
+use bridge_hub_test_utils::test_cases::run_test;
 use codec::{Decode, Encode};
 use core::ops::Mul;
-use frame_support::{assert_ok, traits::fungibles::InspectEnumerable};
+use frame_support::{
+	assert_ok,
+	traits::{fungibles::InspectEnumerable, SignedTransactionBuilder},
+};
 use parachains_common::{
-	AccountId, AssetHubPolkadotAuraId as AuraId, AssetIdForTrustBackedAssets, Balance,
+	AccountId, AssetHubPolkadotAuraId as AuraId, AssetIdForTrustBackedAssets, Balance, Signature,
 };
 use sp_consensus_aura::SlotDuration;
 use sp_core::crypto::Ss58Codec;
-use sp_runtime::traits::MaybeEquivalence;
+use sp_runtime::{generic, traits::MaybeEquivalence};
 use system_parachains_constants::{
 	kusama::consensus::RELAY_CHAIN_SLOT_DURATION_MILLIS, polkadot::fee::WeightToFee,
 };
@@ -85,7 +92,7 @@ fn slot_durations() -> SlotDurations {
 fn setup_pool_for_paying_fees_with_foreign_assets(
 	(foreign_asset_owner, foreign_asset_id_location, foreign_asset_id_minimum_balance): (
 		AccountId,
-		xcm::v4::Location,
+		xcm::v5::Location,
 		Balance,
 	),
 ) {
@@ -93,7 +100,7 @@ fn setup_pool_for_paying_fees_with_foreign_assets(
 
 	// setup a pool to pay fees with `foreign_asset_id_location` tokens
 	let pool_owner: AccountId = [14u8; 32].into();
-	let native_asset = xcm::v4::Location::parent();
+	let native_asset = xcm::v5::Location::parent();
 	let pool_liquidity: Balance =
 		existential_deposit.max(foreign_asset_id_minimum_balance).mul(100_000);
 
@@ -128,6 +135,47 @@ fn setup_pool_for_paying_fees_with_foreign_assets(
 	));
 }
 
+fn construct_extrinsic(
+	sender: sp_keyring::Sr25519Keyring,
+	call: RuntimeCall,
+) -> UncheckedExtrinsic {
+	let account_id = sp_core::crypto::AccountId32::from(sender.public());
+	let tx_ext: TxExtension = (
+		frame_system::AuthorizeCall::<Runtime>::new(),
+		frame_system::CheckNonZeroSender::<Runtime>::new(),
+		frame_system::CheckSpecVersion::<Runtime>::new(),
+		frame_system::CheckTxVersion::<Runtime>::new(),
+		frame_system::CheckGenesis::<Runtime>::new(),
+		frame_system::CheckMortality::from(generic::Era::Immortal),
+		frame_system::CheckNonce::<Runtime>::from(
+			frame_system::Pallet::<Runtime>::account(&account_id).nonce,
+		),
+		frame_system::CheckWeight::<Runtime>::new(),
+		pallet_asset_conversion_tx_payment::ChargeAssetTxPayment::<Runtime>::from(0, None),
+		frame_metadata_hash_extension::CheckMetadataHash::<Runtime>::new(false),
+		BridgeRejectObsoleteHeadersAndMessages,
+		(bridge_to_kusama_config::OnAssetHubPolkadotRefundAssetHubKusamaMessages::default(),),
+	)
+		.into();
+	let payload = generic::SignedPayload::new(call.clone(), tx_ext.clone()).unwrap();
+	let signature = payload.using_encoded(|e| sender.sign(e));
+	UncheckedExtrinsic::new_signed_transaction(
+		call,
+		account_id.into(),
+		Signature::Sr25519(signature),
+		tx_ext,
+	)
+}
+
+fn construct_and_apply_extrinsic(
+	relayer_at_target: sp_keyring::Sr25519Keyring,
+	call: RuntimeCall,
+) -> sp_runtime::DispatchOutcome {
+	let xt = construct_extrinsic(relayer_at_target, call);
+	let r = Executive::apply_extrinsic(xt);
+	r.unwrap()
+}
+
 #[test]
 fn test_ed_is_one_hundredth_of_relay() {
 	ExtBuilder::<Runtime>::default()
@@ -159,15 +207,15 @@ fn test_assets_balances_api_works() {
 		.build()
 		.execute_with(|| {
 			let local_asset_id = 1;
-			let foreign_asset_id_location = xcm::v4::Location::new(
+			let foreign_asset_id_location = xcm::v5::Location::new(
 				1,
-				[xcm::v4::Junction::Parachain(1234), xcm::v4::Junction::GeneralIndex(12345)],
+				[xcm::v5::Junction::Parachain(1234), xcm::v5::Junction::GeneralIndex(12345)],
 			);
 
 			// check before
 			assert_eq!(Assets::balance(local_asset_id, AccountId::from(ALICE)), 0);
 			assert_eq!(
-				ForeignAssets::balance(foreign_asset_id_location.clone(), AccountId::from(ALICE)),
+				ForeignAssets::balance(foreign_asset_id_location.clone().try_into().unwrap(), AccountId::from(ALICE)),
 				0
 			);
 			assert_eq!(Balances::free_balance(AccountId::from(ALICE)), 0);
@@ -340,13 +388,13 @@ asset_test_utils::include_asset_transactor_transfer_with_pallet_assets_instance_
 	Runtime,
 	XcmConfig,
 	ForeignAssetsInstance,
-	xcm::v4::Location,
-	WithLatestLocationConverter<xcm::v4::Location>,
+	xcm::v5::Location,
+	WithLatestLocationConverter<xcm::v5::Location>,
 	collator_session_keys(),
 	ExistentialDeposit::get(),
-	xcm::v4::Location::new(
+	xcm::v5::Location::new(
 		1,
-		[xcm::v4::Junction::Parachain(1313), xcm::v4::Junction::GeneralIndex(12345)]
+		[xcm::v5::Junction::Parachain(1313), xcm::v5::Junction::GeneralIndex(12345)]
 	),
 	Box::new(|| {
 		assert!(Assets::asset_ids().collect::<Vec<_>>().is_empty());
@@ -362,8 +410,8 @@ include_create_and_manage_foreign_assets_for_local_consensus_parachain_assets_wo
 	WeightToFee,
 	ForeignCreatorsSovereignAccountOf,
 	ForeignAssetsInstance,
-	xcm::v4::Location,
-	WithLatestLocationConverter<xcm::v4::Location>,
+	xcm::v5::Location,
+	WithLatestLocationConverter<xcm::v5::Location>,
 	collator_session_keys(),
 	ExistentialDeposit::get(),
 	AssetDeposit::get(),
@@ -397,6 +445,24 @@ fn bridging_to_asset_hub_kusama() -> TestBridgingConfig {
 		bridged_network: bridging::to_kusama::KusamaNetwork::get(),
 		local_bridge_hub_para_id: bridging::SiblingBridgeHubParaId::get(),
 		local_bridge_hub_location: bridging::SiblingBridgeHub::get(),
+		bridged_target_location: bridging::to_kusama::AssetHubKusama::get(),
+	}
+}
+
+/// The direct bridge over AssetHubs: AHP <-> AHK
+fn direct_bridging_to_asset_hub_kusama() -> TestBridgingConfig {
+	let _ = PolkadotXcm::force_xcm_version(
+		RuntimeOrigin::root(),
+		Box::new(bridging::to_kusama::AssetHubKusama::get()),
+		XCM_VERSION,
+	)
+	.expect("version saved!");
+	TestBridgingConfig {
+		bridged_network: bridging::to_kusama::KusamaNetwork::get(),
+		// Local AH para_id.
+		local_bridge_hub_para_id: bp_asset_hub_polkadot::ASSET_HUB_POLKADOT_PARACHAIN_ID,
+		// The bridge is deployed `Here` on the AH chain.
+		local_bridge_hub_location: Location::here(),
 		bridged_target_location: bridging::to_kusama::AssetHubKusama::get(),
 	}
 }
@@ -436,28 +502,32 @@ fn limited_reserve_transfer_assets_for_native_asset_to_asset_hub_kusama_works() 
 
 #[test]
 fn receive_reserve_asset_deposited_ksm_from_asset_hub_kusama_fees_paid_by_pool_swap_works() {
-	const BLOCK_AUTHOR_ACCOUNT: [u8; 32] = [13; 32];
-	let block_author_account = AccountId::from(BLOCK_AUTHOR_ACCOUNT);
-	let staking_pot = StakingPot::get();
+	fn test_with(bridging_cfg: impl Fn() -> TestBridgingConfig, bridge_instance: InteriorLocation) {
+		const BLOCK_AUTHOR_ACCOUNT: [u8; 32] = [13; 32];
+		let block_author_account = AccountId::from(BLOCK_AUTHOR_ACCOUNT);
+		let staking_pot = StakingPot::get();
 
-	let foreign_asset_id_location_v4 =
-		xcm::v4::Location::new(2, [xcm::v4::Junction::GlobalConsensus(xcm::v4::NetworkId::Kusama)]);
-	let foreign_asset_id_minimum_balance = 1_000_000_000;
-	// sovereign account as foreign asset owner (can be whoever for this scenario)
-	let foreign_asset_owner = LocationToAccountId::convert_location(&Location::parent()).unwrap();
-	let foreign_asset_create_params = (
-		foreign_asset_owner,
-		foreign_asset_id_location_v4.clone(),
-		foreign_asset_id_minimum_balance,
-	);
+		let foreign_asset_id_location = xcm::v5::Location::new(
+			2,
+			[xcm::v5::Junction::GlobalConsensus(xcm::v5::NetworkId::Kusama)],
+		);
+		let foreign_asset_id_minimum_balance = 1_000_000_000;
+		// sovereign account as a foreign asset owner (can be whoever for this scenario)
+		let foreign_asset_owner =
+			LocationToAccountId::convert_location(&Location::parent()).unwrap();
+		let foreign_asset_create_params = (
+			foreign_asset_owner,
+			foreign_asset_id_location.clone(),
+			foreign_asset_id_minimum_balance,
+		);
 
-	remove_when_updated_to_stable2409::receive_reserve_asset_deposited_from_different_consensus_works::<
+		asset_test_utils::test_cases_over_bridge::receive_reserve_asset_deposited_from_different_consensus_works::<
             Runtime,
             AllPalletsWithoutSystem,
             XcmConfig,
             ForeignAssetsInstance,
         >(
-            collator_session_keys().add(collator_session_key(BLOCK_AUTHOR_ACCOUNT)),
+            collator_session_keys().add(collator_session_key(BLOCK_AUTHOR_ACCOUNT.try_into().unwrap())),
             ExistentialDeposit::get(),
             AccountId::from([73; 32]),
             block_author_account.clone(),
@@ -470,10 +540,10 @@ fn receive_reserve_asset_deposited_ksm_from_asset_hub_kusama_fees_paid_by_pool_s
                 // staking pot account for collecting local native fees from `BuyExecution`
                 let _ = Balances::force_set_balance(RuntimeOrigin::root(), StakingPot::get().into(), ExistentialDeposit::get());
                 // prepare bridge configuration
-                bridging_to_asset_hub_kusama()
+                bridging_cfg()
             },
             (
-                [PalletInstance(bp_bridge_hub_polkadot::WITH_BRIDGE_POLKADOT_TO_KUSAMA_MESSAGES_PALLET_INDEX)].into(),
+                bridge_instance,
                 GlobalConsensus(Kusama),
                 [Parachain(1000)].into()
             ),
@@ -483,7 +553,7 @@ fn receive_reserve_asset_deposited_ksm_from_asset_hub_kusama_fees_paid_by_pool_s
                 // check now foreign asset for staking pot
                 assert_eq!(
                     ForeignAssets::balance(
-                        foreign_asset_id_location_v4.clone(),
+                        foreign_asset_id_location.clone(),
                         &staking_pot
                     ),
                     0
@@ -497,13 +567,31 @@ fn receive_reserve_asset_deposited_ksm_from_asset_hub_kusama_fees_paid_by_pool_s
                 // staking pot receives no foreign assets
                 assert_eq!(
                     ForeignAssets::balance(
-                        foreign_asset_id_location_v4.clone(),
+                        foreign_asset_id_location.clone(),
                         &staking_pot
                     ),
                     0
                 );
             }
         )
+	}
+
+	// The bridge with BHs is working.
+	test_with(
+		bridging_to_asset_hub_kusama,
+		[PalletInstance(
+			bp_bridge_hub_polkadot::WITH_BRIDGE_POLKADOT_TO_KUSAMA_MESSAGES_PALLET_INDEX,
+		)]
+		.into(),
+	);
+	// The bridge with direct AHs is working.
+	test_with(
+		direct_bridging_to_asset_hub_kusama,
+		[PalletInstance(
+			bp_asset_hub_polkadot::WITH_BRIDGE_POLKADOT_TO_KUSAMA_MESSAGES_PALLET_INDEX,
+		)]
+		.into(),
+	);
 }
 
 #[test]
@@ -537,33 +625,35 @@ fn reserve_transfer_native_asset_to_non_teleport_para_works() {
 }
 
 #[test]
-fn report_bridge_status_from_xcm_bridge_router_for_kusama_works() {
-	asset_test_utils::test_cases_over_bridge::report_bridge_status_from_xcm_bridge_router_works::<
+fn update_bridge_status_from_xcm_bridge_router_for_kusama_works() {
+	asset_test_utils::test_cases_over_bridge::update_bridge_status_from_xcm_bridge_router_works::<
 		Runtime,
 		AllPalletsWithoutSystem,
 		XcmConfig,
 		LocationToAccountId,
 		ToKusamaXcmRouterInstance,
-	>(
-		collator_session_keys(),
-		bridging_to_asset_hub_kusama,
-		|| bp_asset_hub_polkadot::build_congestion_message(Default::default(), true).into(),
-		|| bp_asset_hub_polkadot::build_congestion_message(Default::default(), false).into(),
-	)
+	>(collator_session_keys(), bridging_to_asset_hub_kusama, |bridge_id, is_congested| {
+		bp_asset_hub_polkadot::build_congestion_message(bridge_id.inner(), is_congested).into()
+	})
 }
 
 #[test]
 fn test_report_bridge_status_call_compatibility() {
+	let bridge_id = bp_xcm_bridge::BridgeId::new(
+		&InteriorLocation::from([GlobalConsensus(ByGenesis([0; 32]))]),
+		&InteriorLocation::from([GlobalConsensus(ByGenesis([1; 32]))]),
+	);
+
 	// if this test fails, make sure `bp_asset_hub_kusama` has valid encoding
 	assert_eq!(
-		RuntimeCall::ToKusamaXcmRouter(pallet_xcm_bridge_hub_router::Call::report_bridge_status {
-			bridge_id: Default::default(),
+		RuntimeCall::ToKusamaXcmRouter(pallet_xcm_bridge_router::Call::update_bridge_status {
+			bridge_id: bridge_id.inner(),
 			is_congested: true,
 		})
 		.encode(),
 		bp_asset_hub_polkadot::Call::ToKusamaXcmRouter(
-			bp_asset_hub_polkadot::XcmBridgeHubRouterCall::report_bridge_status {
-				bridge_id: Default::default(),
+			bp_asset_hub_polkadot::XcmBridgeHubCall::update_bridge_status {
+				bridge_id: bridge_id.inner(),
 				is_congested: true,
 			}
 		)
@@ -572,11 +662,11 @@ fn test_report_bridge_status_call_compatibility() {
 }
 
 #[test]
-fn check_sane_weight_report_bridge_status() {
-	use pallet_xcm_bridge_hub_router::WeightInfo;
-	let actual = <Runtime as pallet_xcm_bridge_hub_router::Config<
+fn check_sane_weight_update_bridge_status() {
+	use pallet_xcm_bridge_router::WeightInfo;
+	let actual = <Runtime as pallet_xcm_bridge_router::Config<
 		ToKusamaXcmRouterInstance,
-	>>::WeightInfo::report_bridge_status();
+	>>::WeightInfo::update_bridge_status();
 	let max_weight = bp_asset_hub_polkadot::XcmBridgeHubRouterTransactCallMaxWeight::get();
 	assert!(
 		actual.all_lte(max_weight),
@@ -790,9 +880,9 @@ pub mod remove_when_updated_to_stable2409 {
 		<WeightToFee as frame_support::weights::WeightToFee>::Balance: From<u128> + Into<u128>,
 		SovereignAccountOf: ConvertLocation<AccountIdOf<Runtime>>,
 		<Runtime as pallet_assets::Config<ForeignAssetsPalletInstance>>::AssetId:
-			From<xcm::v4::Location> + Into<xcm::v4::Location>,
+			From<xcm::v5::Location> + Into<xcm::v5::Location>,
 		<Runtime as pallet_assets::Config<ForeignAssetsPalletInstance>>::AssetIdParameter:
-			From<xcm::v4::Location> + Into<xcm::v4::Location>,
+			From<xcm::v5::Location> + Into<xcm::v5::Location>,
 		<Runtime as pallet_assets::Config<ForeignAssetsPalletInstance>>::Balance:
 			From<Balance> + Into<u128>,
 		<Runtime as frame_system::Config>::AccountId:
@@ -804,11 +894,11 @@ pub mod remove_when_updated_to_stable2409 {
 	{
 		// foreign parachain with the same consensus currency as asset
 		let foreign_para_id = 2222;
-		let foreign_asset_id_location = xcm::v4::Location {
+		let foreign_asset_id_location = xcm::v5::Location {
 			parents: 1,
 			interior: [
-				xcm::v4::Junction::Parachain(foreign_para_id),
-				xcm::v4::Junction::GeneralIndex(1234567),
+				xcm::v5::Junction::Parachain(foreign_para_id),
+				xcm::v5::Junction::GeneralIndex(1234567),
 			]
 			.into(),
 		};
@@ -816,9 +906,9 @@ pub mod remove_when_updated_to_stable2409 {
 			Location::new(1, [Parachain(foreign_para_id), GeneralIndex(1234567)]);
 
 		// foreign creator, which can be sibling parachain to match ForeignCreators
-		let foreign_creator = xcm::v4::Location {
+		let foreign_creator = xcm::v5::Location {
 			parents: 1,
-			interior: [xcm::v4::Junction::Parachain(foreign_para_id)].into(),
+			interior: [xcm::v5::Junction::Parachain(foreign_para_id)].into(),
 		};
 		let foreign_creator_latest: Location = foreign_creator.try_into().unwrap();
 		let foreign_creator_as_account_id =
@@ -1122,7 +1212,7 @@ pub mod remove_when_updated_to_stable2409 {
 		block_author_account: AccountIdOf<Runtime>,
 		(foreign_asset_owner, foreign_asset_id_location, foreign_asset_id_minimum_balance): (
 			AccountIdOf<Runtime>,
-			xcm::v4::Location,
+			xcm::v5::Location,
 			u128,
 		),
 		foreign_asset_id_amount_to_transfer: u128,
@@ -1148,9 +1238,9 @@ pub mod remove_when_updated_to_stable2409 {
 		BalanceOf<Runtime>: From<Balance> + Into<Balance>,
 		XcmConfig: xcm_executor::Config,
 		<Runtime as pallet_assets::Config<ForeignAssetsPalletInstance>>::AssetId:
-			From<xcm::v4::Location> + Into<xcm::v4::Location>,
+			From<xcm::v5::Location> + Into<xcm::v5::Location>,
 		<Runtime as pallet_assets::Config<ForeignAssetsPalletInstance>>::AssetIdParameter:
-			From<xcm::v4::Location> + Into<xcm::v4::Location>,
+			From<xcm::v5::Location> + Into<xcm::v5::Location>,
 		<Runtime as pallet_assets::Config<ForeignAssetsPalletInstance>>::Balance:
 			From<Balance> + Into<u128> + From<u128>,
 		<Runtime as frame_system::Config>::AccountId: Into<<<Runtime as frame_system::Config>::RuntimeOrigin as OriginTrait>::AccountId>
@@ -1389,6 +1479,7 @@ fn xcm_payment_api_works() {
 		RuntimeCall,
 		RuntimeOrigin,
 		Block,
+		WeightToFee,
 	>();
 	// TODO: uncomment when migrated to the XCMv5 or patched `xcm_payment_api_with_pools_works`
 	// asset_test_utils::test_cases::xcm_payment_api_with_pools_works::<
@@ -1397,6 +1488,571 @@ fn xcm_payment_api_works() {
 	// 	RuntimeOrigin,
 	// 	Block,
 	// >();
+}
+
+mod bridge_to_kusama_tests {
+	use super::{
+		collator_session_keys, construct_and_apply_extrinsic, slot_durations, AccountId,
+		ExtBuilder, Governance, RuntimeHelper,
+	};
+	use asset_hub_polkadot_runtime::{
+		bridge_common_config::{BridgeRelayersInstance, DeliveryRewardInBalance},
+		bridge_to_kusama_config::{
+			AssetHubKusamaLocation, KusamaGlobalConsensusNetwork,
+			WithAssetHubKusamaMessagesInstance, XcmOverAssetHubKusamaInstance,
+		},
+		xcm_config::{bridging, DotLocation, LocationToAccountId, RelayNetwork, XcmConfig},
+		AllPalletsWithoutSystem, AssetHubKusamaProofRootStore, ExistentialDeposit, ParachainSystem,
+		PolkadotXcm, Runtime, RuntimeEvent, RuntimeOrigin,
+	};
+	use bp_runtime::{HeaderOf, RangeInclusiveExt};
+	use bridge_hub_test_utils::{
+		mock_open_hrmp_channel,
+		test_cases::{ToMessageQueueDelivery, ToSiblingDelivery},
+	};
+	use codec::Decode;
+	use cumulus_primitives_core::UpwardMessageSender;
+	use frame_support::traits::{ConstU8, ProcessMessageError};
+	use pallet_bridge_messages::BridgedChainOf;
+	use sp_runtime::{BoundedVec, Perbill};
+	use system_parachains_constants::polkadot::fee::WeightToFee;
+	use xcm::latest::prelude::*;
+	use xcm_builder::{CreateMatcher, MatchXcm};
+
+	// Random para id of sibling chain used in tests.
+	pub const SIBLING_PARACHAIN_ID: u32 = 2053;
+	// Random para id of bridged chain from different global consensus used in tests.
+	pub const BRIDGED_LOCATION_PARACHAIN_ID: u32 = 1075;
+	const RUNTIME_PARA_ID: u32 = bp_asset_hub_polkadot::ASSET_HUB_POLKADOT_PARACHAIN_ID;
+
+	frame_support::parameter_types! {
+		pub SiblingParachainLocation: Location = Location::new(1, [Parachain(SIBLING_PARACHAIN_ID)]);
+		pub BridgedUniversalLocation: InteriorLocation = [GlobalConsensus(KusamaGlobalConsensusNetwork::get()), Parachain(BRIDGED_LOCATION_PARACHAIN_ID)].into();
+	}
+
+	#[test]
+	fn change_bridge_messages_pallet_mode_by_governance_works() {
+		bridge_hub_test_utils::test_cases::change_bridge_messages_pallet_mode_by_governance_works::<
+			Runtime,
+			WithAssetHubKusamaMessagesInstance,
+		>(collator_session_keys(), RUNTIME_PARA_ID, Governance::get())
+	}
+
+	#[test]
+	fn change_delivery_reward_by_governance_works() {
+		bridge_hub_test_utils::test_cases::change_storage_constant_by_governance_works::<
+			Runtime,
+			DeliveryRewardInBalance,
+			u64,
+		>(
+			collator_session_keys(),
+			RUNTIME_PARA_ID,
+			Governance::get(),
+			|| (DeliveryRewardInBalance::key().to_vec(), DeliveryRewardInBalance::get()),
+			|old_value| old_value.checked_mul(2).unwrap(),
+		)
+	}
+
+	#[test]
+	fn handle_export_message_from_sibling_parachain_and_add_to_outbound_queue_works() {
+		// for Polkadot
+		bridge_hub_test_utils::test_cases::handle_export_message_from_system_parachain_to_outbound_queue_works::<
+			Runtime,
+			XcmConfig,
+			WithAssetHubKusamaMessagesInstance,
+		>(
+			collator_session_keys(),
+			RUNTIME_PARA_ID,
+			SIBLING_PARACHAIN_ID,
+			Box::new(|runtime_event_encoded: Vec<u8>| {
+				match RuntimeEvent::decode(&mut &runtime_event_encoded[..]) {
+					Ok(RuntimeEvent::BridgeKusamaMessages(event)) => Some(event),
+					_ => None,
+				}
+			}),
+			|| ExportMessage { network: KusamaGlobalConsensusNetwork::get(), destination: [Parachain(BRIDGED_LOCATION_PARACHAIN_ID)].into(), xcm: Xcm(vec![]) },
+			Some((DotLocation::get(), ExistentialDeposit::get()).into()),
+			// value should be >= than value generated by `can_calculate_weight_for_paid_export_message_with_reserve_transfer`
+			Some((
+				DotLocation::get(),
+				bp_asset_hub_polkadot::AssetHubPolkadotBaseXcmFeeInDots::get()
+					+ bridging::DefaultToKusamaOverAssetHubKusamaXcmRouterBaseFee::get()
+			).into()),
+			|| {
+				PolkadotXcm::force_xcm_version(RuntimeOrigin::root(), Box::new(AssetHubKusamaLocation::get()), XCM_VERSION).expect("version saved!");
+
+				// we need to create lane between sibling parachain and remote destination
+				bridge_hub_test_utils::ensure_opened_xcm_bridge::<
+					Runtime,
+					XcmOverAssetHubKusamaInstance,
+					LocationToAccountId,
+					DotLocation,
+				>(
+					SiblingParachainLocation::get(),
+					BridgedUniversalLocation::get(),
+					true,
+					|locations, fee| {
+						bridge_hub_test_utils::open_xcm_bridge_with_extrinsic::<
+							Runtime,
+							XcmOverAssetHubKusamaInstance
+						>((locations.bridge_origin_relative_location().clone(), OriginKind::Xcm), locations.bridge_destination_universal_location().clone(), fee)
+					}
+				).1
+			},
+		)
+	}
+
+	#[test]
+	fn message_dispatch_routing_works() {
+		// from Polkadot
+		bridge_hub_test_utils::test_cases::message_dispatch_routing_works::<
+			Runtime,
+			AllPalletsWithoutSystem,
+			XcmConfig,
+			ParachainSystem,
+			WithAssetHubKusamaMessagesInstance,
+			RelayNetwork,
+			KusamaGlobalConsensusNetwork,
+			ConstU8<2>,
+		>(
+			collator_session_keys(),
+			slot_durations(),
+			RUNTIME_PARA_ID,
+			SIBLING_PARACHAIN_ID,
+			Box::new(|runtime_event_encoded: Vec<u8>| {
+				match RuntimeEvent::decode(&mut &runtime_event_encoded[..]) {
+					Ok(RuntimeEvent::ParachainSystem(event)) => Some(event),
+					_ => None,
+				}
+			}),
+			Box::new(|runtime_event_encoded: Vec<u8>| {
+				match RuntimeEvent::decode(&mut &runtime_event_encoded[..]) {
+					Ok(RuntimeEvent::XcmpQueue(event)) => Some(event),
+					_ => None,
+				}
+			}),
+			|| <ParachainSystem as UpwardMessageSender>::ensure_successful_delivery(),
+		)
+	}
+
+	type RuntimeTestsAdapter = bridge_hub_test_utils::test_cases::WithBridgeMessagesHelperAdapter<
+		Runtime,
+		WithAssetHubKusamaMessagesInstance,
+		BridgeRelayersInstance,
+		(ToMessageQueueDelivery<Runtime>, ToSiblingDelivery<Runtime>),
+	>;
+
+	#[test]
+	fn for_here_bridge_relayed_incoming_message_works() {
+		// In case AssetHub has directly opened a bridge, for example, an AH-to-AH bridge.
+		let here_location = Location::here();
+
+		bridge_hub_test_utils::test_cases::relayed_incoming_message_proofs_works::<
+			RuntimeTestsAdapter,
+		>(
+			collator_session_keys(),
+			bp_asset_hub_polkadot::ASSET_HUB_POLKADOT_PARACHAIN_ID,
+			here_location.clone(),
+			|| {
+				// we need to create a lane between sibling parachain and remote destination
+				bridge_hub_test_utils::ensure_opened_xcm_bridge::<
+					Runtime,
+					XcmOverAssetHubKusamaInstance,
+					LocationToAccountId,
+					DotLocation,
+				>(
+					here_location.clone(),
+					BridgedUniversalLocation::get(),
+					false,
+					|locations, fee| {
+						bridge_hub_test_utils::open_xcm_bridge_with_extrinsic::<
+							Runtime,
+							XcmOverAssetHubKusamaInstance,
+						>(
+							// This should represent `RuntimeOrigin::root()` which represents
+							// `Location::here()` for `OpenBridgeOrigin`
+							(Location::parent(), OriginKind::Superuser),
+							locations.bridge_destination_universal_location().clone(),
+							fee,
+						)
+					},
+				)
+				.1
+			},
+			|proof_state_root| {
+				use bridge_hub_test_utils::test_cases::WithBridgeMessagesHelper;
+				// create a bridged header
+				let bridged_header = bridge_hub_test_utils::test_header_with_root::<
+					HeaderOf<
+						BridgedChainOf<
+							<RuntimeTestsAdapter as WithBridgeMessagesHelper>::Runtime,
+							<RuntimeTestsAdapter as WithBridgeMessagesHelper>::MPI,
+						>,
+					>,
+				>(5, proof_state_root);
+				let bridged_header_hash = bridged_header.hash();
+
+				// Store proof_state_root + bridged_header_hash.
+				AssetHubKusamaProofRootStore::do_note_new_roots(BoundedVec::truncate_from(vec![(
+					bridged_header_hash,
+					proof_state_root,
+				)]));
+
+				bridged_header_hash
+			},
+			construct_and_apply_extrinsic,
+			true,
+			true,
+		)
+	}
+
+	#[test]
+	fn for_sibling_parachain_bridge_relayed_incoming_message_works() {
+		// In case sibling parachain has opened a bridge, for example, an AH-to-Penpal bridge.
+		let sibling_parachain_location = SiblingParachainLocation::get();
+
+		bridge_hub_test_utils::test_cases::relayed_incoming_message_proofs_works::<
+			RuntimeTestsAdapter,
+		>(
+			collator_session_keys(),
+			bp_asset_hub_polkadot::ASSET_HUB_POLKADOT_PARACHAIN_ID,
+			sibling_parachain_location.clone(),
+			|| {
+				// we need to create a lane between sibling parachain and remote destination
+				bridge_hub_test_utils::ensure_opened_xcm_bridge::<
+					Runtime,
+					XcmOverAssetHubKusamaInstance,
+					LocationToAccountId,
+					DotLocation,
+				>(
+					sibling_parachain_location.clone(),
+					BridgedUniversalLocation::get(),
+					true,
+					|locations, fee| {
+						bridge_hub_test_utils::open_xcm_bridge_with_extrinsic::<
+							Runtime,
+							XcmOverAssetHubKusamaInstance,
+						>(
+							(sibling_parachain_location.clone(), OriginKind::Xcm),
+							locations.bridge_destination_universal_location().clone(),
+							fee,
+						)
+					},
+				)
+				.1
+			},
+			|proof_state_root| {
+				use bridge_hub_test_utils::test_cases::WithBridgeMessagesHelper;
+				// create a bridged header
+				let bridged_header = bridge_hub_test_utils::test_header_with_root::<
+					HeaderOf<
+						BridgedChainOf<
+							<RuntimeTestsAdapter as WithBridgeMessagesHelper>::Runtime,
+							<RuntimeTestsAdapter as WithBridgeMessagesHelper>::MPI,
+						>,
+					>,
+				>(5, proof_state_root);
+				let bridged_header_hash = bridged_header.hash();
+
+				// Store proof_state_root + bridged_header_hash.
+				AssetHubKusamaProofRootStore::do_note_new_roots(BoundedVec::truncate_from(vec![(
+					bridged_header_hash,
+					proof_state_root,
+				)]));
+
+				bridged_header_hash
+			},
+			construct_and_apply_extrinsic,
+			true,
+			true,
+		)
+	}
+
+	#[test]
+	fn open_and_close_bridge_for_sibling_parachain_works() {
+		bridge_hub_test_utils::test_cases::open_and_close_xcm_bridge_works::<
+			Runtime,
+			XcmOverAssetHubKusamaInstance,
+			LocationToAccountId,
+			DotLocation,
+		>(
+			collator_session_keys(),
+			RUNTIME_PARA_ID,
+			SiblingParachainLocation::get(),
+			BridgedUniversalLocation::get(),
+			(SiblingParachainLocation::get(), OriginKind::Xcm),
+			true,
+		)
+	}
+
+	#[test]
+	fn open_and_close_bridge_for_relay_works() {
+		bridge_hub_test_utils::test_cases::open_and_close_xcm_bridge_works::<
+			Runtime,
+			XcmOverAssetHubKusamaInstance,
+			LocationToAccountId,
+			DotLocation,
+		>(
+			collator_session_keys(),
+			RUNTIME_PARA_ID,
+			Location::parent(),
+			BridgedUniversalLocation::get(),
+			(Location::parent(), OriginKind::Xcm),
+			false,
+		)
+	}
+
+	#[test]
+	fn open_and_close_bridge_for_local_works() {
+		bridge_hub_test_utils::test_cases::open_and_close_xcm_bridge_works::<
+			Runtime,
+			XcmOverAssetHubKusamaInstance,
+			LocationToAccountId,
+			DotLocation,
+		>(
+			collator_session_keys(),
+			RUNTIME_PARA_ID,
+			// The source is `here` as the local chain, e.g., AssetHub itself can open its lanes.
+			Location::here(),
+			BridgedUniversalLocation::get(),
+			// This should represent `RuntimeOrigin::root()` which represents `Location::here()`
+			// for `OpenBridgeOrigin`
+			(Location::parent(), OriginKind::Superuser),
+			false,
+		)
+	}
+
+	#[test]
+	fn kusama_xcm_routing_works() {
+		let runtime_para_id = 1000;
+		ExtBuilder::<Runtime>::default()
+			.with_collators(collator_session_keys().collators())
+			.with_session_keys(collator_session_keys().session_keys())
+			.with_para_id(runtime_para_id.into())
+			.build()
+			.execute_with(|| {
+				frame_support::__private::sp_tracing::try_init_simple();
+				let sibling_bridge_hub_para_id = bridging::SiblingBridgeHubParaId::get();
+				let bridged_destination = bridging::to_kusama::AssetHubKusama::get();
+				let bridged_universal_destination = bridged_destination.interior().clone();
+
+				// Common setup
+				frame_support::assert_ok!(PolkadotXcm::force_xcm_version(
+					RuntimeOrigin::root(),
+					Box::new(bridging::to_kusama::AssetHubKusama::get()),
+					XCM_VERSION,
+				));
+
+				// Setup for `ExportMessage` to the `BridgeHub`
+				let mut alice = [0u8; 32];
+				alice[0] = 1;
+				let included_head = RuntimeHelper::run_to_block(2, AccountId::from(alice));
+				mock_open_hrmp_channel::<Runtime, ParachainSystem>(
+					runtime_para_id.into(),
+					sibling_bridge_hub_para_id.into(),
+					included_head,
+					&alice,
+					&slot_durations(),
+				);
+				frame_support::assert_ok!(PolkadotXcm::force_xcm_version(
+					RuntimeOrigin::root(),
+					Box::new(bridging::SiblingBridgeHub::get()),
+					XCM_VERSION,
+				));
+
+				// check no bridge/lane exists
+				assert_eq!(
+					0,
+					pallet_bridge_messages::OutboundLanes::<
+						Runtime,
+						WithAssetHubKusamaMessagesInstance,
+					>::iter()
+					.count()
+				);
+
+				// send to the `bridged_destination`
+				frame_support::assert_ok!(PolkadotXcm::send_xcm(
+					Here,
+					bridged_destination.clone(),
+					Xcm::<()>::default()
+				));
+
+				// check HRMP message contains `ExportMessage`.
+				assert!(asset_test_utils::RuntimeHelper::<
+					cumulus_pallet_xcmp_queue::Pallet<Runtime>,
+					AllPalletsWithoutSystem,
+				>::take_xcm(sibling_bridge_hub_para_id.into())
+				.map(|m| {
+					let mut m: Xcm<()> = m.try_into().expect("valid XCM version");
+					m.0.matcher()
+						.skip_inst_while(|inst| !matches!(inst, ExportMessage { .. }))
+						.expect("no instruction ExportMessage?")
+						.match_next_inst(|instr| match instr {
+							ExportMessage { ref network, .. } => {
+								assert_eq!(
+									network,
+									&bridged_destination
+										.interior
+										.global_consensus()
+										.expect("valid NetworkId")
+								);
+								Ok(())
+							},
+							_ => Err(ProcessMessageError::BadFormat),
+						})
+						.is_ok()
+				})
+				.unwrap_or(false));
+
+				// open permissionless lane between this AH and bridged AH
+				let (_, lane_id) = bridge_hub_test_utils::ensure_opened_xcm_bridge::<
+					Runtime,
+					XcmOverAssetHubKusamaInstance,
+					LocationToAccountId,
+					DotLocation,
+				>(
+					Here.into(),
+					bridged_universal_destination,
+					false,
+					|locations, maybe_paid_execution| {
+						bridge_hub_test_utils::open_xcm_bridge_with_extrinsic::<
+							Runtime,
+							XcmOverAssetHubKusamaInstance,
+						>(
+							// This should represent `RuntimeOrigin::root()` which represents
+							// `Location::here()` for `OpenBridgeOrigin`
+							(Location::parent(), OriginKind::Superuser),
+							locations.bridge_destination_universal_location().clone(),
+							maybe_paid_execution,
+						)
+					},
+				);
+				// lane created
+				assert_eq!(
+					1,
+					pallet_bridge_messages::OutboundLanes::<
+						Runtime,
+						WithAssetHubKusamaMessagesInstance,
+					>::iter()
+					.count()
+				);
+
+				// send to the `bridged_destination` again
+				frame_support::assert_ok!(PolkadotXcm::send_xcm(
+					Here,
+					bridged_destination.clone(),
+					Xcm::<()>::default()
+				));
+
+				// messages pallet holds outbound message for expected lane_id
+				assert_eq!(
+					1,
+					pallet_bridge_messages::OutboundLanes::<
+						Runtime,
+						WithAssetHubKusamaMessagesInstance,
+					>::get(lane_id)
+					.map(|d| d.queued_messages().saturating_len())
+					.unwrap_or(0)
+				);
+
+				// no hrmp message was fired
+				assert!(asset_test_utils::RuntimeHelper::<
+					cumulus_pallet_xcmp_queue::Pallet<Runtime>,
+					AllPalletsWithoutSystem,
+				>::take_xcm(sibling_bridge_hub_para_id.into())
+				.is_none());
+			});
+	}
+
+	#[test]
+	pub fn can_calculate_weight_for_paid_export_message_with_reserve_transfer() {
+		bridge_hub_test_utils::check_sane_fees_values(
+			"bp_asset_hub_polkadot::AssetHubPolkadotBaseXcmFeeInDots",
+			bp_asset_hub_polkadot::AssetHubPolkadotBaseXcmFeeInDots::get(),
+			|| {
+				bridge_hub_test_utils::test_cases::can_calculate_weight_for_paid_export_message_with_reserve_transfer::<
+					Runtime,
+					XcmConfig,
+					WeightToFee,
+				>()
+			},
+			Perbill::from_percent(33),
+			Some(-33),
+			&format!(
+				"Estimate fee for `ExportMessage` for runtime: {:?}",
+				<Runtime as frame_system::Config>::Version::get()
+			),
+		)
+	}
+}
+
+#[test]
+pub fn bridge_rewards_works() {
+	use bp_messages::{HashedLaneId, LaneIdType};
+	use bp_relayers::{PayRewardFromAccount, RewardsAccountOwner, RewardsAccountParams};
+	use frame_support::assert_err;
+	use sp_keyring::Sr25519Keyring::{Alice, Bob};
+	use sp_runtime::AccountId32;
+
+	run_test::<Runtime, _>(
+		collator_session_keys(),
+		bp_bridge_hub_polkadot::BRIDGE_HUB_POLKADOT_PARACHAIN_ID,
+		vec![],
+		|| {
+			// reward in WNDs
+			let reward1: u128 = 2_000_000_000;
+
+			// prepare accounts
+			let account1 = AccountId32::from(Alice);
+			let account2 = AccountId32::from(Bob);
+			let reward1_for = RewardsAccountParams::new(
+				HashedLaneId::try_new(1, 2).unwrap(),
+				*b"test",
+				RewardsAccountOwner::ThisChain,
+			);
+			let expected_reward1_account =
+				PayRewardFromAccount::<(), AccountId, HashedLaneId, ()>::rewards_account(
+					reward1_for,
+				);
+			assert_ok!(Balances::mint_into(&expected_reward1_account, ExistentialDeposit::get()));
+			assert_ok!(Balances::mint_into(&expected_reward1_account, reward1.into()));
+			assert_ok!(Balances::mint_into(&account1, ExistentialDeposit::get()));
+
+			// register rewards
+			use bp_relayers::RewardLedger;
+			BridgeRelayers::register_reward(&account1, BridgeReward::from(reward1_for), reward1);
+
+			// check stored rewards
+			assert_eq!(
+				BridgeRelayers::relayer_reward(&account1, BridgeReward::from(reward1_for)),
+				Some(reward1)
+			);
+			assert_eq!(
+				BridgeRelayers::relayer_reward(&account2, BridgeReward::from(reward1_for)),
+				None,
+			);
+
+			// claim rewards
+			assert_ok!(BridgeRelayers::claim_rewards(
+				RuntimeOrigin::signed(account1.clone()),
+				reward1_for.into()
+			));
+			assert_eq!(Balances::total_balance(&account1), ExistentialDeposit::get() + reward1);
+			assert_eq!(
+				BridgeRelayers::relayer_reward(&account1, BridgeReward::from(reward1_for)),
+				None,
+			);
+
+			// already claimed
+			assert_err!(
+				BridgeRelayers::claim_rewards(
+					RuntimeOrigin::signed(account1.clone()),
+					reward1_for.into()
+				),
+				pallet_bridge_relayers::Error::<Runtime, BridgeRelayersInstance>::NoRewardForRelayer
+			);
+		},
+	);
 }
 
 pub mod remove_when_asset_test_utils_doesnt_use_latest_xcm_location {
@@ -1477,14 +2133,14 @@ pub mod remove_when_asset_test_utils_doesnt_use_latest_xcm_location {
 			From<<Runtime as frame_system::Config>::AccountId>,
 		ForeignAssetsPalletInstance: 'static,
 		AssetId: Clone,
-		AssetIdConverter: MaybeEquivalence<xcm::v4::Location, AssetId>,
+		AssetIdConverter: MaybeEquivalence<xcm::v5::Location, AssetId>,
 		<Runtime as frame_system::Config>::AccountId: Into<sp_runtime::AccountId32>,
 		<Runtime as frame_system::Config>::RuntimeOrigin: From<RuntimeOrigin>,
 	{
 		// foreign parachain with the same consensus currency as asset
-		let foreign_asset_id_location = xcm::v4::Location::new(
+		let foreign_asset_id_location = xcm::v5::Location::new(
 			1,
-			[xcm::v4::Junction::Parachain(2222), xcm::v4::Junction::GeneralIndex(1234567)],
+			[xcm::v5::Junction::Parachain(2222), xcm::v5::Junction::GeneralIndex(1234567)],
 		);
 		let asset_id = AssetIdConverter::convert(&foreign_asset_id_location).unwrap();
 
@@ -1677,11 +2333,11 @@ pub mod remove_when_asset_test_utils_doesnt_use_latest_xcm_location {
 
 				// lets try create asset for different parachain(3333) (foreign_creator(2222) can
 				// create just his assets)
-				let foreign_asset_id_location = xcm::v4::Location {
+				let foreign_asset_id_location = xcm::v5::Location {
 					parents: 1,
 					interior: [
-						xcm::v4::Junction::Parachain(3333),
-						xcm::v4::Junction::GeneralIndex(1234567),
+						xcm::v5::Junction::Parachain(3333),
+						xcm::v5::Junction::GeneralIndex(1234567),
 					]
 					.into(),
 				};

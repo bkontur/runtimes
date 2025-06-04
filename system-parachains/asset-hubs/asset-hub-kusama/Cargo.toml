@@ -100,9 +100,24 @@ assets-common = { workspace = true }
 
 # Bridges
 pallet-xcm-bridge-hub-router = { workspace = true }
+bp-header-chain = { workspace = true }
+bp-messages = { workspace = true }
+bp-relayers = { workspace = true }
+bp-runtime = { workspace = true }
+bridge-hub-common = { workspace = true }
+bridge-runtime-common = { workspace = true }
+pallet-bridge-messages = { workspace = true }
+pallet-bridge-proof-root-store = { workspace = true }
+pallet-bridge-relayers = { workspace = true }
+pallet-xcm-bridge = { workspace = true }
+pallet-xcm-bridge-router = { workspace = true }
 
 [dev-dependencies]
 asset-test-utils = { workspace = true }
+bp-xcm-bridge = { workspace = true }
+bridge-hub-test-utils = { workspace = true, default-features = true }
+bridge-runtime-common = { features = ["integrity-test"], workspace = true }
+pallet-bridge-relayers = { features = ["integrity-test"], workspace = true }
 parachains-runtimes-test-utils = { workspace = true }
 sp-io = { workspace = true, default-features = true }
 
@@ -113,6 +128,8 @@ substrate-wasm-builder = { optional = true, workspace = true }
 default = ["std"]
 runtime-benchmarks = [
 	"assets-common/runtime-benchmarks",
+	"bridge-hub-common/runtime-benchmarks",
+	"bridge-runtime-common/runtime-benchmarks",
 	"bp-asset-hub-kusama/runtime-benchmarks",
 	"bp-asset-hub-polkadot/runtime-benchmarks",
 	"bp-bridge-hub-kusama/runtime-benchmarks",
@@ -131,6 +148,9 @@ runtime-benchmarks = [
 	"pallet-asset-conversion/runtime-benchmarks",
 	"pallet-assets/runtime-benchmarks",
 	"pallet-balances/runtime-benchmarks",
+	"pallet-bridge-messages/runtime-benchmarks",
+	"pallet-bridge-proof-root-store/runtime-benchmarks",
+	"pallet-bridge-relayers/runtime-benchmarks",
 	"pallet-collator-selection/runtime-benchmarks",
 	"pallet-message-queue/runtime-benchmarks",
 	"pallet-multisig/runtime-benchmarks",
@@ -146,6 +166,8 @@ runtime-benchmarks = [
 	"pallet-vesting/runtime-benchmarks",
 	"pallet-xcm-benchmarks/runtime-benchmarks",
 	"pallet-xcm-bridge-hub-router/runtime-benchmarks",
+	"pallet-xcm-bridge-router/runtime-benchmarks",
+	"pallet-xcm-bridge/runtime-benchmarks",
 	"pallet-xcm/runtime-benchmarks",
 	"parachains-common/runtime-benchmarks",
 	"polkadot-parachain-primitives/runtime-benchmarks",
@@ -171,6 +193,9 @@ try-runtime = [
 	"pallet-aura/try-runtime",
 	"pallet-authorship/try-runtime",
 	"pallet-balances/try-runtime",
+	"pallet-bridge-messages/try-runtime",
+	"pallet-bridge-proof-root-store/try-runtime",
+	"pallet-bridge-relayers/try-runtime",
 	"pallet-collator-selection/try-runtime",
 	"pallet-message-queue/try-runtime",
 	"pallet-multisig/try-runtime",
@@ -186,6 +211,8 @@ try-runtime = [
 	"pallet-utility/try-runtime",
 	"pallet-vesting/try-runtime",
 	"pallet-xcm-bridge-hub-router/try-runtime",
+	"pallet-xcm-bridge-router/try-runtime",
+	"pallet-xcm-bridge/try-runtime",
 	"pallet-xcm/try-runtime",
 	"parachain-info/try-runtime",
 	"polkadot-runtime-common/try-runtime",
@@ -197,6 +224,13 @@ std = [
 	"bp-asset-hub-polkadot/std",
 	"bp-bridge-hub-kusama/std",
 	"bp-bridge-hub-polkadot/std",
+	"bp-header-chain/std",
+	"bp-messages/std",
+	"bp-relayers/std",
+	"bp-runtime/std",
+	"bp-xcm-bridge/std",
+	"bridge-hub-common/std",
+	"bridge-runtime-common/std",
 	"codec/std",
 	"cumulus-pallet-aura-ext/std",
 	"cumulus-pallet-parachain-system/std",
@@ -222,6 +256,9 @@ std = [
 	"pallet-aura/std",
 	"pallet-authorship/std",
 	"pallet-balances/std",
+	"pallet-bridge-messages/std",
+	"pallet-bridge-proof-root-store/std",
+	"pallet-bridge-relayers/std",
 	"pallet-collator-selection/std",
 	"pallet-message-queue/std",
 	"pallet-multisig/std",
@@ -240,6 +277,8 @@ std = [
 	"pallet-vesting/std",
 	"pallet-xcm-benchmarks?/std",
 	"pallet-xcm-bridge-hub-router/std",
+	"pallet-xcm-bridge-router/std",
+	"pallet-xcm-bridge/std",
 	"pallet-xcm/std",
 	"parachain-info/std",
 	"parachains-common/std",
