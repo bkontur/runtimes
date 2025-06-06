@@ -17,7 +17,7 @@ use super::{
 	AccountId, AllPalletsWithSystem, AssetConversion, Assets, Balance, Balances, CollatorSelection,
 	ForeignAssets, NativeAndAssets, ParachainInfo, ParachainSystem, PolkadotXcm, PoolAssets,
 	PriceForParentDelivery, Runtime, RuntimeCall, RuntimeEvent, RuntimeOrigin,
-	ToKusamaOverAssetHubKusamaXcmRouter, ToKusamaXcmRouter, TransactionByteFee, Uniques,
+	ToKusamaOverAssetHubKusamaXcmRouter, ToKusamaXcmRouter,
 	WeightToFee, XcmOverAssetHubKusama, XcmpQueue,
 };
 use alloc::{collections::BTreeSet, vec, vec::Vec};
