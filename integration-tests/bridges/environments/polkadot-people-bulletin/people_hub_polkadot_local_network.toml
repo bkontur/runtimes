@@ -3,7 +3,7 @@ node_spawn_timeout = 240
 
 [relaychain]
 default_command = "{{POLKADOT_BINARY}}"
-default_args = ["-lparachain=debug,xcm=trace"]
+default_args = ["-lparachain=debug,xcm=trace,runtime::bridge-hub=trace,runtime::bridge=trace,runtime::bridge-dispatch=trace,bridge=trace,runtime::bridge-messages=trace", "--blocks-pruning=128", "--state-pruning=128" ]
 chain = "polkadot-local"
 chain_spec_command = "{{CHAIN_SPEC_GEN_BINARY_FOR_POLKADOT}} {% raw %} {{chainName}} {% endraw %}"
 
@@ -35,9 +35,9 @@ cumulus_based = true
 	name = "people-hub-polkadot-collator-1"
 	validator = true
 	command = "{{POLKADOT_PARACHAIN_BINARY}}"
-	rpc_port = 8943
+	rpc_port = 9910
 	args = [
-		"-lparachain=debug,runtime::bridge-hub=trace,runtime::bridge=trace,runtime::bridge-dispatch=trace,bridge=trace,runtime::bridge-messages=trace,xcm=trace",
+		"-lparachain=debug,runtime::bridge-hub=trace,runtime::bridge=trace,runtime::bridge-dispatch=trace,bridge=trace,runtime::bridge-messages=trace,xcm=trace", "--blocks-pruning=128", "--state-pruning=128"
 	]
 
 	[[parachains.collators]]
@@ -46,5 +46,5 @@ cumulus_based = true
 	command = "{{POLKADOT_PARACHAIN_BINARY}}"
 	rpc_port = 8944
 	args = [
-		"-lparachain=trace,runtime::bridge-hub=trace,runtime::bridge=trace,runtime::bridge-dispatch=trace,bridge=trace,runtime::bridge-messages=trace,xcm=trace",
+		"-lparachain=trace,runtime::bridge-hub=trace,runtime::bridge=trace,runtime::bridge-dispatch=trace,bridge=trace,runtime::bridge-messages=trace,xcm=trace", "--blocks-pruning=128", "--state-pruning=128"
 	]

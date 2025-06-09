@@ -41,16 +41,12 @@ if [[ $init -eq 1 ]]; then
   echo -e "Setting up the bulletin side of the bridge. Logs available at: $bulletin_init_log\n"
   $helper_script init-people-polkadot-local >> $polkadot_init_log 2>&1 &
   polkadot_init_pid=$!
-  $helper_script init-bulletin-local >> $kusama_init_log 2>&1 &
+  $helper_script init-bulletin-local >> $bulletin_init_log 2>&1 &
   bulletin_init_pid=$!
-  wait -n $polkadot_init_pid $kusama_init_pid
-
-  run_zndsl ${BASH_SOURCE%/*}/polkadot-init.zndsl $polkadot_dir
-  run_zndsl ${BASH_SOURCE%/*}/kusama-init.zndsl $kusama_dir
 fi
 
 if [[ $start_relayer -eq 1 ]]; then
-  ${BASH_SOURCE%/*}/start_relayer.sh $polkadot_dir $kusama_dir finality_relayer_pid parachains_relayer_pid messages_relayer_pid
+  ${BASH_SOURCE%/*}/start_relayer.sh $polkadot_dir $bulletin_dir finality_relayer_pid parachains_relayer_pid messages_relayer_pid
 fi
 
 echo $polkadot_dir > $TEST_DIR/polkadot.env

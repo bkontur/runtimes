@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # import common functions
-source "$(dirname "$0")"/bridges_common.sh
+source "$FRAMEWORK_PATH/utils/bridges.sh"
 
 function init_bulletin_polkadot() {
     local RELAYER_BINARY_PATH=$(ensure_relayer)
@@ -10,7 +10,7 @@ function init_bulletin_polkadot() {
         $RELAYER_BINARY_PATH init-bridge polkadot-bulletin-to-people-hub-polkadot \
         --source-uri ws://localhost:10000 \
         --source-version-mode Auto \
-        --target-uri ws://localhost:8943 \
+        --target-uri ws://localhost:9910 \
         --target-version-mode Auto \
         --target-signer //Bob \
         --target-transactions-mortality 4
@@ -37,7 +37,7 @@ function run_finality_relay() {
       --only-free-headers \
       --source-uri ws://localhost:10000 \
       --source-version-mode Auto \
-      --target-uri ws://localhost:8943 \
+      --target-uri ws://localhost:9910 \
       --target-version-mode Auto \
       --target-signer //Bob \
       --target-transactions-mortality 4 &
@@ -76,7 +76,7 @@ function run_messages_relay() {
         --source-version-mode Auto \
         --source-signer //Alice \
         --source-transactions-mortality 4 \
-        --target-uri ws://localhost:8943 \
+        --target-uri ws://localhost:9910 \
         --target-version-mode Auto \
         --target-signer //Eve \
         --target-transactions-mortality 4 \
@@ -84,7 +84,7 @@ function run_messages_relay() {
 
     RUST_LOG=rpc=trace,bridge=trace \
         $RELAYER_BINARY_PATH relay-messages people-hub-polkadot-to-polkadot-bulletin \
-        --source-uri ws://localhost:8943 \
+        --source-uri ws://localhost:9910 \
         --source-version-mode Auto \
         --source-signer //Ferdie \
         --source-transactions-mortality 4 \
@@ -110,7 +110,7 @@ function run_relay() {
         --polkadot-port 9942 \
         --polkadot-version-mode Auto \
         --people-hub-polkadot-host localhost \
-        --people-hub-polkadot-port 8943 \
+        --people-hub-polkadot-port 9910 \
         --people-hub-polkadot-version-mode Auto \
         --people-hub-polkadot-signer //Charlie \
         --people-hub-polkadot-transactions-mortality 4 \
@@ -136,11 +136,9 @@ function store_data_with_bulletin() {
 }
 
 case "$1" in
-  init-bridge)
+  run-finality-relay)
     init_bulletin_polkadot
     init_polkadot_bulletin
-    ;;
-  run-finality-relay)
     run_finality_relay
     ;;
   run-parachains-relay)
@@ -149,12 +147,10 @@ case "$1" in
   run-messages-relay)
     run_messages_relay
     ;;
-  run-relay)
-    init_bulletin_polkadot
-    init_polkadot_bulletin
-    run_relay
-    ;;
   init-people-polkadot-local)
+      ensure_polkadot_js_api
+      ;;
+  init-bulletin-local)
       ensure_polkadot_js_api
       ;;
   stop)

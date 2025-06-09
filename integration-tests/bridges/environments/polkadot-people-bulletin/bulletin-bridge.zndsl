@@ -1,5 +1,5 @@
 Network: ./polkadot_bulletin_local_network.toml
 Creds: config
 
-# relay is already started - let's wait until with-Bulletin GRANPDA pallet is initialized at Polkadot
-polkadot-bulletin-collator-1: js-script {{FRAMEWORK_PATH}}/js-helpers/best-finalized-header-at-bridged-chain.js with "Polkadot,0" within 400 seconds
+# relay is already started - let's wait until with-Polkadot GRANPDA pallet is initialized at Bulletin
+alice: js-script {{FRAMEWORK_PATH}}/js-helpers/best-finalized-header-at-bridged-chain.js with "Polkadot,0" within 400 seconds
