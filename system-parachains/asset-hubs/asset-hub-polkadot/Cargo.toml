@@ -273,7 +273,6 @@ std = [
 	"pallet-utility/std",
 	"pallet-vesting/std",
 	"pallet-xcm-benchmarks?/std",
-	"pallet-xcm-bridge-hub-router/std",
 	"pallet-xcm-bridge-router/std",
 	"pallet-xcm-bridge/std",
 	"pallet-xcm/std",

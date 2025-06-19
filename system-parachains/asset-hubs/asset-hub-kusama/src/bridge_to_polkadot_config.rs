@@ -14,15 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Cumulus.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Bridge definitions used on BridgeHubPolkadot for bridging to BridgeHubKusama.
-
+//! Bridge definitions used on BridgeHubKusama for bridging to BridgeHubPolkadot.
 use crate::{
 	bridge_common_config::{BridgeRelayersInstance, DeliveryRewardInBalance},
 	weights, xcm_config,
 	xcm_config::UniversalLocation,
-	AccountId, AssetHubKusamaProofRootStore, Balance, Balances, BridgeKusamaMessages, MessageQueue,
-	PolkadotXcm, Runtime, RuntimeEvent, RuntimeHoldReason, ToKusamaOverAssetHubKusamaXcmRouter,
-	XcmOverAssetHubKusama,
+	AccountId, AssetHubPolkadotProofRootStore, Balance, Balances, BridgePolkadotMessages,
+	MessageQueue, PolkadotXcm, Runtime, RuntimeEvent, RuntimeHoldReason,
+	ToPolkadotOverAssetHubPolkadotXcmRouter, XcmOverAssetHubPolkadot,
 };
 use alloc::{vec, vec::Vec};
 use bp_messages::HashedLaneId;
@@ -48,35 +47,44 @@ use parachains_common::xcm_config::{
 	AllSiblingSystemParachains, ParentRelayOrSiblingParachains, RelayOrOtherSystemParachains,
 };
 use polkadot_parachain_primitives::primitives::Sibling;
-use polkadot_runtime_constants::currency::UNITS as DOT;
 use sp_runtime::traits::{ConstU32, Convert, MaybeConvert};
-use xcm::{latest::prelude::*, prelude::NetworkId};
+use kusama_runtime_constants::currency::UNITS as KSM;
+use xcm::{
+	latest::{prelude::*},
+	prelude::NetworkId,
+};
 use xcm_builder::{
 	BridgeBlobDispatcher, LocalExporter, MessageQueueRouterFor, ParentIsPreset,
 	SiblingParachainConvertsVia,
 };
 
 parameter_types! {
-	pub BridgePolkadotToKusamaMessagesPalletInstance: InteriorLocation = [PalletInstance(<BridgeKusamaMessages as PalletInfoAccess>::index() as u8)].into();
+	pub BridgeKusamaToPolkadotMessagesPalletInstance: InteriorLocation = [PalletInstance(<BridgePolkadotMessages as PalletInfoAccess>::index() as u8)].into();
 	pub const HereLocation: Location = Location::here();
-	pub KusamaGlobalConsensusNetwork: NetworkId = NetworkId::Polkadot;
-	pub KusamaGlobalConsensusNetworkLocation: Location = Location::new(
+	pub PolkadotGlobalConsensusNetwork: NetworkId = NetworkId::Polkadot;
+	pub PolkadotGlobalConsensusNetworkLocation: Location = Location::new(
 		2,
-		[GlobalConsensus(KusamaGlobalConsensusNetwork::get())]
+		[GlobalConsensus(PolkadotGlobalConsensusNetwork::get())]
 	);
 	// see the `FEE_BOOST_PER_MESSAGE` constant to get the meaning of this value
 	pub PriorityBoostPerMessage: u64 = 364_088_888_888_888;
 
 	// The other side of the bridge
-	pub AssetHubKusamaLocation: Location = Location::new(
+	pub AssetHubPolkadotLocation: Location = Location::new(
 		2,
 		[
-			GlobalConsensus(KusamaGlobalConsensusNetwork::get()),
-			Parachain(<bp_asset_hub_kusama::AssetHubKusama as bp_runtime::Parachain>::PARACHAIN_ID)
+			GlobalConsensus(PolkadotGlobalConsensusNetwork::get()),
+			Parachain(<bp_asset_hub_polkadot::AssetHubPolkadot as bp_runtime::Parachain>::PARACHAIN_ID)
 		]
 	);
 
-	pub storage BridgeDeposit: Balance = 5 * DOT;
+	pub storage BridgeDeposit: Balance = 5 * KSM;
+
+	// The fee for exporting/delivery.
+	pub MessageExportPrice: Assets = (
+		xcm_config::bridging::XcmBridgeHubRouterFeeAssetId::get(),
+		xcm_config::bridging::ToPolkadotOverAssetHubPolkadotXcmRouterBaseFee::get(),
+	).into();
 }
 
 /// A converter that accepts only the `Here` location and converts it into `AggregateMessageOrigin`.
@@ -94,29 +102,29 @@ impl MaybeConvert<&Location, AggregateMessageOrigin> for AcceptOnlyHere {
 	}
 }
 
-/// Transaction extension that refunds relayers that are delivering messages from the Kusama
+/// Transaction extension that refunds relayers that are delivering messages from the Polkadot
 /// parachain.
-pub type OnAssetHubPolkadotRefundAssetHubKusamaMessages = BridgeRelayersTransactionExtension<
+pub type OnAssetHubKusamaRefundAssetHubPolkadotMessages = BridgeRelayersTransactionExtension<
 	Runtime,
 	WithMessagesExtensionConfig<
-		StrOnAssetHubPolkadotRefundAssetHubKusamaMessages,
+		StrOnAssetHubKusamaRefundAssetHubPolkadotMessages,
 		Runtime,
-		WithAssetHubKusamaMessagesInstance,
+		WithAssetHubPolkadotMessagesInstance,
 		BridgeRelayersInstance,
 		PriorityBoostPerMessage,
 	>,
 >;
-bp_runtime::generate_static_str_provider!(OnAssetHubPolkadotRefundAssetHubKusamaMessages);
+bp_runtime::generate_static_str_provider!(OnAssetHubKusamaRefundAssetHubPolkadotMessages);
 
-/// Add XCM messages support for AssetHubPolkadot to support Polkadot->Kusama XCM messages
-pub type WithAssetHubKusamaMessagesInstance = pallet_bridge_messages::Instance1;
-impl pallet_bridge_messages::Config<WithAssetHubKusamaMessagesInstance> for Runtime {
+/// Add XCM messages support for AssetHubKusama to support Kusama->Polkadot XCM messages
+pub type WithAssetHubPolkadotMessagesInstance = pallet_bridge_messages::Instance1;
+impl pallet_bridge_messages::Config<WithAssetHubPolkadotMessagesInstance> for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = weights::pallet_bridge_messages::WeightInfo<Runtime>;
 
-	type ThisChain = bp_asset_hub_polkadot::AssetHubPolkadot;
-	type BridgedChain = bp_asset_hub_kusama::AssetHubKusama;
-	type BridgedHeaderChain = AssetHubKusamaHeaders;
+	type ThisChain = bp_asset_hub_kusama::AssetHubKusama;
+	type BridgedChain = bp_asset_hub_polkadot::AssetHubPolkadot;
+	type BridgedHeaderChain = AssetHubPolkadotHeaders;
 
 	type OutboundPayload = XcmAsPlainPayload;
 	type InboundPayload = XcmAsPlainPayload;
@@ -125,18 +133,18 @@ impl pallet_bridge_messages::Config<WithAssetHubKusamaMessagesInstance> for Runt
 	type DeliveryPayments = ();
 	type DeliveryConfirmationPayments = pallet_bridge_relayers::DeliveryConfirmationPaymentsAdapter<
 		Runtime,
-		WithAssetHubKusamaMessagesInstance,
+		WithAssetHubPolkadotMessagesInstance,
 		BridgeRelayersInstance,
 		DeliveryRewardInBalance,
 	>;
 
-	type MessageDispatch = XcmOverAssetHubKusama;
-	type OnMessagesDelivered = XcmOverAssetHubKusama;
+	type MessageDispatch = XcmOverAssetHubPolkadot;
+	type OnMessagesDelivered = XcmOverAssetHubPolkadot;
 }
 
-/// Add support for storing bridged AssetHubKusama state roots.
-pub type AssetHubKusamaProofRootStoreInstance = pallet_bridge_proof_root_store::Instance1;
-impl pallet_bridge_proof_root_store::Config<AssetHubKusamaProofRootStoreInstance> for Runtime {
+/// Add support for storing bridged AssetHubPolkadot state roots.
+pub type AssetHubPolkadotProofRootStoreInstance = pallet_bridge_proof_root_store::Instance1;
+impl pallet_bridge_proof_root_store::Config<AssetHubPolkadotProofRootStoreInstance> for Runtime {
 	// TOOD: FAIL-CI weights
 	type WeightInfo = ();
 	type SubmitOrigin = EitherOfDiverse<
@@ -145,32 +153,36 @@ impl pallet_bridge_proof_root_store::Config<AssetHubKusamaProofRootStoreInstance
 		// and only the local BridgeHub can send updates.
 		EnsureXcm<Equals<xcm_config::bridging::SiblingBridgeHub>>,
 	>;
-	// Means `block_hash` of AHR.
-	type Key =
-		HashOf<pallet_bridge_messages::BridgedChainOf<Runtime, WithAssetHubKusamaMessagesInstance>>;
-	// Means `state_root` of AHR.
-	type Value =
-		HashOf<pallet_bridge_messages::BridgedChainOf<Runtime, WithAssetHubKusamaMessagesInstance>>;
-	// Configured according to the BHW's `ParachainHeadsToKeep`
+	// Means `block_hash` of AHW.
+	type Key = HashOf<
+		pallet_bridge_messages::BridgedChainOf<Runtime, WithAssetHubPolkadotMessagesInstance>,
+	>;
+	// Means `state_root` of AHW.
+	type Value = HashOf<
+		pallet_bridge_messages::BridgedChainOf<Runtime, WithAssetHubPolkadotMessagesInstance>,
+	>;
+	// Configured according to the BHR's `ParachainHeadsToKeep`
 	type RootsToKeep = ConstU32<64>;
 }
 
-/// Adapter `bp_header_chain::HeaderChain` implementation which resolves AssetHubKusama `state_root`
-/// for `block_hash`.
-pub struct AssetHubKusamaHeaders;
+/// Adapter `bp_header_chain::HeaderChain` implementation which resolves AssetHubPolkadot
+/// `state_root` for `block_hash`.
+pub struct AssetHubPolkadotHeaders;
 impl
 	bp_header_chain::HeaderChain<
-		pallet_bridge_messages::BridgedChainOf<Runtime, WithAssetHubKusamaMessagesInstance>,
-	> for AssetHubKusamaHeaders
+		pallet_bridge_messages::BridgedChainOf<Runtime, WithAssetHubPolkadotMessagesInstance>,
+	> for AssetHubPolkadotHeaders
 {
 	fn finalized_header_state_root(
 		header_hash: HashOf<
-			pallet_bridge_messages::BridgedChainOf<Runtime, WithAssetHubKusamaMessagesInstance>,
+			pallet_bridge_messages::BridgedChainOf<Runtime, WithAssetHubPolkadotMessagesInstance>,
 		>,
 	) -> Option<
-		HashOf<pallet_bridge_messages::BridgedChainOf<Runtime, WithAssetHubKusamaMessagesInstance>>,
+		HashOf<
+			pallet_bridge_messages::BridgedChainOf<Runtime, WithAssetHubPolkadotMessagesInstance>,
+		>,
 	> {
-		AssetHubKusamaProofRootStore::get_root(&header_hash)
+		AssetHubPolkadotProofRootStore::get_root(&header_hash)
 	}
 }
 
@@ -192,19 +204,18 @@ impl Convert<Vec<u8>, Xcm<()>> for UpdateBridgeStatusXcmProvider {
 }
 
 /// Add support for the export and dispatch of XCM programs withing
-/// `WithAssetHubKusamaMessagesInstance`.
-pub type XcmOverAssetHubKusamaInstance = pallet_xcm_bridge::Instance1;
-impl pallet_xcm_bridge::Config<XcmOverAssetHubKusamaInstance> for Runtime {
+/// `WithAssetHubPolkadotMessagesInstance`.
+pub type XcmOverAssetHubPolkadotInstance = pallet_xcm_bridge::Instance1;
+impl pallet_xcm_bridge::Config<XcmOverAssetHubPolkadotInstance> for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = weights::pallet_xcm_bridge::WeightInfo<Runtime>;
 
 	type UniversalLocation = UniversalLocation;
-	type BridgedNetwork = KusamaGlobalConsensusNetworkLocation;
-	type BridgeMessagesPalletInstance = WithAssetHubKusamaMessagesInstance;
+	type BridgedNetwork = PolkadotGlobalConsensusNetworkLocation;
+	type BridgeMessagesPalletInstance = WithAssetHubPolkadotMessagesInstance;
 
-	// TODO: FAIL-CI: we need to setup some price or configure per location?
-	type MessageExportPrice = ();
-	type DestinationVersion = XcmVersionOfDestAndRemoteBridge<PolkadotXcm, AssetHubKusamaLocation>;
+	type MessageExportPrice = MessageExportPrice;
+	type DestinationVersion = XcmVersionOfDestAndRemoteBridge<PolkadotXcm, AssetHubPolkadotLocation>;
 
 	type ForceOrigin = EnsureRoot<AccountId>;
 	// We allow creating bridges for the runtime itself and for other local consensus chains (relay,
@@ -233,12 +244,12 @@ impl pallet_xcm_bridge::Config<XcmOverAssetHubKusamaInstance> for Runtime {
 	type LocalXcmChannelManager = HereOrLocalConsensusXcmChannelManager<
 		pallet_xcm_bridge::BridgeId,
 		// handles congestion for local chain router for local AH's bridges
-		ToKusamaOverAssetHubKusamaXcmRouter,
+		ToPolkadotOverAssetHubPolkadotXcmRouter,
 		// handles congestion for other local chains with XCM using `update_bridge_status` sent to
 		// the sending chain.
 		UpdateBridgeStatusXcmChannelManager<
 			Runtime,
-			XcmOverAssetHubKusamaInstance,
+			XcmOverAssetHubPolkadotInstance,
 			UpdateBridgeStatusXcmProvider,
 			xcm_config::LocalXcmRouter,
 		>,
@@ -257,7 +268,7 @@ impl pallet_xcm_bridge::Config<XcmOverAssetHubKusamaInstance> for Runtime {
 			),
 			UniversalLocation,
 			// TODO: FAIL-CI wait for https://github.com/paritytech/polkadot-sdk/pull/6002#issuecomment-2469892343
-			BridgePolkadotToKusamaMessagesPalletInstance,
+			BridgeKusamaToPolkadotMessagesPalletInstance,
 		>,
 		// Provides the status of the XCMP queue's outbound queue, indicating whether messages can
 		// be dispatched to the sibling.
@@ -266,13 +277,13 @@ impl pallet_xcm_bridge::Config<XcmOverAssetHubKusamaInstance> for Runtime {
 	type CongestionLimits = ();
 }
 
-/// XCM router instance to the local `pallet_xcm_bridge::<XcmOverAssetHubKusamaInstance>` with
-/// direct bridging capabilities for `Kusama` global consensus with dynamic fees and back-pressure.
-pub type ToKusamaOverAssetHubKusamaXcmRouterInstance = pallet_xcm_bridge_router::Instance2;
-impl pallet_xcm_bridge_router::Config<ToKusamaOverAssetHubKusamaXcmRouterInstance> for Runtime {
+/// XCM router instance to the local `pallet_xcm_bridge::<XcmOverAssetHubPolkadotInstance>` with
+/// direct bridging capabilities for `Polkadot` global consensus with dynamic fees and back-pressure.
+pub type ToPolkadotOverAssetHubPolkadotXcmRouterInstance = pallet_xcm_bridge_router::Instance4;
+impl pallet_xcm_bridge_router::Config<ToPolkadotOverAssetHubPolkadotXcmRouterInstance> for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo =
-		weights::pallet_xcm_bridge_router_to_kusama_over_asset_hub_kusama::WeightInfo<Runtime>;
+		weights::pallet_xcm_bridge_router_to_polkadot_over_asset_hub_polkadot::WeightInfo<Runtime>;
 
 	type DestinationVersion = PolkadotXcm;
 
@@ -280,8 +291,8 @@ impl pallet_xcm_bridge_router::Config<ToKusamaOverAssetHubKusamaXcmRouterInstanc
 	// `pallet_xcm_bridge_router` can trigger directly `pallet_xcm_bridge` as exporter.
 	type MessageExporter = pallet_xcm_bridge_router::impls::ViaLocalBridgeExporter<
 		Runtime,
-		ToKusamaOverAssetHubKusamaXcmRouterInstance,
-		LocalExporter<XcmOverAssetHubKusama, UniversalLocation>,
+		ToPolkadotOverAssetHubPolkadotXcmRouterInstance,
+		LocalExporter<XcmOverAssetHubPolkadot, UniversalLocation>,
 	>;
 
 	// For congestion - resolves `BridgeId` using the same algorithm as `pallet_xcm_bridge` on
@@ -292,7 +303,6 @@ impl pallet_xcm_bridge_router::Config<ToKusamaOverAssetHubKusamaXcmRouterInstanc
 	// ...).
 	type UpdateBridgeStatusOrigin = EnsureRoot<AccountId>;
 
-	// TODO: FAIL-CI - fix/add new constants
 	// For adding message size fees
 	type ByteFee = xcm_config::bridging::XcmBridgeHubRouterByteFee;
 	// For adding message size fees
@@ -322,18 +332,18 @@ mod tests {
 	///
 	/// We want this tip to be large enough (delivery transactions with more messages = less
 	/// operational costs and a faster bridge), so this value should be significant.
-	const FEE_BOOST_PER_MESSAGE: Balance = 2 * DOT;
+	const FEE_BOOST_PER_MESSAGE: Balance = 2 * KSM;
 
 	#[test]
-	fn ensure_bridge_hub_polkadot_message_lane_weights_are_correct() {
+	fn ensure_bridge_hub_kusama_message_lane_weights_are_correct() {
 		check_message_lane_weights::<
-			bp_asset_hub_polkadot::AssetHubPolkadot,
+			bp_asset_hub_kusama::AssetHubKusama,
 			Runtime,
-			WithAssetHubKusamaMessagesInstance,
+			WithAssetHubPolkadotMessagesInstance,
 		>(
-			bp_asset_hub_kusama::EXTRA_STORAGE_PROOF_SIZE,
-			bp_asset_hub_polkadot::MAX_UNREWARDED_RELAYERS_IN_CONFIRMATION_TX,
-			bp_asset_hub_polkadot::MAX_UNCONFIRMED_MESSAGES_IN_CONFIRMATION_TX,
+			bp_asset_hub_polkadot::EXTRA_STORAGE_PROOF_SIZE,
+			bp_asset_hub_kusama::MAX_UNREWARDED_RELAYERS_IN_CONFIRMATION_TX,
+			bp_asset_hub_kusama::MAX_UNCONFIRMED_MESSAGES_IN_CONFIRMATION_TX,
 			true,
 		);
 	}
@@ -342,47 +352,47 @@ mod tests {
 	fn ensure_bridge_integrity() {
 		assert_complete_bridge_types!(
 			runtime: Runtime,
-			with_bridged_chain_messages_instance: WithAssetHubKusamaMessagesInstance,
-			this_chain: bp_asset_hub_polkadot::AssetHubPolkadot,
-			bridged_chain: bp_asset_hub_kusama::AssetHubKusama,
+			with_bridged_chain_messages_instance: WithAssetHubPolkadotMessagesInstance,
+			this_chain: bp_asset_hub_kusama::AssetHubKusama,
+			bridged_chain: bp_asset_hub_polkadot::AssetHubPolkadot,
 			expected_payload_type: XcmAsPlainPayload,
 		);
 
-		assert_standalone_messages_bridge_constants::<Runtime, WithAssetHubKusamaMessagesInstance>(
+		assert_standalone_messages_bridge_constants::<Runtime, WithAssetHubPolkadotMessagesInstance>(
 			AssertCompleteBridgeConstants {
 				this_chain_constants: AssertChainConstants {
-					block_length: bp_bridge_hub_polkadot::BlockLength::get(),
-					block_weights: bp_bridge_hub_polkadot::BlockWeightsForAsyncBacking::get(),
+					block_length: bp_bridge_hub_kusama::BlockLength::get(),
+					block_weights: bp_bridge_hub_kusama::BlockWeightsForAsyncBacking::get(),
 				},
 			},
 		);
 
 		pallet_bridge_relayers::extension::per_message::ensure_priority_boost_is_sane::<
 			Runtime,
-			WithAssetHubKusamaMessagesInstance,
+			WithAssetHubPolkadotMessagesInstance,
 			PriorityBoostPerMessage,
 		>(FEE_BOOST_PER_MESSAGE);
 
 		let expected: InteriorLocation = [PalletInstance(
-			bp_asset_hub_polkadot::WITH_BRIDGE_POLKADOT_TO_KUSAMA_MESSAGES_PALLET_INDEX,
+			bp_asset_hub_kusama::WITH_BRIDGE_KUSAMA_TO_POLKADOT_MESSAGES_PALLET_INDEX,
 		)]
 		.into();
-		assert_eq!(BridgePolkadotToKusamaMessagesPalletInstance::get(), expected);
+		assert_eq!(BridgeKusamaToPolkadotMessagesPalletInstance::get(), expected);
 	}
 
 	#[test]
 	fn ensure_encoding_compatibility() {
 		let hash = HashOf::<
-			pallet_bridge_messages::BridgedChainOf<Runtime, WithAssetHubKusamaMessagesInstance>,
+			pallet_bridge_messages::BridgedChainOf<Runtime, WithAssetHubPolkadotMessagesInstance>,
 		>::from([1; 32]);
 		let roots = vec![(hash, hash), (hash, hash)];
 
 		assert_eq!(
-			bp_asset_hub_polkadot::Call::AssetHubKusamaProofRootStore(
-				bp_asset_hub_polkadot::ProofRootStoreCall::note_new_roots { roots: roots.clone() }
+			bp_asset_hub_kusama::Call::AssetHubPolkadotProofRootStore(
+				bp_asset_hub_kusama::ProofRootStoreCall::note_new_roots { roots: roots.clone() }
 			)
 			.encode(),
-			RuntimeCall::AssetHubKusamaProofRootStore(
+			RuntimeCall::AssetHubPolkadotProofRootStore(
 				pallet_bridge_proof_root_store::Call::note_new_roots {
 					roots: BoundedVec::truncate_from(roots)
 				}

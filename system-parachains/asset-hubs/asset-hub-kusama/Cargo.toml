@@ -57,6 +57,7 @@ sp-block-builder = { workspace = true }
 sp-consensus-aura = { workspace = true }
 sp-core = { workspace = true }
 sp-genesis-builder = { workspace = true }
+sp-keyring = { workspace = true }
 sp-inherents = { workspace = true }
 sp-offchain = { workspace = true }
 sp-runtime = { workspace = true }
@@ -99,7 +100,6 @@ system-parachains-constants = { workspace = true }
 assets-common = { workspace = true }
 
 # Bridges
-pallet-xcm-bridge-hub-router = { workspace = true }
 bp-header-chain = { workspace = true }
 bp-messages = { workspace = true }
 bp-relayers = { workspace = true }
@@ -165,7 +165,6 @@ runtime-benchmarks = [
 	"pallet-utility/runtime-benchmarks",
 	"pallet-vesting/runtime-benchmarks",
 	"pallet-xcm-benchmarks/runtime-benchmarks",
-	"pallet-xcm-bridge-hub-router/runtime-benchmarks",
 	"pallet-xcm-bridge-router/runtime-benchmarks",
 	"pallet-xcm-bridge/runtime-benchmarks",
 	"pallet-xcm/runtime-benchmarks",
@@ -210,7 +209,6 @@ try-runtime = [
 	"pallet-uniques/try-runtime",
 	"pallet-utility/try-runtime",
 	"pallet-vesting/try-runtime",
-	"pallet-xcm-bridge-hub-router/try-runtime",
 	"pallet-xcm-bridge-router/try-runtime",
 	"pallet-xcm-bridge/try-runtime",
 	"pallet-xcm/try-runtime",
@@ -276,7 +274,6 @@ std = [
 	"pallet-utility/std",
 	"pallet-vesting/std",
 	"pallet-xcm-benchmarks?/std",
-	"pallet-xcm-bridge-hub-router/std",
 	"pallet-xcm-bridge-router/std",
 	"pallet-xcm-bridge/std",
 	"pallet-xcm/std",
@@ -293,6 +290,7 @@ std = [
 	"sp-consensus-aura/std",
 	"sp-core/std",
 	"sp-genesis-builder/std",
+	"sp-keyring/std",
 	"sp-inherents/std",
 	"sp-offchain/std",
 	"sp-runtime/std",
