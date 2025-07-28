@@ -62,14 +62,14 @@ parameter_types! {
 	);
 
 	// see the `FEE_BOOST_PER_RELAY_HEADER` constant get the meaning of this value
-	pub PriorityBoostPerRelayHeader: u64 = 58_014_163_614_163;
+	pub PriorityBoostPerRelayHeader: u64 = 58_014_163_614_1;
 
 	/// Priority boost that the registered relayer receives for every additional message in the message
 	/// delivery transaction.
 	///
 	/// It is determined semi-automatically - see `FEE_BOOST_PER_MESSAGE` constant to get the
 	/// meaning of this value.
-	pub PriorityBoostPerMessage: u64 = 364_088_888_888_888;
+	pub PriorityBoostPerMessage: u64 = 1_980_483_516_483;
 
 	/// PeoplePolkadot location
 	pub PeoplePolkadotLocation: Location = Location::new(1, [Parachain(polkadot_runtime_constants::system_parachain::PEOPLE_ID)]);
@@ -110,8 +110,7 @@ bp_runtime::generate_static_str_provider!(OnPeopleHubPolkadotRefundPolkadotBulle
 pub type WithPolkadotBulletinMessagesInstance = pallet_bridge_messages::Instance1;
 impl pallet_bridge_messages::Config<WithPolkadotBulletinMessagesInstance> for Runtime {
 	type RuntimeEvent = RuntimeEvent;
-	type WeightInfo =
-		();
+	type WeightInfo = ();
 
 	type ThisChain = bp_people_hub_polkadot::PeopleHubPolkadot;
 	type BridgedChain = bp_polkadot_bulletin::PolkadotBulletin;

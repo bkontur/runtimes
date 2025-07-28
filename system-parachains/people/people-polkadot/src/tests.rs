@@ -17,15 +17,22 @@
 use crate::{
 	xcm_config::{GovernanceLocation, LocationToAccountId},
 	Block, Runtime, RuntimeCall, RuntimeOrigin, WeightToFee,
+	bridge_common_config::{
+		BridgeGrandpaPolkadotBulletinInstance, RelayersForLegacyLaneIdsMessagesInstance,
+	},
+	bridge_to_bulletin_config::WithPolkadotBulletinMessagesInstance,
 	bridge_to_bulletin_config::{
 		PolkadotBulletinGlobalConsensusNetwork, PolkadotBulletinGlobalConsensusNetworkLocation,
-		WithPolkadotBulletinMessagesInstance, XcmOverPolkadotBulletinInstance,
+		XcmOverPolkadotBulletinInstance,
 	},
 	xcm_config::{LocationToAccountId, XcmConfig},
 	AllPalletsWithoutSystem, ExistentialDeposit, ParachainSystem, PolkadotXcm, Runtime,
 	RuntimeEvent, RuntimeOrigin, SessionKeys, SLOT_DURATION,
 };
-use bridge_hub_test_utils::SlotDurations;
+use bridge_hub_test_utils::{
+	test_cases::from_grandpa_chain,
+	SlotDurations,
+};
 use bp_messages::LegacyLaneId;
 use codec::Decode;
 use frame_support::parameter_types;
@@ -45,15 +52,10 @@ const ALICE: [u8; 32] = [1u8; 32];
 
 // Para id of sibling chain used in tests.
 pub const SIBLING_PARACHAIN_ID: u32 = 1000;
-// Random para id of sibling chain used in tests.
-pub const SIBLING_SYSTEM_PARACHAIN_ID: u32 = 1008;
-// Random para id of bridged chain from different global consensus used in tests.
-pub const BRIDGED_LOCATION_PARACHAIN_ID: u32 = 1000;
 
 parameter_types! {
 	pub SiblingParachainLocation: Location = Location::new(1, [Parachain(SIBLING_PARACHAIN_ID)]);
-	pub SiblingSystemParachainLocation: Location = Location::new(1, [Parachain(SIBLING_SYSTEM_PARACHAIN_ID)]);
-	pub BridgedUniversalLocation: InteriorLocation = [GlobalConsensus(PolkadotBulletinGlobalConsensusNetwork::get()), Parachain(BRIDGED_LOCATION_PARACHAIN_ID)].into();
+	pub BridgedUniversalLocation: InteriorLocation = [GlobalConsensus(PolkadotBulletinGlobalConsensusNetwork::get())].into();
 	pub TestNetworkId: NetworkId = NetworkId::Polkadot;
 }
 
@@ -89,7 +91,7 @@ fn handle_export_message_from_system_parachain_add_to_outbound_queue_works() {
 				_ => None,
 			}
 		}),
-		|| ExportMessage { network: PolkadotBulletinGlobalConsensusNetwork::get(), destination: Parachain(BRIDGED_LOCATION_PARACHAIN_ID).into(), xcm: Xcm(vec![]) },
+		|| ExportMessage { network: PolkadotBulletinGlobalConsensusNetwork::get(), destination: Here.into(), xcm: Xcm(vec![]) },
 		Some((Location::parent(), ExistentialDeposit::get()).into()),
 		Some((Location::parent(), 1_000_000_000).into()),
 		|| {
@@ -307,4 +309,77 @@ fn governance_authorize_upgrade_works() {
 		Runtime,
 		RuntimeOrigin,
 	>(GovernanceOrigin::Location(GovernanceLocation::get())));
+}
+
+type GrandpaRuntimeTestsAdapter = from_grandpa_chain::WithRemoteGrandpaChainHelperAdapter<
+	Runtime,
+	AllPalletsWithoutSystem,
+	BridgeGrandpaPolkadotBulletinInstance,
+	WithPolkadotBulletinMessagesInstance,
+	RelayersForLegacyLaneIdsMessagesInstance,
+>;
+
+#[test]
+fn relayed_incoming_message_works() {
+	from_grandpa_chain::relayed_incoming_message_works::<GrandpaRuntimeTestsAdapter>(
+		collator_session_keys(),
+		slot_durations(),
+		polkadot_runtime_constants::system_parachain::PEOPLE_ID,
+		0, // Bulletin relay chain id
+		NetworkId::PolkadotBulletin,
+		|| {
+			bridge_hub_test_utils::ensure_opened_bridge::<
+				Runtime,
+				XcmOverPolkadotBulletinInstance,
+				LocationToAccountId,
+				SiblingParachainLocation,
+			>(
+				SiblingParachainLocation::get(),
+				BridgedUniversalLocation::get(),
+				false,
+				|locations, _fee| {
+					bridge_hub_test_utils::open_bridge_with_storage::<
+						Runtime,
+						XcmOverPolkadotBulletinInstance,
+					>(locations, LegacyLaneId([0, 0, 0, 1]))
+				},
+			)
+			.1
+		},
+		|_relayer_at_target, _call| Ok(()),
+		true,
+	);
+}
+
+#[test]
+fn free_relay_extrinsic_works() {
+	from_grandpa_chain::free_relay_extrinsic_works::<GrandpaRuntimeTestsAdapter>(
+		collator_session_keys(),
+		slot_durations(),
+		polkadot_runtime_constants::system_parachain::PEOPLE_ID,
+		0, // Bulletin relay chain id
+		NetworkId::PolkadotBulletin,
+		|| {
+			// Initialize bridge state for GRANDPA chain tests
+			bridge_hub_test_utils::ensure_opened_bridge::<
+				Runtime,
+				XcmOverPolkadotBulletinInstance,
+				LocationToAccountId,
+				SiblingParachainLocation,
+			>(
+				SiblingParachainLocation::get(),
+				BridgedUniversalLocation::get(),
+				false,
+				|locations, _fee| {
+					bridge_hub_test_utils::open_bridge_with_storage::<
+						Runtime,
+						XcmOverPolkadotBulletinInstance,
+					>(locations, LegacyLaneId([0, 0, 0, 1]))
+				},
+			)
+			.1
+		},
+		|_relayer_at_target, _call| Ok(()),
+		true,
+	);
 }
