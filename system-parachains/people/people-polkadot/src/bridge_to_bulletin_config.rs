@@ -244,13 +244,13 @@ where
 {
 	use pallet_xcm_bridge_hub::{Bridge, BridgeId, BridgeState};
 	use sp_runtime::traits::Zero;
-	use xcm::{latest::POLKADOT_GENESIS_HASH, VersionedInteriorLocation};
+	use xcm::VersionedInteriorLocation;
 
 	// insert bridge metadata
 	let lane_id = with;
 	let sibling_parachain = Location::new(1, [Parachain(sibling_para_id)]);
 	let universal_source =
-		[GlobalConsensus(ByGenesis(POLKADOT_GENESIS_HASH)), Parachain(sibling_para_id)].into();
+		[GlobalConsensus(Polkadot), Parachain(sibling_para_id)].into();
 	let universal_destination =
 		[GlobalConsensus(PolkadotBulletinGlobalConsensusNetwork::get())].into();
 	let bridge_id = BridgeId::new(&universal_source, &universal_destination);

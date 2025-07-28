@@ -89,7 +89,7 @@ bp-bridge-hub-polkadot = { workspace = true }
 bp-people-hub-polkadot = { workspace = true }
 pallet-bridge-grandpa = { workspace = true }
 pallet-bridge-messages = { workspace = true }
-pallet-bridge-relayers = { workspace = true }
+pallet-bridge-relayers = { workspace = true, features = ["integrity-test"] }
 pallet-bridge-parachains = { workspace = true }
 
 pallet-xcm-bridge-hub = { workspace = true }
@@ -98,6 +98,7 @@ bridge-runtime-common = { workspace = true }
 pallet-sudo = { workspace = true }
 
 [dev-dependencies]
+bridge-hub-test-utils = { workspace = true }
 parachains-runtimes-test-utils = { workspace = true }
 
 [build-dependencies]
@@ -182,10 +183,8 @@ std = [
 	"pallet-bridge-parachains/std",
 	"pallet-xcm-bridge-hub/std",
 	"bridge-runtime-common/std",
+	"bridge-runtime-common/integrity-test",
 	"pallet-sudo/std",
-
-
-
 ]
 
 runtime-benchmarks = [

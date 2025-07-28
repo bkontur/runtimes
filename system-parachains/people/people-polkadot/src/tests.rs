@@ -17,10 +17,24 @@
 use crate::{
 	xcm_config::{GovernanceLocation, LocationToAccountId},
 	Block, Runtime, RuntimeCall, RuntimeOrigin, WeightToFee,
+	bridge_to_bulletin_config::{
+		PolkadotBulletinGlobalConsensusNetwork, PolkadotBulletinGlobalConsensusNetworkLocation,
+		WithPolkadotBulletinMessagesInstance, XcmOverPolkadotBulletinInstance,
+	},
+	xcm_config::{LocationToAccountId, XcmConfig},
+	AllPalletsWithoutSystem, ExistentialDeposit, ParachainSystem, PolkadotXcm, Runtime,
+	RuntimeEvent, RuntimeOrigin, SessionKeys, SLOT_DURATION,
 };
-use cumulus_primitives_core::relay_chain::AccountId;
+use bridge_hub_test_utils::SlotDurations;
+use bp_messages::LegacyLaneId;
+use codec::Decode;
+use frame_support::parameter_types;
+use frame_support::traits::ConstU8;
+use parachains_common::AccountId;
 use sp_core::crypto::Ss58Codec;
-use xcm::prelude::*;
+use sp_core::sr25519;
+use system_parachains_constants::polkadot::consensus::RELAY_CHAIN_SLOT_DURATION_MILLIS;
+use xcm::latest::prelude::*;
 use xcm_runtime_apis::conversions::LocationToAccountHelper;
 
 use frame_support::{assert_err, assert_ok};
@@ -28,6 +42,110 @@ use parachains_runtimes_test_utils::GovernanceOrigin;
 use sp_runtime::Either;
 
 const ALICE: [u8; 32] = [1u8; 32];
+
+// Para id of sibling chain used in tests.
+pub const SIBLING_PARACHAIN_ID: u32 = 1000;
+// Random para id of sibling chain used in tests.
+pub const SIBLING_SYSTEM_PARACHAIN_ID: u32 = 1008;
+// Random para id of bridged chain from different global consensus used in tests.
+pub const BRIDGED_LOCATION_PARACHAIN_ID: u32 = 1000;
+
+parameter_types! {
+	pub SiblingParachainLocation: Location = Location::new(1, [Parachain(SIBLING_PARACHAIN_ID)]);
+	pub SiblingSystemParachainLocation: Location = Location::new(1, [Parachain(SIBLING_SYSTEM_PARACHAIN_ID)]);
+	pub BridgedUniversalLocation: InteriorLocation = [GlobalConsensus(PolkadotBulletinGlobalConsensusNetwork::get()), Parachain(BRIDGED_LOCATION_PARACHAIN_ID)].into();
+	pub TestNetworkId: NetworkId = NetworkId::Polkadot;
+}
+
+fn collator_session_keys() -> bridge_hub_test_utils::CollatorSessionKeys<Runtime> {
+	let pubkey = sr25519::Public::from_raw(ALICE);
+	bridge_hub_test_utils::CollatorSessionKeys::new(
+		AccountId::from(ALICE),
+		AccountId::from(ALICE),
+		SessionKeys { aura: pubkey.into() },
+	)
+}
+
+fn slot_durations() -> SlotDurations {
+	SlotDurations {
+		relay: SlotDuration::from_millis(RELAY_CHAIN_SLOT_DURATION_MILLIS.into()),
+		para: SlotDuration::from_millis(SLOT_DURATION),
+	}
+}
+
+#[test]
+fn handle_export_message_from_system_parachain_add_to_outbound_queue_works() {
+	bridge_hub_test_utils::test_cases::handle_export_message_from_system_parachain_to_outbound_queue_works::<
+		Runtime,
+		XcmConfig,
+		WithPolkadotBulletinMessagesInstance,
+	>(
+		collator_session_keys(),
+		polkadot_runtime_constants::system_parachain::PEOPLE_ID,
+		SIBLING_PARACHAIN_ID,
+		Box::new(|runtime_event_encoded: Vec<u8>| {
+			match RuntimeEvent::decode(&mut &runtime_event_encoded[..]) {
+				Ok(RuntimeEvent::BridgePolkadotBulletinMessages(event)) => Some(event),
+				_ => None,
+			}
+		}),
+		|| ExportMessage { network: PolkadotBulletinGlobalConsensusNetwork::get(), destination: Parachain(BRIDGED_LOCATION_PARACHAIN_ID).into(), xcm: Xcm(vec![]) },
+		Some((Location::parent(), ExistentialDeposit::get()).into()),
+		Some((Location::parent(), 1_000_000_000).into()),
+		|| {
+			PolkadotXcm::force_xcm_version(RuntimeOrigin::root(), Box::new(PolkadotBulletinGlobalConsensusNetworkLocation::get()), XCM_VERSION).expect("version saved!");
+
+			bridge_hub_test_utils::ensure_opened_bridge::<
+				Runtime,
+				XcmOverPolkadotBulletinInstance,
+				LocationToAccountId,
+				SiblingParachainLocation,
+			>(
+				SiblingParachainLocation::get(),
+				BridgedUniversalLocation::get(),
+				false,
+				|locations, _fee| {
+					bridge_hub_test_utils::open_bridge_with_storage::<
+						Runtime,
+						XcmOverPolkadotBulletinInstance
+					>(locations, LegacyLaneId([0, 0, 0, 1]))
+				}
+			).1
+		},
+	)
+}
+
+#[test]
+fn message_dispatch_routing_works() {
+	bridge_hub_test_utils::test_cases::message_dispatch_routing_works::<
+		Runtime,
+		AllPalletsWithoutSystem,
+		XcmConfig,
+		ParachainSystem,
+		WithPolkadotBulletinMessagesInstance,
+		TestNetworkId,
+		PolkadotBulletinGlobalConsensusNetwork,
+		ConstU8<2>,
+	>(
+		collator_session_keys(),
+		slot_durations(),
+		polkadot_runtime_constants::system_parachain::PEOPLE_ID,
+		SIBLING_PARACHAIN_ID,
+		Box::new(|runtime_event_encoded: Vec<u8>| {
+			match RuntimeEvent::decode(&mut &runtime_event_encoded[..]) {
+				Ok(RuntimeEvent::ParachainSystem(event)) => Some(event),
+				_ => None,
+			}
+		}),
+		Box::new(|runtime_event_encoded: Vec<u8>| {
+			match RuntimeEvent::decode(&mut &runtime_event_encoded[..]) {
+				Ok(RuntimeEvent::XcmpQueue(event)) => Some(event),
+				_ => None,
+			}
+		}),
+		|| (),
+	)
+}
 
 #[test]
 fn location_conversion_works() {
