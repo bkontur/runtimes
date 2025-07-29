@@ -72,9 +72,7 @@ parameter_types! {
 	pub PriorityBoostPerMessage: u64 = 1_980_483_516_483;
 
 	/// PeoplePolkadot location
-	pub PeoplePolkadotLocation: Location = Location::new(1, [Parachain(polkadot_runtime_constants::system_parachain::PEOPLE_ID)]);
-
-	pub storage BridgeDeposit: Balance = 5 * ROC;
+	pub PeoplePolkadotLocation: Location = Here.into_location();
 }
 
 /// Proof of messages, coming from Polkadot Bulletin chain.
@@ -137,18 +135,22 @@ impl pallet_xcm_bridge_hub::Config<XcmOverPolkadotBulletinInstance> for Runtime 
 	type BridgeMessagesPalletInstance = WithPolkadotBulletinMessagesInstance;
 
 	type MessageExportPrice = ();
+        // TODO: (setup XCM version with PolkadotXcm) -> type DestinationVersion = XcmVersionOfDestAndRemoteBridge<PolkadotXcm, BridgeHubKusamaLocation>;
 	type DestinationVersion = AlwaysV5;
 
 	type ForceOrigin = EnsureRoot<AccountId>;
+        // TODO: (revisit both so OpenGov can close_bridge at least - add some tests)
 	// We don't want to allow creating bridges for this instance.
 	type OpenBridgeOrigin = EnsureNever<Location>;
 	// Converter aligned with `OpenBridgeOrigin`.
 	type BridgeOriginAccountIdConverter =
 		(ParentIsPreset<AccountId>, SiblingParachainConvertsVia<Sibling, AccountId>);
 
-	type BridgeDeposit = BridgeDeposit;
+	type BridgeDeposit = ConstU128<0>;
 	type Currency = Balances;
 	type RuntimeHoldReason = RuntimeHoldReason;
+        // TODO: (for People, we should allow here just `Here` instead of `PeoplePolkadotLocation`)
+        // TODO: (revisit also OpenBridgeOrigin/BridgeOriginAccountIdConverter) so OpenGov will be able to `close_bridge` (follow up)
 	// Do not require deposit from People parachains.
 	type AllowWithoutBridgeDeposit = Equals<PeoplePolkadotLocation>;
 

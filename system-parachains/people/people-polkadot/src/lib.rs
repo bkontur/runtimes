@@ -203,8 +203,6 @@ parameter_types! {
 		.avg_block_initialization(AVERAGE_ON_INITIALIZE_RATIO)
 		.build_or_panic();
 	pub const SS58Prefix: u8 = 0;
-
-	pub const BridgePolkadotBulletinMessagesPalletName: &'static str = "BridgePolkadotBulletinMessages";
 }
 
 #[derive_impl(frame_system::config_preludes::ParaChainDefaultConfig as frame_system::DefaultConfig)]

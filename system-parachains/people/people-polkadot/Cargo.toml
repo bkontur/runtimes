@@ -95,11 +95,12 @@ pallet-bridge-parachains = { workspace = true }
 pallet-xcm-bridge-hub = { workspace = true }
 bridge-runtime-common = { workspace = true }	
 
-pallet-sudo = { workspace = true }
-
 [dev-dependencies]
 bridge-hub-test-utils = { workspace = true }
 parachains-runtimes-test-utils = { workspace = true }
+bridge-runtime-common = { features = [
+	"integrity-test",
+], workspace = true, default-features = true }
 
 [build-dependencies]
 substrate-wasm-builder = { optional = true, workspace = true }
@@ -168,7 +169,7 @@ std = [
 	"xcm-executor/std",
 	"xcm-runtime-apis/std",
 	"xcm/std",
-    "bp-messages/std",
+        "bp-messages/std",
 	"bp-polkadot-bulletin/std",
 	"bp-header-chain/std",
 	"bp-runtime/std",

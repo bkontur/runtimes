@@ -28,20 +28,17 @@ parameter_types! {
 	pub const RelayChainHeadersToKeep: u32 = 1024;
 	pub const ParachainHeadsToKeep: u32 = 64;
 
-	pub const PolkadotBridgeParachainPalletName: &'static str = bp_bridge_hub_polkadot::bp_polkadot::PARAS_PALLET_NAME;
-	pub const MaxPolkadotParaHeadDataSize: u32 = bp_bridge_hub_polkadot::bp_polkadot::MAX_NESTED_PARACHAIN_HEAD_DATA_SIZE;
 
 	pub storage RequiredStakeForStakeAndSlash: Balance = 1_000_000;
 	pub const RelayerStakeLease: u32 = 8;
 	pub const RelayerStakeReserveId: [u8; 8] = *b"brdgrlrs";
 
-	pub storage DeliveryRewardInBalance: u64 = 1_000_000;
 }
 
 
 /// Allows collect and claim rewards for relayers
-pub type RelayersForLegacyLaneIdsMessagesInstance = ();
-impl pallet_bridge_relayers::Config<RelayersForLegacyLaneIdsMessagesInstance> for Runtime {
+pub type BridgeRelayersInstance = ();
+impl pallet_bridge_relayers::Config<BridgeRelayersInstance> for Runtime {
 	type LaneId = bp_messages::LegacyLaneId;
 	type RuntimeEvent = RuntimeEvent;
 	type Reward = Balance;
@@ -58,6 +55,7 @@ impl pallet_bridge_relayers::Config<RelayersForLegacyLaneIdsMessagesInstance> fo
 		RequiredStakeForStakeAndSlash,
 		RelayerStakeLease,
 	>;
+        // TODO: (setup real weights and benchmarking)
 	type WeightInfo = ();
 }
 
@@ -69,13 +67,6 @@ impl pallet_bridge_grandpa::Config<BridgeGrandpaPolkadotBulletinInstance> for Ru
 	type MaxFreeHeadersPerBlock = ConstU32<4>;
 	type FreeHeadersInterval = ConstU32<5>;
 	type HeadersToKeep = RelayChainHeadersToKeep;
-	// Technically this is incorrect - we have two pallet instances and ideally we shall
-	// benchmark every instance separately. But the benchmarking engine has a flaw - it
-	// messes with components. E.g. in Kusama maximal validators count is 1024 and in
-	// Bulletin chain it is 100. But benchmarking engine runs Bulletin benchmarks using
-	// components range, computed for Kusama => it causes an error.
-	//
-	// In practice, however, GRANDPA pallet works the same way for all bridged chains, so
-	// weights are also the same for both bridges.
+        // TODO: (setup benchmarking correctly)
 	type WeightInfo = ();
 }
