@@ -20,7 +20,6 @@
 //! are reusing Polkadot Bulletin chain primitives everywhere here.
 
 use crate::{
-	bridge_common_config::RelayersForLegacyLaneIdsMessagesInstance,
 	xcm_config::UniversalLocation, AccountId, Balance, Balances, BridgePolkadotBulletinGrandpa,
 	BridgePolkadotBulletinMessages, Runtime, RuntimeEvent, RuntimeHoldReason, XcmOverPolkadotBulletin,
 	XcmRouter,
@@ -31,19 +30,15 @@ use bp_messages::{
 
 use frame_support::{
 	parameter_types,
-	traits::{Equals, PalletInfoAccess},
+	traits::{Equals, PalletInfoAccess, ConstU128},
 };
 use frame_system::{EnsureNever, EnsureRoot};
 use pallet_bridge_messages::LaneIdOf;
-use pallet_bridge_relayers::extension::{
-	BridgeRelayersTransactionExtension, WithMessagesExtensionConfig,
-};
 use pallet_xcm_bridge_hub::XcmAsPlainPayload;
 use polkadot_parachain_primitives::primitives::Sibling;
-use system_parachains_constants::polkadot::currency::UNITS as ROC;
 use xcm::{
 	latest::prelude::*,
-	prelude::{InteriorLocation, NetworkId},
+	prelude::InteriorLocation,
 	AlwaysV5,
 };
 use xcm_builder::{BridgeBlobDispatcher, ParentIsPreset, SiblingParachainConvertsVia};
@@ -53,12 +48,10 @@ parameter_types! {
 	pub BridgePolkadotToPolkadotBulletinMessagesPalletInstance: InteriorLocation = [
 		PalletInstance(<BridgePolkadotBulletinMessages as PalletInfoAccess>::index() as u8)
 	].into();
-	/// Polkadot Bulletin Network identifier.
-	pub PolkadotBulletinGlobalConsensusNetwork: NetworkId = NetworkId::PolkadotBulletin;
 	/// Relative location of the Polkadot Bulletin chain.
 	pub PolkadotBulletinGlobalConsensusNetworkLocation: Location = Location::new(
 		2,
-		[GlobalConsensus(PolkadotBulletinGlobalConsensusNetwork::get())]
+		[GlobalConsensus(bp_polkadot_bulletin::PolkadotBulletinGlobalConsensusNetwork::get())]
 	);
 
 	// see the `FEE_BOOST_PER_RELAY_HEADER` constant get the meaning of this value
@@ -88,21 +81,6 @@ type FromPolkadotBulletinMessageBlobDispatcher = BridgeBlobDispatcher<
 	UniversalLocation,
 	BridgePolkadotToPolkadotBulletinMessagesPalletInstance,
 >;
-
-/// Transaction extension that refunds relayers that are delivering messages from the Polkadot
-/// Bulletin chain.
-pub type OnPeopleHubPolkadotRefundPolkadotBulletinMessages = BridgeRelayersTransactionExtension<
-	Runtime,
-	WithMessagesExtensionConfig<
-		StrOnPeopleHubPolkadotRefundPolkadotBulletinMessages,
-		Runtime,
-		WithPolkadotBulletinMessagesInstance,
-		RelayersForLegacyLaneIdsMessagesInstance,
-		PriorityBoostPerMessage,
-	>,
-	bp_messages::LegacyLaneId,
->;
-bp_runtime::generate_static_str_provider!(OnPeopleHubPolkadotRefundPolkadotBulletinMessages);
 
 /// Add XCM messages support for PeopleHubPolkadot to support Polkadot->Polkadot Bulletin XCM messages.
 pub type WithPolkadotBulletinMessagesInstance = pallet_bridge_messages::Instance1;

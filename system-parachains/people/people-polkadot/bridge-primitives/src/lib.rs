@@ -82,10 +82,6 @@ pub const PEOPLE_HUB_POLKADOT_PARACHAIN_ID: u32 = 1004;
 /// Name of the With-PeopleHubPolkadot messages pallet instance that is deployed at bridged chains.
 pub const WITH_PEOPLE_HUB_POLKADOT_MESSAGES_PALLET_NAME: &str = "PeoplePolkadotMessages";
 
-/// Name of the With-PeopleHubPolkadot bridge-relayers pallet instance that is deployed at bridged
-/// chains.
-pub const WITH_PEOPLE_HUB_POLKADOT_RELAYERS_PALLET_NAME: &str = "BridgeRelayers";
-
 /// Pallet index of `BridgePolkadotBulletinMessages: pallet_bridge_messages::<Instance1>`.
 pub const WITH_PEOPLE_POLKADOT_TO_BULLETIN_MESSAGES_PALLET_INDEX: u8 = 61;
 

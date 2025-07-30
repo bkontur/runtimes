@@ -185,7 +185,6 @@ std = [
 	"pallet-xcm-bridge-hub/std",
 	"bridge-runtime-common/std",
 	"bridge-runtime-common/integrity-test",
-	"pallet-sudo/std",
 ]
 
 runtime-benchmarks = [

@@ -35,6 +35,7 @@ use frame_system::limits;
 use sp_runtime::{
 	Perbill, StateVersion,
 };
+use xcm::prelude::NetworkId;
 
 // This chain reuses most of Polkadot primitives.
 pub use bp_polkadot_core::{
@@ -83,6 +84,8 @@ parameter_types! {
 		10 * 1024 * 1024,
 		NORMAL_DISPATCH_RATIO,
 	);
+	/// Identifier of the Polkadot Bulletin chain
+	pub PolkadotBulletinGlobalConsensusNetwork: NetworkId = NetworkId::PolkadotBulletin;
 }
 
 /// Polkadot Bulletin Chain declaration.
