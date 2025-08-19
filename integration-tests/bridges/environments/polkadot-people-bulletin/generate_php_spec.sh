@@ -122,7 +122,11 @@ cat "$script_dir/chain-spec-plain.json" | jq --rawfile code "$script_dir/rt-hex.
                     }
             ]
         ]' \
-    > "$script_dir/edited-chain-spec-plain.json"
+| jq 'if .genesis.runtimeGenesis.patch
+    then .genesis.runtimeGenesis.patch.bridgeBulletinGrandpa.owner = "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY"
+    else .
+    end' \
+    > "$script_dir/edited-chain-spec-plain.json" \
 
 # build a raw spec
 $POLKADOT_PARACHAIN_BINARY build-spec --chain "$script_dir/edited-chain-spec-plain.json" --raw > "$script_dir/chain-spec-raw.json" 2>/dev/null
