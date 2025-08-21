@@ -27,8 +27,8 @@ chain_spec_command = "{{CHAIN_SPEC_GEN_BINARY_FOR_POLKADOT}} {% raw %} {{chainNa
 
 [[parachains]]
 id = 1004
-chain = "people-hub-polkadot-local"
-chain_spec_command = "{{ENV_PATH}}/generate_php_spec.sh PolkadotBulletin {% raw %} {{chainName}} {% endraw %}"
+chain = "people-polkadot-local"
+chain_spec_command = "{{CHAIN_SPEC_GEN_BINARY_FOR_POLKADOT}} {% raw %} {{chainName}} {% endraw %}"
 cumulus_based = true
 
 	[[parachains.collators]]
