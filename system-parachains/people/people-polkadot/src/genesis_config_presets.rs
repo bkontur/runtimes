@@ -19,6 +19,7 @@
 use crate::*;
 use sp_genesis_builder::PresetId;
 use system_parachains_constants::genesis_presets::*;
+use sp_core::sr25519;
 
 const PEOPLE_POLKADOT_ED: Balance = ExistentialDeposit::get();
 
@@ -26,6 +27,7 @@ fn people_polkadot_genesis(
 	invulnerables: Vec<(AccountId, parachains_common::AuraId)>,
 	endowed_accounts: Vec<AccountId>,
 	id: ParaId,
+	bridge_owner: Option<AccountId>,
 ) -> serde_json::Value {
 	serde_json::json!({
 		"balances": BalancesConfig {
@@ -61,13 +63,18 @@ fn people_polkadot_genesis(
 		"polkadotXcm": {
 			"safeXcmVersion": Some(SAFE_XCM_VERSION),
 		},
+		"bridgePolkadotBulletinGrandpa": BridgePolkadotBulletinGrandpaConfig {
+			owner: bridge_owner,
+			..Default::default()
+		}
+
 		// no need to pass anything to aura, in fact it will panic if we do. Session will take care
 		// of this. `aura: Default::default()`
 	})
 }
 
 pub fn people_polkadot_local_testnet_genesis(para_id: ParaId) -> serde_json::Value {
-	people_polkadot_genesis(invulnerables(), testnet_accounts(), para_id)
+	people_polkadot_genesis(invulnerables(), testnet_accounts(), para_id, Some(get_account_id_from_seed::<sr25519::Public>("Alice")))
 }
 
 fn people_polkadot_development_genesis(para_id: ParaId) -> serde_json::Value {
