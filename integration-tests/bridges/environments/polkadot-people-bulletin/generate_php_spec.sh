@@ -20,7 +20,7 @@ cat $rt_path | od -A n -v -t x1 | tr -d ' \n' > "$script_dir/rt-hex.txt" 2>/dev/
 # is not recommended in value-bearing networks.
 cat "$script_dir/chain-spec-plain.json" | jq --rawfile code "$script_dir/rt-hex.txt" '.genesis.runtimeGenesis.code = ("0x" + $code)' \
     | jq '.name = "Polkadot People"' \
-    | jq '.id = "people-polkadot"' \
+    | jq '.id = "people-polkadot-local"' \
     | jq '.chainType = "Local"' \
     | jq '.bootNodes = [
 		"/dns/polkadot-people-connect-0.polkadot.io/tcp/30334/p2p/12D3KooWP7BoJ7nAF9QnsreN8Eft1yHNUhvhxFiQyKFEUePi9mu3",
@@ -32,7 +32,7 @@ cat "$script_dir/chain-spec-plain.json" | jq --rawfile code "$script_dir/rt-hex.
      "/dns/polkadot-people-connect-2.polkadot.io/tcp/443/wss/p2p/12D3KooWGywSaoumTpcTwojvLBjZbrrwLgSRL9jFsCPJpQXjsXzp",
      "/dns/polkadot-people-connect-3.polkadot.io/tcp/443/wss/p2p/12D3KooWLegYvfSKxVdLXgcSYt24bcHtn1VyKGMiDrpfQ8M96w11"
 ]' \
-    | jq '.relay_chain = "polkadot"' \
+    | jq '.relay_chain = "polkadot-local"' \
     | jq --argjson para_id $para_id '.para_id = $para_id' \
     | jq --argjson para_id $para_id '.genesis.runtimeGenesis.config.parachainInfo.parachainId |= $para_id' \
     | jq --argjson para_id $para_id '.genesis.runtimeGenesis.config.parachainInfo.parachainId |= $para_id' \
@@ -123,7 +123,7 @@ cat "$script_dir/chain-spec-plain.json" | jq --rawfile code "$script_dir/rt-hex.
             ]
         ]' \
 | jq 'if .genesis.runtimeGenesis.patch
-    then .genesis.runtimeGenesis.patch.bridgeBulletinGrandpa.owner = "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY"
+    then .genesis.runtimeGenesis.patch.bridgePolkadotBulletinGrandpa.owner = "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY"
     else .
     end' \
     > "$script_dir/edited-chain-spec-plain.json" \
