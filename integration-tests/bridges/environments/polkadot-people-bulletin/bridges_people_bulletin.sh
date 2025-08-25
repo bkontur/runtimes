@@ -12,7 +12,7 @@ function init_bulletin_polkadot() {
         --source-version-mode Auto \
         --target-uri ws://localhost:9910 \
         --target-version-mode Auto \
-        --target-signer //Bob \
+        --target-signer //Alice \
         --target-transactions-mortality 4
 }
 
@@ -39,7 +39,7 @@ function run_finality_relay() {
       --source-version-mode Auto \
       --target-uri ws://localhost:9910 \
       --target-version-mode Auto \
-      --target-signer //Bob \
+      --target-signer //Alice \
       --target-transactions-mortality 4 &
 
   RUST_LOG=rpc=trace,bridge=trace \
