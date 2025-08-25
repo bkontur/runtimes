@@ -86,7 +86,7 @@ bp-parachains = { workspace = true }
 bp-relayers = { workspace = true }
 bp-polkadot-core = { workspace = true }
 bp-bridge-hub-polkadot = { workspace = true }
-bp-people-hub-polkadot = { workspace = true }
+bp-people-polkadot = { workspace = true }
 pallet-bridge-grandpa = { workspace = true }
 pallet-bridge-messages = { workspace = true }
 pallet-bridge-relayers = { workspace = true, features = ["integrity-test"] }
@@ -177,7 +177,7 @@ std = [
 	"bp-relayers/std",
 	"bp-polkadot-core/std",
 	"bp-bridge-hub-polkadot/std",
-	"bp-people-hub-polkadot/std",
+	"bp-people-polkadot/std",
 	"pallet-bridge-grandpa/std",
 	"pallet-bridge-messages/std",
 	"pallet-bridge-relayers/std",

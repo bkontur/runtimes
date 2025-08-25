@@ -7,7 +7,7 @@ function init_bulletin_polkadot() {
     local RELAYER_BINARY_PATH=$(ensure_relayer)
 
     RUST_LOG=runtime=trace,rpc=trace,bridge=trace \
-        $RELAYER_BINARY_PATH init-bridge polkadot-bulletin-to-people-hub-polkadot \
+        $RELAYER_BINARY_PATH init-bridge polkadot-bulletin-to-people-polkadot \
         --source-uri ws://localhost:10000 \
         --source-version-mode Auto \
         --target-uri ws://localhost:9910 \
@@ -33,7 +33,7 @@ function run_finality_relay() {
   local RELAYER_BINARY_PATH=$(ensure_relayer)
 
   RUST_LOG=rpc=trace,bridge=trace \
-      $RELAYER_BINARY_PATH relay-headers polkadot-bulletin-to-people-hub-polkadot \
+      $RELAYER_BINARY_PATH relay-headers polkadot-bulletin-to-people-polkadot \
       --only-free-headers \
       --source-uri ws://localhost:10000 \
       --source-version-mode Auto \
@@ -71,7 +71,7 @@ function run_messages_relay() {
     local RELAYER_BINARY_PATH=$(ensure_relayer)
 
     RUST_LOG=runtime=trace,rpc=trace,bridge=trace \
-        $RELAYER_BINARY_PATH relay-messages polkadot-bulletin-to-people-hub-polkadot \
+        $RELAYER_BINARY_PATH relay-messages polkadot-bulletin-to-people-polkadot \
         --source-uri ws://localhost:10000 \
         --source-version-mode Auto \
         --source-signer //Alice \
@@ -83,7 +83,7 @@ function run_messages_relay() {
         --lane 00000000 &
 
     RUST_LOG=rpc=trace,bridge=trace \
-        $RELAYER_BINARY_PATH relay-messages people-hub-polkadot-to-polkadot-bulletin \
+        $RELAYER_BINARY_PATH relay-messages people-polkadot-to-polkadot-bulletin \
         --source-uri ws://localhost:9910 \
         --source-version-mode Auto \
         --source-signer //Ferdie \
@@ -137,7 +137,7 @@ case "$1" in
     pkill -f substrate-relay
     ;;
   store-data)
-    # store data in the bulletin
+    # store data on bulletin
     url=$2
     seed=$3
     data=$4

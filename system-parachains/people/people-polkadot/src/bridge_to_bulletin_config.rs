@@ -14,7 +14,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Bridge definitions used on PeopleHubPolkadot for bridging to Polkadot Bulletin.
+//! Bridge definitions used on PeoplePolkadot for bridging to Polkadot Bulletin.
 //!
 //! Polkadot Bulletin chain will be the 1:1 copy of the Polkadot Bulletin, so we
 //! are reusing Polkadot Bulletin chain primitives everywhere here.
@@ -82,13 +82,13 @@ type FromPolkadotBulletinMessageBlobDispatcher = BridgeBlobDispatcher<
 	BridgePolkadotToPolkadotBulletinMessagesPalletInstance,
 >;
 
-/// Add XCM messages support for PeopleHubPolkadot to support Polkadot->Polkadot Bulletin XCM messages.
+/// Add XCM messages support for PeoplePolkadot to support Polkadot->Polkadot Bulletin XCM messages.
 pub type WithPolkadotBulletinMessagesInstance = pallet_bridge_messages::Instance1;
 impl pallet_bridge_messages::Config<WithPolkadotBulletinMessagesInstance> for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = ();
 
-	type ThisChain = bp_people_hub_polkadot::PeopleHubPolkadot;
+	type ThisChain = bp_people_polkadot::PeoplePolkadot;
 	type BridgedChain = bp_polkadot_bulletin::PolkadotBulletin;
 	type BridgedHeaderChain = BridgePolkadotBulletinGrandpa;
 
@@ -163,13 +163,13 @@ mod tests {
 	#[test]
 	fn ensure_bridge_hub_polkadot_message_lane_weights_are_correct() {
 		check_message_lane_weights::<
-			bp_people_hub_polkadot::PeopleHubPolkadot,
+			bp_people_polkadot::PeoplePolkadot,
 			Runtime,
 			WithPolkadotBulletinMessagesInstance,
 		>(
 			bp_polkadot_bulletin::EXTRA_STORAGE_PROOF_SIZE,
-			bp_people_hub_polkadot::MAX_UNREWARDED_RELAYERS_IN_CONFIRMATION_TX,
-			bp_people_hub_polkadot::MAX_UNCONFIRMED_MESSAGES_IN_CONFIRMATION_TX,
+			bp_people_polkadot::MAX_UNREWARDED_RELAYERS_IN_CONFIRMATION_TX,
+			bp_people_polkadot::MAX_UNCONFIRMED_MESSAGES_IN_CONFIRMATION_TX,
 			true,
 		);
 	}
@@ -179,7 +179,7 @@ mod tests {
 		assert_complete_bridge_types!(
 			runtime: Runtime,
 			with_bridged_chain_messages_instance: WithPolkadotBulletinMessagesInstance,
-			this_chain: bp_people_hub_polkadot::PeopleHubPolkadot,
+			this_chain: bp_people_polkadot::PeoplePolkadot,
 			bridged_chain: bp_polkadot_bulletin::PolkadotBulletin,
 			expected_payload_type: XcmAsPlainPayload,
 		);
@@ -201,7 +201,7 @@ mod tests {
 		>(FEE_BOOST_PER_MESSAGE);
 
 		let expected: InteriorLocation = PalletInstance(
-			bp_people_hub_polkadot::WITH_PEOPLE_POLKADOT_TO_BULLETIN_MESSAGES_PALLET_INDEX,
+			bp_people_polkadot::WITH_PEOPLE_POLKADOT_TO_BULLETIN_MESSAGES_PALLET_INDEX,
 		)
 		.into();
 

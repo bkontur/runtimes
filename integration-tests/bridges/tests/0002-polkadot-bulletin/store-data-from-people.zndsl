@@ -1,6 +1,6 @@
-Description: User is able to store data on Bulletin via PeopleHub
+Description: User is able to store data on Bulletin via PoP
 Network: {{ENV_PATH}}/polkadot_bulletin_local_network.toml
 Creds: config
 
 # Store some random data on Bulletin
-alice: run {{ENV_PATH}}/helper.sh with "store-data ws://127.0.0.1:9010 //Alice {{DATA_FOR_BULLETIN}}" within 120 seconds
+alice: run {{ENV_PATH}}/helper.sh with "store-data ws://127.0.0.1:10000 //Alice {{DATA_FOR_BULLETIN}}" within 120 seconds

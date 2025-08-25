@@ -26,7 +26,7 @@ done
 logs_dir=$TEST_DIR/logs
 helper_script="${BASH_SOURCE%/*}/helper.sh"
 
-polkadot_def=${BASH_SOURCE%/*}/people_hub_polkadot_local_network.toml
+polkadot_def=${BASH_SOURCE%/*}/people_polkadot_local_network.toml
 start_zombienet $TEST_DIR $polkadot_def polkadot_dir polkadot_pid
 echo
 

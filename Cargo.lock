@@ -1796,7 +1796,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "bp-people-hub-polkadot"
+name = "bp-people-polkadot"
 version = "1.0.0"
 dependencies = [
  "bp-bridge-hub-cumulus",
@@ -1828,6 +1828,7 @@ dependencies = [
  "sp-api",
  "sp-runtime",
  "sp-std",
+ "staging-xcm",
 ]
 
 [[package]]
@@ -10588,11 +10589,12 @@ dependencies = [
  "bp-header-chain",
  "bp-messages",
  "bp-parachains",
- "bp-people-hub-polkadot",
+ "bp-people-polkadot",
  "bp-polkadot-bulletin",
  "bp-polkadot-core",
  "bp-relayers",
  "bp-runtime",
+ "bridge-hub-test-utils",
  "bridge-runtime-common",
  "cumulus-pallet-aura-ext",
  "cumulus-pallet-parachain-system",
@@ -10627,7 +10629,6 @@ dependencies = [
  "pallet-multisig",
  "pallet-proxy",
  "pallet-session",
- "pallet-sudo",
  "pallet-timestamp",
  "pallet-transaction-payment",
  "pallet-transaction-payment-rpc-runtime-api",
