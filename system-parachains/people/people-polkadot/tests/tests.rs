@@ -87,6 +87,7 @@ fn slot_durations() -> SlotDurations {
 	}
 }
 
+// TODO: we don't need ExportMessage - maybe for governance calls, but then we need to set up MessageExporter
 #[test]
 fn handle_export_message_from_system_parachain_add_to_outbound_queue_works() {
 	bridge_hub_test_utils::test_cases::handle_export_message_from_system_parachain_to_outbound_queue_works::<
@@ -337,7 +338,8 @@ fn relayed_incoming_message_works() {
 		collator_session_keys(),
 		slot_durations(),
 		polkadot_runtime_constants::system_parachain::PEOPLE_ID,
-		0, // Bulletin relay chain id
+		1000,
+		// Bulletin relay chain id
 		NetworkId::PolkadotBulletin,
 		|| {
 			bridge_hub_test_utils::ensure_opened_bridge::<

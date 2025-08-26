@@ -17,8 +17,8 @@ use super::{
 	AccountId, AllPalletsWithSystem, Balance, Balances, CollatorSelection, ParachainInfo,
 	ParachainSystem, PolkadotXcm, Runtime, RuntimeCall, RuntimeEvent, RuntimeHoldReason,
 	RuntimeOrigin, WeightToFee, XcmpQueue,
+	bridge_to_bulletin_config, TransactionByteFee, CENTS,
 };
-use crate::{TransactionByteFee, CENTS};
 use frame_support::{
 	parameter_types,
 	traits::{
@@ -285,13 +285,22 @@ impl xcm_executor::Config for XcmConfig {
 /// sending/executing XCMs.
 pub type LocalSignedOriginToLocation = SignedToAccountId32<RuntimeOrigin, AccountId, RelayNetwork>;
 
-/// The means for routing XCM messages which are not for local execution into the right message
-/// queues.
-pub type XcmRouter = WithUniqueTopic<(
+/// For routing XCM messages which do not cross local consensus boundary.
+type LocalXcmRouter = (
 	// Two routers - use UMP to communicate with the relay chain:
 	cumulus_primitives_utility::ParentAsUmp<ParachainSystem, PolkadotXcm, PriceForParentDelivery>,
 	// ..and XCMP to communicate with the sibling chains.
 	XcmpQueue,
+);
+
+/// The means for routing XCM messages which are not for local execution into the right message
+/// queues.
+pub type XcmRouter = WithUniqueTopic<(
+	LocalXcmRouter,
+	/*
+	// Router for a Polkadot Bulletin chain.
+	bridge_to_bulletin_config::ToBulletinXcmRouter,
+	 */
 )>;
 
 parameter_types! {

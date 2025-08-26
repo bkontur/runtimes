@@ -38,7 +38,9 @@ use pallet_bridge_messages::LaneIdOf;
 use pallet_xcm_bridge_hub::XcmAsPlainPayload;
 use polkadot_parachain_primitives::primitives::Sibling;
 use xcm::{latest::prelude::*, prelude::InteriorLocation, AlwaysV5};
-use xcm_builder::{BridgeBlobDispatcher, ParentIsPreset, SiblingParachainConvertsVia};
+use xcm_builder::{
+	BridgeBlobDispatcher, UnpaidLocalExporter, ParentIsPreset, SiblingParachainConvertsVia,
+};
 
 parameter_types! {
 	/// Interior location (relative to this runtime) of the with-PolkadotBulletin messages pallet.
@@ -176,6 +178,12 @@ impl pallet_xcm_bridge_hub::Config<XcmOverPolkadotBulletinInstance> for Runtime 
 	type LocalXcmChannelManager = ();
 	type BlobDispatcher = FromPolkadotBulletinMessageBlobDispatcher;
 }
+
+/* TODO: when rebased with `main`
+/// Router for a Polkadot Bulletin chain.
+/// We use `LocalExporter` to ensure that `pallet_xcm_bridge_hub` can directly export messages.
+pub type ToBulletinXcmRouter = UnpaidLocalExporter<XcmOverPolkadotBulletin, UniversalLocation>;
+*/
 
 #[cfg(test)]
 mod tests {

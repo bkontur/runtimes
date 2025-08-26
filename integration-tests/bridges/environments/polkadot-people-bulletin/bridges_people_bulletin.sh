@@ -137,6 +137,7 @@ case "$1" in
     pkill -f substrate-relay
     ;;
   store-data)
+    # TODO: replace with something useful
     # store data on bulletin
     url=$2
     seed=$3
