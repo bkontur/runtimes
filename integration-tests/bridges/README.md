@@ -34,7 +34,8 @@ command.
   - For PoP Bulletin bridge build the chain spec generator by running `cargo build --release -p chain-spec-generator --no-default-features --features fast-runtime,polkadot,people-polkadot`
     command.
       - Copy the binary to `~/local_bridge_testing/bin/chain-spec-generator-polkadot`.
-      - Build the Bulletin node from the repo https://github.com/paritytech/polkadot-bulletin-chain `cargo build --release -p polkadot-bulletin-chain --features polkadot` 
+      - Build the Bulletin node from the repo https://github.com/paritytech/polkadot-bulletin-chain `cargo build --release -p polkadot-bulletin-chain --features polkadot`
+        - Copy the binary to `~/local_bridge_testing/bin/polkadot-bulletin-chain`.
 - check/change the `POLKADOT_BINARY` and `POLKADOT_PARACHAIN_BINARY` paths (and ensure that the nearby variables
 have correct values) in the `./run-test.sh`.
 - `./run-test.sh` needs polkadot-sdk testing framework, so:
