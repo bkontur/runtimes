@@ -14,10 +14,10 @@
 // limitations under the License.
 
 use super::{
-	AccountId, AllPalletsWithSystem, Balance, Balances, CollatorSelection, ParachainInfo,
-	ParachainSystem, PolkadotXcm, Runtime, RuntimeCall, RuntimeEvent, RuntimeHoldReason,
-	RuntimeOrigin, WeightToFee, XcmpQueue,
-	bridge_to_bulletin_config, TransactionByteFee, CENTS,
+	bridge_to_bulletin_config, AccountId, AllPalletsWithSystem, Balance, Balances,
+	CollatorSelection, ParachainInfo, ParachainSystem, PolkadotXcm, Runtime, RuntimeCall,
+	RuntimeEvent, RuntimeHoldReason, RuntimeOrigin, TransactionByteFee, WeightToFee, XcmpQueue,
+	CENTS,
 };
 use frame_support::{
 	parameter_types,
@@ -297,10 +297,8 @@ type LocalXcmRouter = (
 /// queues.
 pub type XcmRouter = WithUniqueTopic<(
 	LocalXcmRouter,
-	/*
 	// Router for a Polkadot Bulletin chain.
 	bridge_to_bulletin_config::ToBulletinXcmRouter,
-	 */
 )>;
 
 parameter_types! {

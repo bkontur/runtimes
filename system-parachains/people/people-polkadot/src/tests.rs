@@ -21,44 +21,42 @@ use crate::{
 		XcmOverPolkadotBulletinInstance,
 	},
 	xcm_config::XcmConfig,
-	xcm_config::{GovernanceLocation, LocationToAccountId},
-	AllPalletsWithoutSystem, Block, ExistentialDeposit, ParachainSystem, PolkadotXcm, Runtime,
-	RuntimeCall, RuntimeEvent, RuntimeOrigin, SessionKeys, WeightToFee, SLOT_DURATION,
+	xcm_config::{GovernanceLocation, LocationToAccountId, RelayLocation},
+	AllPalletsWithoutSystem, AuraId, Block, ExistentialDeposit, ParachainSystem, PolkadotXcm,
+	Runtime, RuntimeCall, RuntimeEvent, RuntimeOrigin, SessionKeys, System, WeightToFee,
+	SLOT_DURATION,
 };
 use bp_messages::LegacyLaneId;
-use bridge_hub_test_utils::{test_cases::from_grandpa_chain, SlotDurations};
+use bridge_hub_test_utils::{test_cases::from_grandpa_chain, ExtBuilder, SlotDurations};
 use codec::Decode;
 use frame_support::parameter_types;
 use frame_support::traits::ConstU8;
 use parachains_common::AccountId;
 use sp_consensus_aura::SlotDuration;
 use sp_core::crypto::Ss58Codec;
-use sp_core::sr25519;
 use system_parachains_constants::polkadot::consensus::RELAY_CHAIN_SLOT_DURATION_MILLIS;
-use xcm::latest::prelude::*;
+use xcm::{latest::prelude::*, VersionedXcm};
 use xcm_runtime_apis::conversions::LocationToAccountHelper;
 
 use frame_support::{assert_err, assert_ok};
 use parachains_runtimes_test_utils::GovernanceOrigin;
+use sp_keyring::Sr25519Keyring::Alice;
 use sp_runtime::Either;
-
-const ALICE: [u8; 32] = [1u8; 32];
 
 // Para id of sibling chain used in tests.
 pub const SIBLING_PARACHAIN_ID: u32 = 1000;
 
 parameter_types! {
-	pub SiblingParachainLocation: Location = Location::new(1, [Parachain(SIBLING_PARACHAIN_ID)]);
+	pub PeopleLocation: Location = Here.into();
 	pub BridgedUniversalLocation: InteriorLocation = [GlobalConsensus(bp_polkadot_bulletin::PolkadotBulletinGlobalConsensusNetwork::get())].into();
 	pub TestNetworkId: NetworkId = NetworkId::Polkadot;
 }
 
 fn collator_session_keys() -> bridge_hub_test_utils::CollatorSessionKeys<Runtime> {
-	let pubkey = sr25519::Public::from_raw(ALICE);
 	bridge_hub_test_utils::CollatorSessionKeys::new(
-		AccountId::from(ALICE),
-		AccountId::from(ALICE),
-		SessionKeys { aura: pubkey.into() },
+		AccountId::from(Alice),
+		AccountId::from(Alice),
+		SessionKeys { aura: AuraId::from(Alice.public()) },
 	)
 }
 
@@ -96,9 +94,9 @@ fn handle_export_message_from_system_parachain_add_to_outbound_queue_works() {
 				Runtime,
 				XcmOverPolkadotBulletinInstance,
 				LocationToAccountId,
-				SiblingParachainLocation,
+				RelayLocation,
 			>(
-				SiblingParachainLocation::get(),
+				Here.into(),
 				BridgedUniversalLocation::get(),
 				false,
 				|locations, _fee| {
@@ -146,6 +144,7 @@ fn message_dispatch_routing_works() {
 
 #[test]
 fn location_conversion_works() {
+	const ALICE: [u8; 32] = [1u8; 32];
 	let alice_32 = AccountId32 { network: None, id: AccountId::from(ALICE).into() };
 	let bob_20 = AccountKey20 { network: None, key: [123u8; 20] };
 
@@ -328,9 +327,9 @@ fn relayed_incoming_message_works() {
 				Runtime,
 				XcmOverPolkadotBulletinInstance,
 				LocationToAccountId,
-				SiblingParachainLocation,
+				RelayLocation,
 			>(
-				SiblingParachainLocation::get(),
+				PeopleLocation::get(),
 				BridgedUniversalLocation::get(),
 				false,
 				|locations, _fee| {
@@ -361,9 +360,9 @@ fn free_relay_extrinsic_works() {
 				Runtime,
 				XcmOverPolkadotBulletinInstance,
 				LocationToAccountId,
-				SiblingParachainLocation,
+				RelayLocation,
 			>(
-				SiblingParachainLocation::get(),
+				PeopleLocation::get(),
 				BridgedUniversalLocation::get(),
 				false,
 				|locations, _fee| {
@@ -378,4 +377,58 @@ fn free_relay_extrinsic_works() {
 		|_relayer_at_target, _call| Ok(()),
 		true,
 	);
+}
+
+#[test]
+fn bulletin_router_works() {
+	ExtBuilder::<Runtime>::default()
+		.with_collators(collator_session_keys().collators())
+		.with_session_keys(collator_session_keys().session_keys())
+		.with_tracing()
+		.build()
+		.execute_with(|| {
+			// Err - no bridge opened
+			assert_err!(
+				PolkadotXcm::send(
+					RuntimeOrigin::signed(AccountId::from(Alice)),
+					Box::new(PolkadotBulletinGlobalConsensusNetworkLocation::get().into()),
+					Box::new(VersionedXcm::from(Xcm(vec![])))
+				),
+				pallet_xcm::Error::<Runtime>::Unreachable
+			);
+
+			// open the PoP bridge
+			let expected_lane_id = LegacyLaneId([0, 0, 0, 1]);
+			bridge_hub_test_utils::ensure_opened_bridge::<
+				Runtime,
+				XcmOverPolkadotBulletinInstance,
+				LocationToAccountId,
+				RelayLocation,
+			>(
+				PeopleLocation::get(),
+				BridgedUniversalLocation::get(),
+				false,
+				|locations, _fee| {
+					bridge_hub_test_utils::open_bridge_with_storage::<
+						Runtime,
+						XcmOverPolkadotBulletinInstance,
+					>(locations, expected_lane_id)
+				},
+			);
+
+			// Ok
+			assert_ok!(PolkadotXcm::send(
+				RuntimeOrigin::signed(AccountId::from(Alice)),
+				Box::new(PolkadotBulletinGlobalConsensusNetworkLocation::get().into()),
+				Box::new(VersionedXcm::from(Xcm(vec![])))
+			));
+			// Assert that some message is ready for bridging
+			System::assert_has_event(
+				pallet_bridge_messages::Event::MessageAccepted {
+					lane_id: expected_lane_id,
+					nonce: 1,
+				}
+				.into(),
+			);
+		})
 }

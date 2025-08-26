@@ -101,6 +101,7 @@ parachains-runtimes-test-utils = { workspace = true }
 bridge-runtime-common = { features = [
 	"integrity-test",
 ], workspace = true, default-features = true }
+sp-keyring = {workspace = true}
 
 [build-dependencies]
 substrate-wasm-builder = { optional = true, workspace = true }

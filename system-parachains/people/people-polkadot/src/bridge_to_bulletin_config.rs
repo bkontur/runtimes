@@ -20,11 +20,12 @@
 //! are reusing Polkadot Bulletin chain primitives everywhere here.
 
 use crate::{
-	xcm_config::UniversalLocation, AccountId, Balance, Balances, BlockNumber,
-	BridgePolkadotBulletinGrandpa, BridgePolkadotBulletinMessages, Runtime, RuntimeEvent,
-	RuntimeHoldReason, XcmOverPolkadotBulletin, XcmRouter,
+	xcm_config::{LocationToAccountId, UniversalLocation},
+	AccountId, Balance, Balances, BlockNumber, BridgePolkadotBulletinGrandpa,
+	BridgePolkadotBulletinMessages, Runtime, RuntimeEvent, RuntimeHoldReason,
+	XcmOverPolkadotBulletin, XcmRouter,
 };
-use alloc::boxed::Box;
+use alloc::{boxed::Box, vec::Vec};
 use bp_messages::{
 	source_chain::FromBridgedChainMessagesDeliveryProof,
 	target_chain::FromBridgedChainMessagesProof, LegacyLaneId,
@@ -35,15 +36,14 @@ use frame_support::{
 	parameter_types,
 	traits::{ConstU128, ConstU32, Equals, PalletInfoAccess},
 };
-use frame_system::{EnsureNever, EnsureRoot};
+use frame_system::{EnsureRoot, EnsureRootWithSuccess};
 use pallet_bridge_messages::LaneIdOf;
 use pallet_xcm_bridge_hub::XcmAsPlainPayload;
-use polkadot_parachain_primitives::primitives::Sibling;
 use scale_info::TypeInfo;
-use xcm::{latest::prelude::*, prelude::InteriorLocation, AlwaysV5, VersionedLocation};
-use xcm_builder::{
-	BridgeBlobDispatcher, ParentIsPreset, SiblingParachainConvertsVia, UnpaidLocalExporter,
+use xcm::{
+	latest::prelude::*, prelude::InteriorLocation, AlwaysV5, VersionedLocation, VersionedXcm,
 };
+use xcm_builder::{BridgeBlobDispatcher, InspectMessageQueues, LocalExporter};
 
 parameter_types! {
 	/// Interior location (relative to this runtime) of the with-PolkadotBulletin messages pallet.
@@ -64,10 +64,10 @@ parameter_types! {
 	///
 	/// It is determined semi-automatically - see `FEE_BOOST_PER_MESSAGE` constant to get the
 	/// meaning of this value.
-	pub PriorityBoostPerMessage: u64 = 1_980_483_516_483;
+	pub PriorityBoostPerMessage: u64 = 3_980_971_916_971;
 
-	/// PeoplePolkadot location
-	pub PeoplePolkadotLocation: Location = Here.into_location();
+	/// Here location
+	pub HereLocation: Location = Here.into_location();
 
 	/// Number of Bulletin headers to keep in the runtime storage.
 	pub const RelayChainHeadersToKeep: u32 = 1_200;
@@ -232,30 +232,49 @@ impl pallet_xcm_bridge_hub::Config<XcmOverPolkadotBulletinInstance> for Runtime 
 	type DestinationVersion = AlwaysV5;
 
 	type ForceOrigin = EnsureRoot<AccountId>;
-	// TODO: (revisit both so OpenGov can close_bridge at least - add some tests)
-	// We don't want to allow creating bridges for this instance.
-	type OpenBridgeOrigin = EnsureNever<Location>;
+	// We allow creating bridges only for the runtime itself.
+	// We want to translate `RuntimeOrigin::root()` to the `Location::here()`, e.g. for
+	// governance calls.
+	type OpenBridgeOrigin = EnsureRootWithSuccess<AccountId, HereLocation>;
 	// Converter aligned with `OpenBridgeOrigin`.
-	type BridgeOriginAccountIdConverter =
-		(ParentIsPreset<AccountId>, SiblingParachainConvertsVia<Sibling, AccountId>);
+	type BridgeOriginAccountIdConverter = LocationToAccountId;
 
 	type BridgeDeposit = ConstU128<0>;
 	type Currency = Balances;
 	type RuntimeHoldReason = RuntimeHoldReason;
-	// TODO: (for People, we should allow here just `Here` instead of `PeoplePolkadotLocation`)
-	// TODO: (revisit also OpenBridgeOrigin/BridgeOriginAccountIdConverter) so OpenGov will be able to `close_bridge` (follow up)
-	// Do not require deposit from People parachains.
-	type AllowWithoutBridgeDeposit = Equals<PeoplePolkadotLocation>;
+	// Do not require deposit from the chain itself.
+	type AllowWithoutBridgeDeposit = Equals<HereLocation>;
 
+	// TODO: setup back-pressure and congestion
 	type LocalXcmChannelManager = ();
+	// TODO: probably not needed now
 	type BlobDispatcher = FromPolkadotBulletinMessageBlobDispatcher;
 }
 
-/* TODO: when rebased with `main`
 /// Router for a Polkadot Bulletin chain.
 /// We use `LocalExporter` to ensure that `pallet_xcm_bridge_hub` can directly export messages.
-pub type ToBulletinXcmRouter = UnpaidLocalExporter<XcmOverPolkadotBulletin, UniversalLocation>;
-*/
+pub type ToBulletinXcmRouter =
+	LocalBulletinExporter<LocalExporter<XcmOverPolkadotBulletin, UniversalLocation>>;
+pub struct LocalBulletinExporter<Inner>(core::marker::PhantomData<Inner>);
+impl<Inner: SendXcm> SendXcm for LocalBulletinExporter<Inner> {
+	type Ticket = Inner::Ticket;
+
+	fn validate(
+		dest: &mut Option<Location>,
+		xcm: &mut Option<Xcm<()>>,
+	) -> SendResult<Self::Ticket> {
+		Inner::validate(dest, xcm)
+	}
+	fn deliver(ticket: Self::Ticket) -> Result<XcmHash, SendError> {
+		Inner::deliver(ticket)
+	}
+}
+impl<Inner> InspectMessageQueues for LocalBulletinExporter<Inner> {
+	fn clear_messages() {}
+	fn get_messages() -> Vec<(VersionedLocation, Vec<VersionedXcm<()>>)> {
+		Vec::new()
+	}
+}
 
 #[cfg(test)]
 mod tests {
