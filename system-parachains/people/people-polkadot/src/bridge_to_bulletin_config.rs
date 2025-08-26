@@ -20,27 +20,24 @@
 //! are reusing Polkadot Bulletin chain primitives everywhere here.
 
 use crate::{
-	xcm_config::UniversalLocation, AccountId, Balance, Balances, BridgePolkadotBulletinGrandpa,
-	BridgePolkadotBulletinMessages, Runtime, RuntimeEvent, RuntimeHoldReason, XcmOverPolkadotBulletin,
-	XcmRouter,
+	xcm_config::UniversalLocation, AccountId, Balance, Balances, BlockNumber,
+	BridgePolkadotBulletinGrandpa, BridgePolkadotBulletinMessages, Runtime, RuntimeEvent,
+	RuntimeHoldReason, XcmOverPolkadotBulletin, XcmRouter,
 };
 use bp_messages::{
-	source_chain::FromBridgedChainMessagesDeliveryProof, target_chain::FromBridgedChainMessagesProof, LegacyLaneId,
+	source_chain::FromBridgedChainMessagesDeliveryProof,
+	target_chain::FromBridgedChainMessagesProof, LegacyLaneId,
 };
 
 use frame_support::{
 	parameter_types,
-	traits::{Equals, PalletInfoAccess, ConstU128},
+	traits::{ConstU128, ConstU32, Equals, PalletInfoAccess},
 };
 use frame_system::{EnsureNever, EnsureRoot};
 use pallet_bridge_messages::LaneIdOf;
 use pallet_xcm_bridge_hub::XcmAsPlainPayload;
 use polkadot_parachain_primitives::primitives::Sibling;
-use xcm::{
-	latest::prelude::*,
-	prelude::InteriorLocation,
-	AlwaysV5,
-};
+use xcm::{latest::prelude::*, prelude::InteriorLocation, AlwaysV5};
 use xcm_builder::{BridgeBlobDispatcher, ParentIsPreset, SiblingParachainConvertsVia};
 
 parameter_types! {
@@ -66,7 +63,16 @@ parameter_types! {
 
 	/// PeoplePolkadot location
 	pub PeoplePolkadotLocation: Location = Here.into_location();
+
+	/// Number of Bulletin headers to keep in the runtime storage.
+	pub const RelayChainHeadersToKeep: u32 = 1_200;
+
+	pub storage RequiredStakeForStakeAndSlash: Balance = 1_000_000;
+	pub const RelayerStakeLease: u32 = 8;
+	pub const RelayerStakeReserveId: [u8; 8] = *b"brdgrlrs";
 }
+
+parameter_types! {}
 
 /// Proof of messages, coming from Polkadot Bulletin chain.
 pub type FromPolkadotBulletinMessagesProof<MI> =
@@ -81,6 +87,41 @@ type FromPolkadotBulletinMessageBlobDispatcher = BridgeBlobDispatcher<
 	UniversalLocation,
 	BridgePolkadotToPolkadotBulletinMessagesPalletInstance,
 >;
+
+/// Add GRANDPA bridge pallet to track Polkadot Bulletin chain.
+pub type BridgeGrandpaPolkadotBulletinInstance = pallet_bridge_grandpa::Instance1;
+impl pallet_bridge_grandpa::Config<BridgeGrandpaPolkadotBulletinInstance> for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type BridgedChain = bp_polkadot_bulletin::PolkadotBulletin;
+	type MaxFreeHeadersPerBlock = ConstU32<4>;
+	type FreeHeadersInterval = ConstU32<5>;
+	type HeadersToKeep = RelayChainHeadersToKeep;
+	// TODO: (setup benchmarking correctly)
+	type WeightInfo = ();
+}
+
+/// Allows collect and claim rewards for relayers
+pub type BridgeRelayersInstance = ();
+impl pallet_bridge_relayers::Config<BridgeRelayersInstance> for Runtime {
+	type LaneId = bp_messages::LegacyLaneId;
+	type RuntimeEvent = RuntimeEvent;
+	type Reward = Balance;
+	type PaymentProcedure = bp_relayers::PayRewardFromAccount<
+		pallet_balances::Pallet<Runtime>,
+		AccountId,
+		bp_messages::LegacyLaneId,
+	>;
+	type StakeAndSlash = pallet_bridge_relayers::StakeAndSlashNamed<
+		AccountId,
+		BlockNumber,
+		Balances,
+		RelayerStakeReserveId,
+		RequiredStakeForStakeAndSlash,
+		RelayerStakeLease,
+	>;
+	// TODO: (setup real weights and benchmarking)
+	type WeightInfo = ();
+}
 
 /// Add XCM messages support for PeoplePolkadot to support Polkadot->Polkadot Bulletin XCM messages.
 pub type WithPolkadotBulletinMessagesInstance = pallet_bridge_messages::Instance1;
@@ -113,11 +154,11 @@ impl pallet_xcm_bridge_hub::Config<XcmOverPolkadotBulletinInstance> for Runtime 
 	type BridgeMessagesPalletInstance = WithPolkadotBulletinMessagesInstance;
 
 	type MessageExportPrice = ();
-        // TODO: (setup XCM version with PolkadotXcm) -> type DestinationVersion = XcmVersionOfDestAndRemoteBridge<PolkadotXcm, BridgeHubKusamaLocation>;
+	// TODO: (setup XCM version with PolkadotXcm) -> type DestinationVersion = XcmVersionOfDestAndRemoteBridge<PolkadotXcm, BridgeHubKusamaLocation>;
 	type DestinationVersion = AlwaysV5;
 
 	type ForceOrigin = EnsureRoot<AccountId>;
-        // TODO: (revisit both so OpenGov can close_bridge at least - add some tests)
+	// TODO: (revisit both so OpenGov can close_bridge at least - add some tests)
 	// We don't want to allow creating bridges for this instance.
 	type OpenBridgeOrigin = EnsureNever<Location>;
 	// Converter aligned with `OpenBridgeOrigin`.
@@ -127,8 +168,8 @@ impl pallet_xcm_bridge_hub::Config<XcmOverPolkadotBulletinInstance> for Runtime 
 	type BridgeDeposit = ConstU128<0>;
 	type Currency = Balances;
 	type RuntimeHoldReason = RuntimeHoldReason;
-        // TODO: (for People, we should allow here just `Here` instead of `PeoplePolkadotLocation`)
-        // TODO: (revisit also OpenBridgeOrigin/BridgeOriginAccountIdConverter) so OpenGov will be able to `close_bridge` (follow up)
+	// TODO: (for People, we should allow here just `Here` instead of `PeoplePolkadotLocation`)
+	// TODO: (revisit also OpenBridgeOrigin/BridgeOriginAccountIdConverter) so OpenGov will be able to `close_bridge` (follow up)
 	// Do not require deposit from People parachains.
 	type AllowWithoutBridgeDeposit = Equals<PeoplePolkadotLocation>;
 
@@ -139,7 +180,6 @@ impl pallet_xcm_bridge_hub::Config<XcmOverPolkadotBulletinInstance> for Runtime 
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use crate::bridge_common_config::BridgeGrandpaPolkadotBulletinInstance;
 	use bridge_runtime_common::{
 		assert_complete_bridge_types, integrity::check_message_lane_weights,
 	};
@@ -228,8 +268,7 @@ where
 	// insert bridge metadata
 	let lane_id = with;
 	let sibling_parachain = Location::new(1, [Parachain(sibling_para_id)]);
-	let universal_source =
-		[GlobalConsensus(Polkadot), Parachain(sibling_para_id)].into();
+	let universal_source = [GlobalConsensus(Polkadot), Parachain(sibling_para_id)].into();
 	let universal_destination =
 		[GlobalConsensus(PolkadotBulletinGlobalConsensusNetwork::get())].into();
 	let bridge_id = BridgeId::new(&universal_source, &universal_destination);

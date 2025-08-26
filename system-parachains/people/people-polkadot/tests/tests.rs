@@ -34,10 +34,22 @@ use bridge_hub_test_utils::{
 	SlotDurations,
 };
 use bp_messages::LegacyLaneId;
+use bridge_hub_test_utils::{test_cases::from_grandpa_chain, SlotDurations};
 use codec::Decode;
 use frame_support::parameter_types;
 use frame_support::traits::ConstU8;
 use parachains_common::AccountId;
+use people_polkadot_runtime::{
+	bridge_to_bulletin_config::{
+		BridgeGrandpaPolkadotBulletinInstance, BridgeRelayersInstance,
+		PolkadotBulletinGlobalConsensusNetworkLocation, WithPolkadotBulletinMessagesInstance,
+		XcmOverPolkadotBulletinInstance,
+	},
+	xcm_config::{LocationToAccountId, XcmConfig},
+	AllPalletsWithoutSystem, Block, ExistentialDeposit, ParachainSystem, PolkadotXcm, Runtime,
+	RuntimeCall, RuntimeEvent, RuntimeOrigin, SessionKeys, SLOT_DURATION,
+};
+use sp_consensus_aura::SlotDuration;
 use sp_core::crypto::Ss58Codec;
 use sp_core::sr25519;
 use system_parachains_constants::polkadot::consensus::RELAY_CHAIN_SLOT_DURATION_MILLIS;

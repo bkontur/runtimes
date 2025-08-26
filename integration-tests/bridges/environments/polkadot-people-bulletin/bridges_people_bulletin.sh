@@ -146,7 +146,12 @@ case "$1" in
   *)
     echo "A command is require. Supported commands for:
     Local (zombienet) run:
-          - run-relay";
+          - run-finality-relay
+          - run-parachains-relay
+          - run-messages-relay
+          - init-people-polkadot-local
+          - init-bulletin-local
+          - stop";
     exit 1
     ;;
 esac

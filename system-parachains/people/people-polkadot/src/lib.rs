@@ -23,12 +23,9 @@ extern crate alloc;
 // Genesis preset configurations.
 pub mod genesis_config_presets;
 pub mod people;
-#[cfg(test)]
-mod tests;
 mod weights;
 pub mod xcm_config;
 
-pub mod bridge_common_config;
 pub mod bridge_to_bulletin_config;
 use alloc::{borrow::Cow, vec, vec::Vec};
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
@@ -46,16 +43,16 @@ use frame_support::{
 	weights::{ConstantMultiplier, Weight},
 	PalletId,
 };
-use pallet_bridge_messages::LaneIdOf;
 use frame_system::{
 	limits::{BlockLength, BlockWeights},
 	EnsureRoot,
 };
+use pallet_bridge_messages::LaneIdOf;
 use pallet_xcm::{EnsureXcm, IsVoiceOfBody};
 use parachains_common::{
 	message_queue::{NarrowOriginToSibling, ParaIdToSibling},
 	AccountId, Balance, BlockNumber, Hash, Header, Nonce, Signature, AVERAGE_ON_INITIALIZE_RATIO,
-	HOURS, MAXIMUM_BLOCK_WEIGHT, NORMAL_DISPATCH_RATIO, SLOT_DURATION,
+	HOURS, MAXIMUM_BLOCK_WEIGHT, NORMAL_DISPATCH_RATIO,
 };
 use polkadot_runtime_common::{BlockHashCount, SlowAdjustingFeeUpdate};
 use sp_api::impl_runtime_apis;
@@ -74,6 +71,7 @@ pub use sp_runtime::{MultiAddress, Perbill, Permill};
 use sp_version::NativeVersion;
 use sp_version::RuntimeVersion;
 use system_parachains_constants::polkadot::{consensus::*, currency::*, fee::WeightToFee};
+pub use system_parachains_constants::SLOT_DURATION;
 use weights::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight};
 use xcm::{
 	latest::prelude::{AssetId, BodyId},
@@ -82,8 +80,7 @@ use xcm::{
 };
 use xcm_config::{
 	FellowshipLocation, GovernanceLocation, PriceForSiblingParachainDelivery, StakingPot,
-	XcmConfig, XcmOriginToTransactDispatchOrigin,
-	XcmRouter,
+	XcmConfig, XcmOriginToTransactDispatchOrigin, XcmRouter,
 };
 use xcm_runtime_apis::{
 	dry_run::{CallDryRunEffects, Error as XcmDryRunApiError, XcmDryRunEffects},
@@ -519,29 +516,29 @@ impl InstanceFilter<RuntimeCall> for ProxyType {
 			),
 			ProxyType::CancelProxy => matches!(
 				c,
-				RuntimeCall::Proxy(pallet_proxy::Call::reject_announcement { .. }) |
-					RuntimeCall::Utility { .. } |
-					RuntimeCall::Multisig { .. }
+				RuntimeCall::Proxy(pallet_proxy::Call::reject_announcement { .. })
+					| RuntimeCall::Utility { .. }
+					| RuntimeCall::Multisig { .. }
 			),
 			ProxyType::Identity => {
 				matches!(
 					c,
-					RuntimeCall::Identity { .. } |
-						RuntimeCall::Utility { .. } |
-						RuntimeCall::Multisig { .. }
+					RuntimeCall::Identity { .. }
+						| RuntimeCall::Utility { .. }
+						| RuntimeCall::Multisig { .. }
 				)
 			},
 			ProxyType::IdentityJudgement => matches!(
 				c,
-				RuntimeCall::Identity(pallet_identity::Call::provide_judgement { .. }) |
-					RuntimeCall::Utility(..) |
-					RuntimeCall::Multisig { .. }
+				RuntimeCall::Identity(pallet_identity::Call::provide_judgement { .. })
+					| RuntimeCall::Utility(..)
+					| RuntimeCall::Multisig { .. }
 			),
 			ProxyType::Collator => matches!(
 				c,
-				RuntimeCall::CollatorSelection { .. } |
-					RuntimeCall::Utility { .. } |
-					RuntimeCall::Multisig { .. }
+				RuntimeCall::CollatorSelection { .. }
+					| RuntimeCall::Utility { .. }
+					| RuntimeCall::Multisig { .. }
 			),
 		}
 	}
@@ -646,7 +643,7 @@ construct_runtime!(
 		BridgePolkadotBulletinGrandpa: pallet_bridge_grandpa::<Instance1> = 60,
 		BridgePolkadotBulletinMessages: pallet_bridge_messages::<Instance1> = 61,
 		XcmOverPolkadotBulletin: pallet_xcm_bridge_hub::<Instance1> = 62,
-	
+
 		// Handy utilities.
 		Utility: pallet_utility = 40,
 		Multisig: pallet_multisig = 41,
@@ -863,7 +860,7 @@ mod benches {
 	pub use pallet_xcm::benchmarking::Pallet as PalletXcmExtrinsicsBenchmark;
 	pub type XcmBalances = pallet_xcm_benchmarks::fungible::Pallet<Runtime>;
 	pub type XcmGeneric = pallet_xcm_benchmarks::generic::Pallet<Runtime>;
-	
+
 	pub use frame_support::traits::WhitelistedStorageKeys;
 	pub use sp_storage::TrackedStorageKey;
 }
