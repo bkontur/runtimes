@@ -15,30 +15,16 @@
 // limitations under the License.
 
 use crate::{
-	xcm_config::{GovernanceLocation, LocationToAccountId},
-	Block, Runtime, RuntimeCall, RuntimeOrigin, WeightToFee,
-	bridge_common_config::{
-		BridgeGrandpaPolkadotBulletinInstance, BridgeRelayersInstance,
-	},
-	bridge_to_bulletin_config::WithPolkadotBulletinMessagesInstance,
 	bridge_to_bulletin_config::{
-		PolkadotBulletinGlobalConsensusNetworkLocation,
+		BridgeGrandpaPolkadotBulletinInstance, BridgeRelayersInstance,
+		PolkadotBulletinGlobalConsensusNetworkLocation, WithPolkadotBulletinMessagesInstance,
 		XcmOverPolkadotBulletinInstance,
 	},
-	xcm_config::{LocationToAccountId, XcmConfig},
-	AllPalletsWithoutSystem, ExistentialDeposit, ParachainSystem, PolkadotXcm, Runtime,
-	RuntimeEvent, RuntimeOrigin, SessionKeys, SLOT_DURATION,
+	xcm_config::XcmConfig,
+	xcm_config::{GovernanceLocation, LocationToAccountId},
+	AllPalletsWithoutSystem, Block, ExistentialDeposit, ParachainSystem, PolkadotXcm, Runtime,
+	RuntimeCall, RuntimeEvent, RuntimeOrigin, SessionKeys, WeightToFee, SLOT_DURATION,
 };
-use bridge_hub_test_utils::{
-	test_cases::from_grandpa_chain,
-	SlotDurations,
-};
-use bp_messages::LegacyLaneId;
-use bridge_hub_test_utils::{test_cases::from_grandpa_chain, SlotDurations};
-use codec::Decode;
-use frame_support::parameter_types;
-use frame_support::traits::ConstU8;
-use parachains_common::AccountId;
 use bp_messages::LegacyLaneId;
 use bridge_hub_test_utils::{test_cases::from_grandpa_chain, SlotDurations};
 use codec::Decode;

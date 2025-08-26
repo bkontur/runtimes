@@ -24,11 +24,13 @@ use crate::{
 	BridgePolkadotBulletinGrandpa, BridgePolkadotBulletinMessages, Runtime, RuntimeEvent,
 	RuntimeHoldReason, XcmOverPolkadotBulletin, XcmRouter,
 };
+use alloc::boxed::Box;
 use bp_messages::{
 	source_chain::FromBridgedChainMessagesDeliveryProof,
 	target_chain::FromBridgedChainMessagesProof, LegacyLaneId,
 };
-
+use bp_relayers::RewardsAccountParams;
+use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use frame_support::{
 	parameter_types,
 	traits::{ConstU128, ConstU32, Equals, PalletInfoAccess},
@@ -37,9 +39,10 @@ use frame_system::{EnsureNever, EnsureRoot};
 use pallet_bridge_messages::LaneIdOf;
 use pallet_xcm_bridge_hub::XcmAsPlainPayload;
 use polkadot_parachain_primitives::primitives::Sibling;
-use xcm::{latest::prelude::*, prelude::InteriorLocation, AlwaysV5};
+use scale_info::TypeInfo;
+use xcm::{latest::prelude::*, prelude::InteriorLocation, AlwaysV5, VersionedLocation};
 use xcm_builder::{
-	BridgeBlobDispatcher, UnpaidLocalExporter, ParentIsPreset, SiblingParachainConvertsVia,
+	BridgeBlobDispatcher, ParentIsPreset, SiblingParachainConvertsVia, UnpaidLocalExporter,
 };
 
 parameter_types! {
@@ -102,17 +105,85 @@ impl pallet_bridge_grandpa::Config<BridgeGrandpaPolkadotBulletinInstance> for Ru
 	type WeightInfo = ();
 }
 
+/// Potential rewards.
+#[derive(
+	Clone,
+	Copy,
+	Debug,
+	Decode,
+	DecodeWithMemTracking,
+	Encode,
+	Eq,
+	MaxEncodedLen,
+	PartialEq,
+	TypeInfo,
+)]
+pub enum BridgeReward {
+	/// Rewards for the Bulletin bridge.
+	BulletinBridge(RewardsAccountParams<LegacyLaneId>),
+}
+impl From<RewardsAccountParams<LegacyLaneId>> for BridgeReward {
+	fn from(value: RewardsAccountParams<LegacyLaneId>) -> Self {
+		Self::BulletinBridge(value)
+	}
+}
+
+/// An enum representing the different types of supported beneficiaries.
+#[derive(
+	Clone, Debug, Decode, DecodeWithMemTracking, Encode, Eq, MaxEncodedLen, PartialEq, TypeInfo,
+)]
+pub enum BridgeRewardBeneficiaries {
+	/// A local chain account.
+	LocalAccount(AccountId),
+	/// A beneficiary specified by a VersionedLocation.
+	AssetHubLocation(Box<VersionedLocation>),
+}
+
+impl From<sp_runtime::AccountId32> for BridgeRewardBeneficiaries {
+	fn from(value: sp_runtime::AccountId32) -> Self {
+		BridgeRewardBeneficiaries::LocalAccount(value)
+	}
+}
+
+/// Implementation of `bp_relayers::PaymentProcedure` as a pay/claim rewards scheme.
+pub struct BridgeRewardPayer;
+impl bp_relayers::PaymentProcedure<AccountId, BridgeReward, u128> for BridgeRewardPayer {
+	type Error = sp_runtime::DispatchError;
+	type Beneficiary = BridgeRewardBeneficiaries;
+
+	fn pay_reward(
+		relayer: &AccountId,
+		reward_kind: BridgeReward,
+		reward: u128,
+		beneficiary: BridgeRewardBeneficiaries,
+	) -> Result<(), Self::Error> {
+		match reward_kind {
+			BridgeReward::BulletinBridge(lane_params) => {
+				match beneficiary {
+					BridgeRewardBeneficiaries::LocalAccount(account) => {
+						bp_relayers::PayRewardFromAccount::<
+							Balances,
+							AccountId,
+							LegacyLaneId,
+							u128,
+						>::pay_reward(
+							relayer, lane_params, reward, account,
+						)
+					},
+					BridgeRewardBeneficiaries::AssetHubLocation(_) => Err(Self::Error::Other("`AssetHubLocation` beneficiary is not supported for `BulletinBridge` rewards!")),
+				}
+			}
+		}
+	}
+}
+
 /// Allows collect and claim rewards for relayers
 pub type BridgeRelayersInstance = ();
 impl pallet_bridge_relayers::Config<BridgeRelayersInstance> for Runtime {
-	type LaneId = bp_messages::LegacyLaneId;
 	type RuntimeEvent = RuntimeEvent;
-	type Reward = Balance;
-	type PaymentProcedure = bp_relayers::PayRewardFromAccount<
-		pallet_balances::Pallet<Runtime>,
-		AccountId,
-		bp_messages::LegacyLaneId,
-	>;
+	type RewardBalance = Balance;
+	type Reward = BridgeReward;
+	type PaymentProcedure = BridgeRewardPayer;
 	type StakeAndSlash = pallet_bridge_relayers::StakeAndSlashNamed<
 		AccountId,
 		BlockNumber,
@@ -121,6 +192,7 @@ impl pallet_bridge_relayers::Config<BridgeRelayersInstance> for Runtime {
 		RequiredStakeForStakeAndSlash,
 		RelayerStakeLease,
 	>;
+	type Balance = Balance;
 	// TODO: (setup real weights and benchmarking)
 	type WeightInfo = ();
 }

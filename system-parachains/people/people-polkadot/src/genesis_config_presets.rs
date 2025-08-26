@@ -17,9 +17,9 @@
 //! Genesis configs presets for the PeoplePolkadot runtime
 
 use crate::*;
+use sp_core::sr25519;
 use sp_genesis_builder::PresetId;
 use system_parachains_constants::genesis_presets::*;
-use sp_core::sr25519;
 
 const PEOPLE_POLKADOT_ED: Balance = ExistentialDeposit::get();
 
@@ -74,7 +74,12 @@ fn people_polkadot_genesis(
 }
 
 pub fn people_polkadot_local_testnet_genesis(para_id: ParaId) -> serde_json::Value {
-	people_polkadot_genesis(invulnerables(), testnet_accounts(), para_id, Some(get_account_id_from_seed::<sr25519::Public>("Alice")))
+	people_polkadot_genesis(
+		invulnerables(),
+		testnet_accounts(),
+		para_id,
+		Some(get_account_id_from_seed::<sr25519::Public>("Alice")),
+	)
 }
 
 fn people_polkadot_development_genesis(para_id: ParaId) -> serde_json::Value {
@@ -85,6 +90,7 @@ fn people_polkadot_development_genesis(para_id: ParaId) -> serde_json::Value {
 			StakingPot::get(),
 		]),
 		para_id,
+		None,
 	)
 }
 
@@ -100,8 +106,9 @@ pub fn preset_names() -> Vec<PresetId> {
 pub fn get_preset(id: &PresetId) -> Option<Vec<u8>> {
 	let patch = match id.as_ref() {
 		sp_genesis_builder::DEV_RUNTIME_PRESET => people_polkadot_development_genesis(1004.into()),
-		sp_genesis_builder::LOCAL_TESTNET_RUNTIME_PRESET =>
-			people_polkadot_local_testnet_genesis(1004.into()),
+		sp_genesis_builder::LOCAL_TESTNET_RUNTIME_PRESET => {
+			people_polkadot_local_testnet_genesis(1004.into())
+		},
 		_ => return None,
 	};
 	Some(
