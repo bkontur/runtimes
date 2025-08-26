@@ -26,11 +26,15 @@ To start a test, you need to:
 [`parity-bridges-common`](https://github.com/paritytech/parity-bridges-common) repository clone. Copy the binary to `~/local_bridge_testing/bin/substrate-relay`. 
 - build chain spec generator:
   - (you can use the current branch, or you can build generators from different branches, such as from specific tags or releases)
-  - add the `sudo` pallet to the Polkadot and Kusama runtimes and give sudo rights to Alice, e.g. by running `git apply ./integration-tests/bridges/sudo-relay.patch` from the fellows root dir.
-  - with this change build the chain spec generator by running `cargo build --release -p chain-spec-generator --no-default-features --features fast-runtime,polkadot,kusama,bridge-hub-kusama,bridge-hub-polkadot,asset-hub-kusama,asset-hub-polkadot`
+  - you can add the `sudo` pallet to the Polkadot and Kusama runtimes and give sudo rights to Alice, e.g. by running `git apply ./integration-tests/bridges/sudo-relay.patch` from the fellows root dir.
+  - For P/K bridge with the sudo change build the chain spec generator by running `cargo build --release -p chain-spec-generator --no-default-features --features fast-runtime,polkadot,kusama,bridge-hub-kusama,bridge-hub-polkadot,asset-hub-kusama,asset-hub-polkadot`
 command.
     - Copy the binary to `~/local_bridge_testing/bin/chain-spec-generator-kusama`.
     - Copy the binary to `~/local_bridge_testing/bin/chain-spec-generator-polkadot`.
+  - For PoP Bulletin bridge build the chain spec generator by running `cargo build --release -p chain-spec-generator --no-default-features --features fast-runtime,polkadot,people-polkadot`
+    command.
+      - Copy the binary to `~/local_bridge_testing/bin/chain-spec-generator-polkadot`.
+      - Build the Bulletin node from the repo https://github.com/paritytech/polkadot-bulletin-chain `cargo build --release -p polkadot-bulletin-chain --features polkadot` 
 - check/change the `POLKADOT_BINARY` and `POLKADOT_PARACHAIN_BINARY` paths (and ensure that the nearby variables
 have correct values) in the `./run-test.sh`.
 - `./run-test.sh` needs polkadot-sdk testing framework, so:
@@ -45,4 +49,6 @@ or
 FRAMEWORK_REPO_PATH=/home/username/polkadot-sdk ./run-test.sh 0001-polkadot-kusama-asset-transfer
 or
 FRAMEWORK_REPO_TAG_OR_COMMIT=7d875655ea38b734d6f1a3a79aef227e846f227c ./run-test.sh 0001-polkadot-kusama-asset-transfer
+or
+FRAMEWORK_REPO_PATH=/home/username/polkadot-sdk ./run-test.sh 0002-polkadot-bulletin
 ```
