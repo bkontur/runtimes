@@ -64,7 +64,7 @@ use sp_core::{crypto::KeyTypeId, OpaqueMetadata};
 pub use sp_runtime::BuildStorage;
 use sp_runtime::{
 	generic, impl_opaque_keys,
-	traits::{BlakeTwo256, Block as BlockT},
+	traits::{BlakeTwo256, Block as BlockT, Get},
 	transaction_validity::{TransactionSource, TransactionValidity},
 	ApplyExtrinsicResult, RuntimeDebug,
 };
@@ -1127,11 +1127,9 @@ impl_runtime_apis! {
 		}
 
 		fn free_headers_interval() -> Option<bp_polkadot_bulletin::BlockNumber> {
-			// <Runtime as pallet_bridge_grandpa::Config<
-			// 	bridge_common_config::BridgeGrandpaPolkadotBulletinInstance
-			// >>::FreeHeadersInterval::get()
-			// TODO fix this
-			Some(bp_polkadot_bulletin::BlockNumber::from(5u32))
+			<Runtime as pallet_bridge_grandpa::Config<
+				bridge_to_bulletin_config::BridgeGrandpaPolkadotBulletinInstance
+			>>::FreeHeadersInterval::get()
 		}
 
 		fn synced_headers_grandpa_info(
