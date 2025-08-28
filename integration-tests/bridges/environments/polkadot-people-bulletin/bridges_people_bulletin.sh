@@ -95,6 +95,34 @@ function run_messages_relay() {
         --lane 00000000
 }
 
+function send_data() {
+    local url=$1
+    local seed=$2
+    local data=$3
+
+    echo "  calling send_data:"
+    echo "      url: ${url}"
+    echo "      seed: ${seed}"
+    echo "      data: ${data}"
+    echo ""
+    echo "--------------------------------------------------"
+
+    # Destination: Location::new(2, [GlobalConsensus(Bulletin)])
+    local dest
+    dest=$(jq --null-input '{ "V4": { "parents": 2, "interior": { "X1": [ { "GlobalConsensus": "PolkadotBulletin" } ] } } }')
+
+    # XCM program: send a simple Trap to verify routing over the bridge.
+    local xcm_msg
+    xcm_msg=$(jq --null-input '{ "V5": [ { "Trap": 0 } ] }')
+
+    call_polkadot_js_api \
+        --ws "${url?}" \
+        --seed "${seed?}" \
+        tx.polkadotXcm.send \
+            "$dest" \
+            "$xcm_msg"
+}
+
 function store_data_with_bulletin() {
     local url=$1
     local seed=$2
@@ -136,6 +164,12 @@ case "$1" in
     pkill -f polkadot-parachain
     pkill -f substrate-relay
     ;;
+  send-data)
+     url=$2
+     seed=$3
+     data=$4
+     send_data "$url" "$seed" "$data"
+     ;;
   store-data)
     # TODO: replace with something useful
     # store data on bulletin
