@@ -22,3 +22,9 @@ bulletin_dir=`cat $TEST_DIR/bulletin.env`
 echo
 
 run_zndsl ${BASH_SOURCE%/*}/store-data-from-people.zndsl $polkadot_dir
+
+echo "TODO: let's run forever and replace this with some asserts (wait for MessageProcessed...) in store-data-from-people.zndsl"
+
+while true; do
+  sleep 2
+done
