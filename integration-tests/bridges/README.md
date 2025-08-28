@@ -51,5 +51,5 @@ FRAMEWORK_REPO_PATH=/home/username/polkadot-sdk ./run-test.sh 0001-polkadot-kusa
 or
 FRAMEWORK_REPO_TAG_OR_COMMIT=7d875655ea38b734d6f1a3a79aef227e846f227c ./run-test.sh 0001-polkadot-kusama-asset-transfer
 or
-FRAMEWORK_REPO_PATH=/home/username/polkadot-sdk ./run-test.sh 0002-polkadot-bulletin
+FRAMEWORK_REPO_PATH=/home/username/polkadot-sdk DATA_FOR_BULLETIN=asdfasdfasdf ./run-test.sh 0002-polkadot-bulletin
 ```
