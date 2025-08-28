@@ -10651,6 +10651,7 @@ dependencies = [
  "sp-core 38.0.0",
  "sp-genesis-builder",
  "sp-inherents",
+ "sp-keyring",
  "sp-offchain",
  "sp-runtime",
  "sp-session",
