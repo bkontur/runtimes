@@ -10,7 +10,7 @@ default_command = "{{POLKADOT_BULLETIN_BINARY_PATH}}"
 	name = "alice"
 	rpc_port = 10000
 	validator = true
-	args = [ "--ipfs-server", "-lruntime=trace,runtime::bridge-hub=trace,runtime::bridge=trace,runtime::bridge-dispatch=trace,bridge=trace,runtime::bridge-messages=trace", "-lxcm=trace" ]
+	args = [ "--ipfs-server", "-lruntime=trace,runtime::bridge-hub=trace,runtime::bridge=trace,runtime::bridge-dispatch=trace,bridge=trace,runtime::bridge-messages=trace,runtime::xcm=trace,xcm=trace" ]
 
 	[[relaychain.nodes]]
 	name = "bob"
