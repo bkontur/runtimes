@@ -3,7 +3,7 @@ Network: {{ENV_PATH}}/polkadot_bulletin_local_network.toml
 Creds: config
 
 # Store some random data on Bulletin
-alice: run {{ENV_PATH}}/helper.sh with "store-data ws://127.0.0.1:10000 //Alice {{DATA_FOR_BULLETIN}}" within 120 seconds
+alice: run {{ENV_PATH}}/helper.sh with "auto-log store-data ws://127.0.0.1:10000 //Alice {{DATA_FOR_BULLETIN}}" within 120 seconds
 
 # Send an XCM Trap from People chain to Bulletin
-alice: run {{ENV_PATH}}/helper.sh with "send-data ws://127.0.0.1:9910 //Alice {{DATA_FOR_BULLETIN}}" within 120 seconds
+alice: run {{ENV_PATH}}/helper.sh with "auto-log send-data ws://127.0.0.1:9910 //Alice {{DATA_FOR_BULLETIN}}" within 120 seconds
