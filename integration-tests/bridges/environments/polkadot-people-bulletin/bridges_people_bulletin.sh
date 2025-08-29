@@ -109,7 +109,7 @@ function send_data() {
 
     # Destination: Location::new(2, [GlobalConsensus(Bulletin)])
     local dest
-    dest=$(jq --null-input '{ "V4": { "parents": 2, "interior": { "X1": [ { "GlobalConsensus": "PolkadotBulletin" } ] } } }')
+    dest=$(jq --null-input '{ "V5": { "parents": 2, "interior": { "X1": [ { "GlobalConsensus": "PolkadotBulletin" } ] } } }')
 
     # XCM program: send a simple Trap to verify routing over the bridge.
     local xcm_msg
