@@ -85,7 +85,7 @@ pub fn people_polkadot_local_testnet_genesis(para_id: ParaId) -> serde_json::Val
 		Some(get_account_id_from_seed::<sr25519::Public>("Alice")),
 		vec![
 			(
-				Location::new(1, [Parachain(1004)]),
+				Location::here(),
 				Junctions::from([
 					GlobalConsensus(bp_polkadot_bulletin::PolkadotBulletinGlobalConsensusNetwork::get()),
 				]),
