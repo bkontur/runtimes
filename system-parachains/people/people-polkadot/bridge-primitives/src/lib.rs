@@ -80,7 +80,7 @@ impl ChainWithMessages for PeoplePolkadot {
 pub const PEOPLE_POLKADOT_PARACHAIN_ID: u32 = 1004;
 
 /// Name of the With-PeoplePolkadot messages pallet instance that is deployed at bridged chains.
-pub const WITH_PEOPLE_POLKADOT_MESSAGES_PALLET_NAME: &str = "PeoplePolkadotMessages";
+pub const WITH_PEOPLE_POLKADOT_MESSAGES_PALLET_NAME: &str = "BridgePolkadotMessages";
 
 /// Pallet index of `BridgePolkadotBulletinMessages: pallet_bridge_messages::<Instance1>`.
 pub const WITH_PEOPLE_POLKADOT_TO_BULLETIN_MESSAGES_PALLET_INDEX: u8 = 61;
