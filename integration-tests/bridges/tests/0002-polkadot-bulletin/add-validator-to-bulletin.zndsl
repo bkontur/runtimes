@@ -1,0 +1,12 @@
+Description: Governance call to add validator to Bulletin via People chain XCM
+Network: {{ENV_PATH}}/polkadot_bulletin_local_network.toml
+Creds: config
+
+# Check before that is not present
+alice: js-script ./check-validator.js with '{ "validatorAddress": "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw", "isPresent": false }' within 30 seconds
+
+# Add validator "(//Eve - 5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw)" to Bulletin chain via governance XCM call from relay chain through People chain
+alice: run {{ENV_PATH}}/helper.sh with "auto-log add-validator-to-bulletin ws://127.0.0.1:9942 //Alice 1004 ws://127.0.0.1:9910 ws://127.0.0.1:10000 5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw" within 30 seconds
+
+# Check/wait that the validator is added to the ValidatorSet
+alice: js-script ./check-validator.js with '{ "validatorAddress": "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw", "isPresent": true }' within 120 seconds

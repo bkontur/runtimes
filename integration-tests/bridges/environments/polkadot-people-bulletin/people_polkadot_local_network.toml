@@ -8,13 +8,13 @@ chain = "polkadot-local"
 chain_spec_command = "{{CHAIN_SPEC_GEN_BINARY_FOR_POLKADOT}} {% raw %} {{chainName}} {% endraw %}"
 
 	[[relaychain.nodes]]
-	name = "alice"
+	name = "dave"
 	validator = true
 	rpc_port = 9942
 	balance = 2000000000000
 
 	[[relaychain.nodes]]
-	name = "bob"
+	name = "ferdie"
 	validator = true
 	rpc_port = 9943
 	balance = 2000000000000

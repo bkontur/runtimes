@@ -3,7 +3,7 @@
 # zombienet -p native spawn ./zombienet/config.toml
 
 [relaychain]
-chain = "polkadot-local"
+chain = "bulletin-polkadot-local"
 default_command = "{{POLKADOT_BULLETIN_BINARY_PATH}}"
 
 	[[relaychain.nodes]]
