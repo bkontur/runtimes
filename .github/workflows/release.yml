@@ -67,13 +67,13 @@ jobs:
             METADATA_HASH=",metadata-hash"
           fi
 
-          echo "try_runtime=--features try-runtime${METADATA_HASH}" >> $GITHUB_OUTPUT
+          echo "try_runtime=--features try-runtime${METADATA_HASH}" >> "$GITHUB_OUTPUT"
 
           if has_feature "fast-runtime"; then
-            echo "fast_runtime=--features fast-runtime${METADATA_HASH}" >> $GITHUB_OUTPUT
-            echo "has_fast_runtime=true" >> $GITHUB_OUTPUT
+            echo "fast_runtime=--features fast-runtime${METADATA_HASH}" >> "$GITHUB_OUTPUT"
+            echo "has_fast_runtime=true" >> "$GITHUB_OUTPUT"
           else
-            echo "has_fast_runtime=false" >> $GITHUB_OUTPUT
+            echo "has_fast_runtime=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Build ${{ matrix.runtime.name }}
