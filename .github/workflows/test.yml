@@ -618,6 +618,5 @@ jobs:
       # If the runtimes being tested against have breaking changes (removed extrinsics, added/changed/removed call
       # params), false negatives will occur. See #1078 .
       #- ecosystem-tests
-      - ecosystem-tests
     steps:
       - run: echo '### Good job! All the tests passed 🚀' >> $GITHUB_STEP_SUMMARY
