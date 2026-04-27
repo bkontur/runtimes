@@ -2805,6 +2805,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "bulletin-pallets-common"
+version = "0.2.0-draft"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "pallet-proxy",
+ "pallet-sudo",
+ "pallet-utility",
+ "parity-scale-codec",
+ "polkadot-sdk-frame",
+ "scale-info",
+]
+
+[[package]]
 name = "bulletin-polkadot-emulated-chain"
 version = "1.0.0"
 dependencies = [
@@ -2835,6 +2848,8 @@ dependencies = [
 name = "bulletin-polkadot-runtime"
 version = "1.0.0"
 dependencies = [
+ "bulletin-pallets-common",
+ "bulletin-transaction-storage-primitives",
  "cumulus-pallet-aura-ext",
  "cumulus-pallet-parachain-system",
  "cumulus-pallet-session-benchmarking",
@@ -2856,6 +2871,7 @@ dependencies = [
  "pallet-aura",
  "pallet-authorship",
  "pallet-balances",
+ "pallet-bulletin-transaction-storage",
  "pallet-collator-selection",
  "pallet-message-queue",
  "pallet-session",
@@ -2897,6 +2913,18 @@ dependencies = [
  "substrate-wasm-builder",
  "system-parachains-constants",
  "xcm-runtime-apis",
+]
+
+[[package]]
+name = "bulletin-transaction-storage-primitives"
+version = "0.2.0-draft"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "cid 0.11.1",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-io 45.0.0",
+ "tracing",
 ]
 
 [[package]]
@@ -9925,6 +9953,20 @@ dependencies = [
  "sp-arithmetic",
  "sp-core 41.0.0",
  "sp-runtime 47.0.0",
+]
+
+[[package]]
+name = "pallet-bulletin-transaction-storage"
+version = "0.2.0-draft"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "array-bytes 6.2.3",
+ "bulletin-transaction-storage-primitives",
+ "parity-scale-codec",
+ "polkadot-sdk-frame",
+ "scale-info",
+ "sp-transaction-storage-proof",
+ "tracing",
 ]
 
 [[package]]
@@ -17637,6 +17679,22 @@ checksum = "bd9caa506f1b9865e6f79b8d24401fe687aa323151f252d62b1b79ebd4084e91"
 dependencies = [
  "sp-api 42.0.0",
  "sp-runtime 47.0.0",
+]
+
+[[package]]
+name = "sp-transaction-storage-proof"
+version = "41.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f4112668080223eeef01571b6a9fda84ea6a40123c89f178bcc84325497bd577"
+dependencies = [
+ "async-trait",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-api 41.0.0",
+ "sp-core 40.0.0",
+ "sp-inherents 41.0.0",
+ "sp-runtime 46.0.0",
+ "sp-trie 43.0.0",
 ]
 
 [[package]]
