@@ -208,7 +208,6 @@ people-kusama-runtime = { path = "system-parachains/people/people-kusama" }
 people-polkadot-emulated-chain = { path = "integration-tests/emulated/chains/parachains/people/people-polkadot" }
 people-polkadot-runtime = { path = "system-parachains/people/people-polkadot" }
 polkadot-core-primitives = { version = "22.0.0", default-features = false }
-polkadot-sdk-frame = { version = "0.15.0", default-features = false }
 polkadot-emulated-chain = { path = "integration-tests/emulated/chains/relays/polkadot" }
 polkadot-parachain-primitives = { version = "21.0.0", default-features = false }
 polkadot-primitives = { version = "23.0.0", default-features = false }
