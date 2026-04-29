@@ -31,7 +31,8 @@ use sp_runtime::transaction_validity::{TransactionLongevity, TransactionPriority
 const DAYS: crate::BlockNumber = (86_400_000u64 / crate::SLOT_DURATION) as crate::BlockNumber;
 
 parameter_types! {
-	pub const AuthorizationPeriod: crate::BlockNumber = 90 * DAYS;
+	// TODO: @bkontur @franciscoaguirre @karolk91 confirm   
+	pub const AuthorizationPeriod: crate::BlockNumber = 14 * DAYS;
 	// Priorities and longevities used by the transaction storage pallet extrinsics.
 	pub const RemoveExpiredAuthorizationPriority: TransactionPriority = TransactionPriority::MAX - 1;
 	pub const RemoveExpiredAuthorizationLongevity: TransactionLongevity =
