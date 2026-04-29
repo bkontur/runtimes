@@ -16,6 +16,7 @@
 
 //! Storage-specific configurations.
 
+use crate::DAYS;
 use super::{xcm_config::PeopleLocation, Runtime, RuntimeCall, RuntimeEvent, RuntimeHoldReason};
 use alloc::vec::Vec;
 use bulletin_pallets_common::inspect_utility_wrapper;
@@ -27,16 +28,11 @@ use pallet_bulletin_transaction_storage::CallInspector;
 use pallet_xcm::EnsureXcm;
 use sp_runtime::transaction_validity::{TransactionLongevity, TransactionPriority};
 
-/// Number of blocks per day on the Bulletin chain (24-second slot duration).
-const DAYS: crate::BlockNumber = (86_400_000u64 / crate::SLOT_DURATION) as crate::BlockNumber;
-
 parameter_types! {
-	pub const AuthorizationPeriod: crate::BlockNumber = 90 * DAYS;
+	// TODO: @bkontur @franciscoaguirre @karolk91 confirm   
+	pub const AuthorizationPeriod: crate::BlockNumber = 14 * DAYS;
 	// Priorities and longevities used by the transaction storage pallet extrinsics.
-	pub const SudoPriority: TransactionPriority = TransactionPriority::MAX;
-	pub const SetPurgeKeysPriority: TransactionPriority = SudoPriority::get() - 1;
-	pub const RemoveExpiredAuthorizationPriority: TransactionPriority =
-		SetPurgeKeysPriority::get() - 1;
+	pub const RemoveExpiredAuthorizationPriority: TransactionPriority = TransactionPriority::MAX - 1;
 	pub const RemoveExpiredAuthorizationLongevity: TransactionLongevity =
 		DAYS as TransactionLongevity;
 	pub const StoreRenewPriority: TransactionPriority =
@@ -84,9 +80,9 @@ impl pallet_bulletin_transaction_storage::Config for Runtime {
 	type RuntimeHoldReason = RuntimeHoldReason;
 	type FeeDestination = ();
 	type WeightInfo = crate::weights::pallet_bulletin_transaction_storage::WeightInfo<Runtime>;
-	type MaxBlockTransactions = crate::ConstU32<512>;
+	type MaxBlockTransactions = crate::ConstU32<{ DEFAULT_MAX_BLOCK_TRANSACTIONS }>;
 	/// Max transaction size per block needs to be aligned with `BlockLength`.
-	type MaxTransactionSize = crate::ConstU32<{ 8 * 1024 * 1024 }>;
+	type MaxTransactionSize = crate::ConstU32<{ DEFAULT_MAX_TRANSACTION_SIZE }>;
 	type AuthorizationPeriod = AuthorizationPeriod;
 	type Authorizer = EitherOfDiverse<
 		// Root can do whatever.
