@@ -27,9 +27,6 @@ use pallet_bulletin_transaction_storage::CallInspector;
 use pallet_xcm::EnsureXcm;
 use sp_runtime::transaction_validity::{TransactionLongevity, TransactionPriority};
 
-/// Number of blocks per day on the Bulletin chain (24-second slot duration).
-const DAYS: crate::BlockNumber = (86_400_000u64 / crate::SLOT_DURATION) as crate::BlockNumber;
-
 parameter_types! {
 	// TODO: @bkontur @franciscoaguirre @karolk91 confirm   
 	pub const AuthorizationPeriod: crate::BlockNumber = 14 * DAYS;
