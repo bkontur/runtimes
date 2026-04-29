@@ -33,10 +33,7 @@ const DAYS: crate::BlockNumber = (86_400_000u64 / crate::SLOT_DURATION) as crate
 parameter_types! {
 	pub const AuthorizationPeriod: crate::BlockNumber = 90 * DAYS;
 	// Priorities and longevities used by the transaction storage pallet extrinsics.
-	pub const SudoPriority: TransactionPriority = TransactionPriority::MAX;
-	pub const SetPurgeKeysPriority: TransactionPriority = SudoPriority::get() - 1;
-	pub const RemoveExpiredAuthorizationPriority: TransactionPriority =
-		SetPurgeKeysPriority::get() - 1;
+	pub const RemoveExpiredAuthorizationPriority: TransactionPriority = TransactionPriority::MAX - 1;
 	pub const RemoveExpiredAuthorizationLongevity: TransactionLongevity =
 		DAYS as TransactionLongevity;
 	pub const StoreRenewPriority: TransactionPriority =
