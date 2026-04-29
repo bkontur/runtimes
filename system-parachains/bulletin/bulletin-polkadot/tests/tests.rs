@@ -218,6 +218,16 @@ fn new_test_ext() -> TestExternalities {
 	sp_io::TestExternalities::new(genesis.build_storage().unwrap())
 }
 
+/// See [`pallet_bulletin_transaction_storage::ensure_weight_sanity`].
+#[test]
+fn transaction_storage_weight_sanity() {
+	pallet_bulletin_transaction_storage::ensure_weight_sanity::<Runtime>(
+		// Collator-side PoV cap: default 85% of max_pov_size.
+		// See cumulus/client/consensus/aura/src/collators/slot_based/block_builder_task.rs
+		Some(85),
+	);
+}
+
 #[test]
 fn authorize_account_via_root_works() {
 	new_test_ext().execute_with(|| {
