@@ -16,6 +16,7 @@
 
 //! Storage-specific configurations.
 
+use crate::DAYS;
 use super::{xcm_config::PeopleLocation, Runtime, RuntimeCall, RuntimeEvent, RuntimeHoldReason};
 use alloc::vec::Vec;
 use bulletin_pallets_common::inspect_utility_wrapper;
