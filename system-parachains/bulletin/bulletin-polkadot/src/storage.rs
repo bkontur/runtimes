@@ -34,11 +34,15 @@ parameter_types! {
 	// TODO: @bkontur @franciscoaguirre @karolk91 confirm   
 	pub const AuthorizationPeriod: crate::BlockNumber = 14 * DAYS;
 	// Priorities and longevities used by the transaction storage pallet extrinsics.
-	pub const RemoveExpiredAuthorizationPriority: TransactionPriority = TransactionPriority::MAX - 1;
-	pub const RemoveExpiredAuthorizationLongevity: TransactionLongevity =
-		DAYS as TransactionLongevity;
-	pub const StoreRenewPriority: TransactionPriority =
-		RemoveExpiredAuthorizationPriority::get() - 1;
+        //
+	// `RemoveExpiredAuthorization` (permissionless cleanup) sits at the top so it always
+	// runs before stores compete for blockspace.
+	pub const RemoveExpiredAuthorizationPriority: TransactionPriority = TransactionPriority::MAX;
+	pub const RemoveExpiredAuthorizationLongevity: TransactionLongevity = crate::DAYS as TransactionLongevity;
+	// Base priority for `store` / `renew`. Picked well below `TransactionPriority::MAX` so
+	// `AllowanceBasedPriority` can add its boost without saturating `u64`, while still
+	// leaving plenty of headroom above generic transactions.
+	pub const StoreRenewPriority: TransactionPriority = TransactionPriority::MAX / 4;
 	pub const StoreRenewLongevity: TransactionLongevity = DAYS as TransactionLongevity;
 }
 
