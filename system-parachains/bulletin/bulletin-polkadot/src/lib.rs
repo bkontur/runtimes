@@ -93,6 +93,8 @@ use xcm_runtime_apis::{
 /// Bulletin uses 24s slot duration.
 pub const SLOT_DURATION: u64 = 24_000;
 
+pub const DAYS: BlockNumber = 86_400_000 / SLOT_DURATION as BlockNumber;
+
 /// The address format for describing accounts.
 pub type Address = MultiAddress<AccountId, ()>;
 

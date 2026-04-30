@@ -20,7 +20,10 @@ use bulletin_polkadot_runtime::{
 	xcm_config::{GovernanceLocation, LocationToAccountId, PeopleLocation},
 	Block, Runtime, RuntimeCall, RuntimeOrigin, System, TransactionStorage,
 };
-use bulletin_transaction_storage_primitives::cids::{calculate_cid, CidConfig, HashingAlgorithm};
+use pallet_bulletin_transaction_storage::DEFAULT_MAX_TRANSACTION_SIZE;
+use bulletin_transaction_storage_primitives::cids::{
+	calculate_cid, CidConfig, HashingAlgorithm, RAW_CODEC,
+};
 use frame_support::{assert_err, assert_noop, assert_ok, traits::Hooks};
 use pallet_bulletin_transaction_storage::AuthorizationExtent;
 use parachains_common::AccountId;
@@ -320,11 +323,11 @@ fn authorize_preimage_via_root_works() {
 		assert_ok!(TransactionStorage::authorize_preimage(
 			RuntimeOrigin::root(),
 			content_hash,
-			8 * 1024 * 1024,
+			DEFAULT_MAX_TRANSACTION_SIZE as u64,
 		));
 		assert_eq!(
 			TransactionStorage::preimage_authorization_extent(content_hash),
-			AuthorizationExtent { transactions: 1, bytes: 8 * 1024 * 1024 },
+			AuthorizationExtent { transactions: 1, bytes: DEFAULT_MAX_TRANSACTION_SIZE as u64 },
 		);
 	});
 }
@@ -335,17 +338,17 @@ fn store_with_cid_config_works() {
 		let data = vec![0u8; 4 * 1024];
 		let block_number = System::block_number();
 
-		// 1. Store data with plain `store` (defaults to Blake2b256, codec 0x55).
+		// 1. Store data with plain `store` (defaults to Blake2b256, RAW_CODEC 0x55).
 		assert_ok!(TransactionStorage::store(RuntimeOrigin::root(), data.clone()));
 
-		// 2. Store with explicit Blake2b256 + codec 0x55 — should produce the same content_hash.
+		// 2. Store with explicit Blake2b256 + RAW_CODEC — should produce the same content_hash.
 		assert_ok!(TransactionStorage::store_with_cid_config(
 			RuntimeOrigin::root(),
-			CidConfig { codec: 0x55, hashing: HashingAlgorithm::Blake2b256 },
+			CidConfig { codec: RAW_CODEC, hashing: HashingAlgorithm::Blake2b256 },
 			data.clone(),
 		));
 
-		// 3. Store with Sha2_256 + codec 0x70 — should produce a different content_hash.
+		// 3. Store with Sha2_256 + dag-pb codec (0x70) — should produce a different content_hash.
 		assert_ok!(TransactionStorage::store_with_cid_config(
 			RuntimeOrigin::root(),
 			CidConfig { codec: 0x70, hashing: HashingAlgorithm::Sha2_256 },
@@ -363,7 +366,7 @@ fn store_with_cid_config_works() {
 		assert_eq!(stored_txs.len(), 3);
 
 		let default_hash =
-			calculate_cid(&data, CidConfig { codec: 0x55, hashing: HashingAlgorithm::Blake2b256 })
+			calculate_cid(&data, CidConfig { codec: RAW_CODEC, hashing: HashingAlgorithm::Blake2b256 })
 				.unwrap()
 				.content_hash;
 		assert_eq!(stored_txs[&0].content_hash, default_hash);
@@ -383,7 +386,7 @@ fn transaction_storage_max_throughput_per_block() {
 	let max_block_txs: u32 = <Runtime as TxStorageConfig>::MaxBlockTransactions::get();
 	assert_eq!(max_block_txs, 512u32);
 	let max_size: u32 = <Runtime as TxStorageConfig>::MaxTransactionSize::get();
-	assert_eq!(max_size, 8u32 * 1024 * 1024);
+	assert_eq!(max_size, DEFAULT_MAX_TRANSACTION_SIZE);
 
 	new_test_ext().execute_with(|| {
 		let max_size: u32 = <Runtime as TxStorageConfig>::MaxTransactionSize::get();

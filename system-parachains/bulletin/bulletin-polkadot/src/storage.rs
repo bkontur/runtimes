@@ -24,7 +24,9 @@ use frame_support::{
 	parameter_types,
 	traits::{Contains, EitherOfDiverse, Equals},
 };
-use pallet_bulletin_transaction_storage::CallInspector;
+use pallet_bulletin_transaction_storage::{
+	CallInspector, DEFAULT_MAX_BLOCK_TRANSACTIONS, DEFAULT_MAX_TRANSACTION_SIZE,
+};
 use pallet_xcm::EnsureXcm;
 use sp_runtime::transaction_validity::{TransactionLongevity, TransactionPriority};
 
