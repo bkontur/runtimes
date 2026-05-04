@@ -29,4 +29,5 @@ frame_benchmarking::define_benchmarks!(
 	[cumulus_pallet_weight_reclaim, WeightReclaim]
 	[pallet_utility, Utility]
 	[pallet_bulletin_transaction_storage, TransactionStorage]
+	// TODO: add HOP promotion
 );
