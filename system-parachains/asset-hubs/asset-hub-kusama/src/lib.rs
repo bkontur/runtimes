@@ -675,12 +675,12 @@ impl InstanceFilter<RuntimeCall> for ProxyType {
 				RuntimeCall::Claims(..) |
 				RuntimeCall::Utility(..) |
 				RuntimeCall::Society(..) |
-				RuntimeCall::Recovery(pallet_recovery::Call::as_recovered {..}) |
-				RuntimeCall::Recovery(pallet_recovery::Call::vouch_recovery {..}) |
-				RuntimeCall::Recovery(pallet_recovery::Call::claim_recovery {..}) |
-				RuntimeCall::Recovery(pallet_recovery::Call::close_recovery {..}) |
-				RuntimeCall::Recovery(pallet_recovery::Call::remove_recovery {..}) |
-				RuntimeCall::Recovery(pallet_recovery::Call::cancel_recovered {..}) |
+				RuntimeCall::Recovery(pallet_recovery::Call::set_friend_groups {..}) |
+				RuntimeCall::Recovery(pallet_recovery::Call::initiate_attempt {..}) |
+				RuntimeCall::Recovery(pallet_recovery::Call::approve_attempt {..}) |
+				RuntimeCall::Recovery(pallet_recovery::Call::finish_attempt {..}) |
+				RuntimeCall::Recovery(pallet_recovery::Call::cancel_attempt {..}) |
+				RuntimeCall::Recovery(pallet_recovery::Call::slash_attempt {..}) |
 				// Specifically omitting Recovery `create_recovery`, `initiate_recovery`
 				RuntimeCall::Vesting(pallet_vesting::Call::vest {..}) |
 				RuntimeCall::Vesting(pallet_vesting::Call::vest_other {..}) |
@@ -1385,21 +1385,44 @@ impl pallet_ah_ops::Config for Runtime {
 }
 
 parameter_types! {
-	pub const ConfigDepositBase: Balance = 500 * CENTS;
-	pub const FriendDepositFactor: Balance = 50 * CENTS;
-	pub const RecoveryDeposit: Balance = 500 * CENTS;
+	pub const RecoverySecurityDeposit: Balance = 500 * CENTS;
+	pub const RecoveryDepositBase: Balance = system_para_deposit(1, 0);
+	pub const RecoveryByteDeposit: Balance = system_para_deposit(0, 1);
+	pub const RecoveryFriendGroupsHoldReason: RuntimeHoldReason =
+		RuntimeHoldReason::Recovery(pallet_recovery::HoldReason::FriendGroupsStorage);
+	pub const RecoveryAttemptHoldReason: RuntimeHoldReason =
+		RuntimeHoldReason::Recovery(pallet_recovery::HoldReason::AttemptStorage);
+	pub const RecoveryInheritorHoldReason: RuntimeHoldReason =
+		RuntimeHoldReason::Recovery(pallet_recovery::HoldReason::InheritorStorage);
 }
 
 impl pallet_recovery::Config for Runtime {
-	type RuntimeEvent = RuntimeEvent;
-	type WeightInfo = weights::pallet_recovery::WeightInfo<Runtime>;
 	type RuntimeCall = RuntimeCall;
-	type Currency = Balances;
-	type ConfigDepositBase = ConfigDepositBase;
-	type FriendDepositFactor = FriendDepositFactor;
-	type MaxFriends = ConstU32<9>;
-	type RecoveryDeposit = RecoveryDeposit;
+	type RuntimeHoldReason = RuntimeHoldReason;
 	type BlockNumberProvider = RelaychainDataProvider<Runtime>;
+	type Currency = Balances;
+	type FriendGroupsConsideration = HoldConsideration<
+		AccountId,
+		Balances,
+		RecoveryFriendGroupsHoldReason,
+		LinearStoragePrice<RecoveryDepositBase, RecoveryByteDeposit, Balance>,
+	>;
+	type AttemptConsideration = HoldConsideration<
+		AccountId,
+		Balances,
+		RecoveryAttemptHoldReason,
+		LinearStoragePrice<RecoveryDepositBase, RecoveryByteDeposit, Balance>,
+	>;
+	type InheritorConsideration = HoldConsideration<
+		AccountId,
+		Balances,
+		RecoveryInheritorHoldReason,
+		LinearStoragePrice<RecoveryDepositBase, RecoveryByteDeposit, Balance>,
+	>;
+	type SecurityDeposit = RecoverySecurityDeposit;
+	type Slash = (); // burn
+	type MaxFriendsPerConfig = ConstU32<9>;
+	type WeightInfo = weights::pallet_recovery::WeightInfo<Runtime>;
 }
 
 /// Defines what origin can modify which dynamic parameters.

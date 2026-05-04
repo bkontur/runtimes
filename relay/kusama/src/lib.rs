@@ -1248,21 +1248,21 @@ impl pallet_multisig::Config for Runtime {
 }
 
 parameter_types! {
-	pub const ConfigDepositBase: Balance = 500 * CENTS;
-	pub const FriendDepositFactor: Balance = 50 * CENTS;
-	pub const RecoveryDeposit: Balance = 500 * CENTS;
+	pub const RecoverySecurityDeposit: Balance = 500 * CENTS;
 }
 
 impl pallet_recovery::Config for Runtime {
-	type RuntimeEvent = RuntimeEvent;
-	type WeightInfo = weights::pallet_recovery::WeightInfo<Runtime>;
 	type RuntimeCall = RuntimeCall;
+	type RuntimeHoldReason = RuntimeHoldReason;
+	type BlockNumberProvider = frame_system::Pallet<Runtime>;
 	type Currency = Balances;
-	type ConfigDepositBase = ConfigDepositBase;
-	type FriendDepositFactor = FriendDepositFactor;
-	type MaxFriends = ConstU32<9>;
-	type RecoveryDeposit = RecoveryDeposit;
-	type BlockNumberProvider = System;
+	type FriendGroupsConsideration = ();
+	type AttemptConsideration = ();
+	type InheritorConsideration = ();
+	type SecurityDeposit = RecoverySecurityDeposit;
+	type Slash = (); // burn
+	type MaxFriendsPerConfig = ConstU32<9>;
+	type WeightInfo = ();
 }
 
 parameter_types! {
@@ -1377,13 +1377,13 @@ impl InstanceFilter<RuntimeCall> for TransparentProxyType {
 				RuntimeCall::Claims(..) |
 				RuntimeCall::Utility(..) |
 				RuntimeCall::Society(..) |
-				RuntimeCall::Recovery(pallet_recovery::Call::as_recovered {..}) |
-				RuntimeCall::Recovery(pallet_recovery::Call::vouch_recovery {..}) |
-				RuntimeCall::Recovery(pallet_recovery::Call::claim_recovery {..}) |
-				RuntimeCall::Recovery(pallet_recovery::Call::close_recovery {..}) |
-				RuntimeCall::Recovery(pallet_recovery::Call::remove_recovery {..}) |
-				RuntimeCall::Recovery(pallet_recovery::Call::cancel_recovered {..}) |
-				// Specifically omitting Recovery `create_recovery`, `initiate_recovery`
+				RuntimeCall::Recovery(pallet_recovery::Call::set_friend_groups {..}) |
+				RuntimeCall::Recovery(pallet_recovery::Call::initiate_attempt {..}) |
+				RuntimeCall::Recovery(pallet_recovery::Call::approve_attempt {..}) |
+				RuntimeCall::Recovery(pallet_recovery::Call::finish_attempt {..}) |
+				RuntimeCall::Recovery(pallet_recovery::Call::cancel_attempt {..}) |
+				RuntimeCall::Recovery(pallet_recovery::Call::slash_attempt {..}) |
+				// Specifically omitting Recovery `control_inherited_account`, `revoke_inheritor`
 				RuntimeCall::Vesting(pallet_vesting::Call::vest {..}) |
 				RuntimeCall::Vesting(pallet_vesting::Call::vest_other {..}) |
 				// Specifically omitting Vesting `vested_transfer`, and `force_vested_transfer`
