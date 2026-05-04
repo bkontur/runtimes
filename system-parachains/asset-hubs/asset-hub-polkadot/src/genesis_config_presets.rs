@@ -17,9 +17,9 @@
 //! Genesis configs presets for the AssetHubPolkadot runtime
 
 use crate::{staking::DapPalletId, xcm_config::UniversalLocation, *};
-use pallet_revive::AddressMapper;
 use alloc::vec::Vec;
 use frame_support::sp_runtime::traits::AccountIdConversion;
+use pallet_revive::AddressMapper;
 use parachains_common::AssetHubPolkadotAuraId;
 use sp_core::sr25519;
 use sp_genesis_builder::PresetId;

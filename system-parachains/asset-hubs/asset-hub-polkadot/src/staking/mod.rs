@@ -425,10 +425,8 @@ impl pallet_staking_async::EraPayout<Balance> for EraPayout {
 /// via `BudgetAllocation`.
 impl sp_staking::budget::IssuanceCurve<Balance> for EraPayout {
 	fn issue(_total_issuance: Balance, elapsed_millis: u64) -> Balance {
-		let relative_period = FixedU128::from_rational(
-			elapsed_millis.into(),
-			Self::MILLISECONDS_PER_YEAR.into(),
-		);
+		let relative_period =
+			FixedU128::from_rational(elapsed_millis.into(), Self::MILLISECONDS_PER_YEAR.into());
 
 		let relay_block_num =
 			<RelaychainDataProvider<Runtime> as BlockNumberProvider>::current_block_number();

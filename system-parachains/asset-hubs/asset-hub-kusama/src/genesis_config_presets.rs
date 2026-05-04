@@ -17,8 +17,8 @@
 //! Genesis configs presets for the AssetHubKusama runtime
 
 use crate::{xcm_config::UniversalLocation, *};
-use pallet_revive::AddressMapper;
 use alloc::vec::Vec;
+use pallet_revive::AddressMapper;
 use sp_genesis_builder::PresetId;
 use system_parachains_constants::genesis_presets::*;
 use xcm::latest::prelude::*;
