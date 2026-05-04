@@ -87,7 +87,6 @@ impl pallet_bulletin_transaction_storage::Config for Runtime {
 	type FeeDestination = ();
 	type WeightInfo = crate::weights::pallet_bulletin_transaction_storage::WeightInfo<Runtime>;
 	type MaxBlockTransactions = crate::ConstU32<{ DEFAULT_MAX_BLOCK_TRANSACTIONS }>;
-	/// Max transaction size per block needs to be aligned with `BlockLength`.
 	type MaxTransactionSize = crate::ConstU32<{ DEFAULT_MAX_TRANSACTION_SIZE }>;
 	type AuthorizationPeriod = AuthorizationPeriod;
 	type Authorizer = EitherOfDiverse<
