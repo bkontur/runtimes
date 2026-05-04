@@ -92,7 +92,7 @@ impl pallet_bulletin_transaction_storage::Config for Runtime {
 	type Authorizer = EitherOfDiverse<
 		// Root can do whatever.
 		frame_system::EnsureRoot<Self::AccountId>,
-		// The People chain can authorize storage (it manages on-chain identities).
+		// The People Chain can authorize for storage allowances.
 		EnsureXcm<Equals<PeopleLocation>>,
 	>;
 	type StoreRenewPriority = StoreRenewPriority;
