@@ -17,14 +17,22 @@
 #![cfg(test)]
 
 use bulletin_polkadot_runtime::{
-	xcm_config::{GovernanceLocation, LocationToAccountId},
-	Block, Runtime, RuntimeCall, RuntimeOrigin,
+	xcm_config::{GovernanceLocation, LocationToAccountId, PeopleLocation},
+	Block, Runtime, RuntimeCall, RuntimeOrigin, System, TransactionStorage,
 };
-use frame_support::{assert_err, assert_ok};
+use pallet_bulletin_transaction_storage::DEFAULT_MAX_TRANSACTION_SIZE;
+use bulletin_transaction_storage_primitives::cids::{
+	calculate_cid, CidConfig, HashingAlgorithm, RAW_CODEC,
+};
+use frame_support::{assert_err, assert_noop, assert_ok, traits::Hooks};
+use pallet_bulletin_transaction_storage::AuthorizationExtent;
 use parachains_common::AccountId;
 use parachains_runtimes_test_utils::GovernanceOrigin;
 use sp_core::crypto::Ss58Codec;
+use sp_io::TestExternalities;
+use sp_keyring::Sr25519Keyring;
 use sp_runtime::Either;
+use std::collections::HashMap;
 use system_parachains_constants::polkadot::fee::WeightToFee;
 use xcm::latest::prelude::*;
 use xcm_runtime_apis::conversions::LocationToAccountHelper;
@@ -199,4 +207,200 @@ fn governance_authorize_upgrade_works() {
 		Runtime,
 		RuntimeOrigin,
 	>(GovernanceOrigin::Location(GovernanceLocation::get())));
+}
+
+fn advance_block() {
+	let current = System::block_number();
+	TransactionStorage::on_finalize(current);
+	System::on_finalize(current);
+	let next = current + 1;
+	System::set_block_number(next);
+	System::on_initialize(next);
+	TransactionStorage::on_initialize(next);
+}
+
+fn new_test_ext() -> TestExternalities {
+	use bulletin_polkadot_runtime::{BuildStorage, RuntimeGenesisConfig};
+	let genesis = RuntimeGenesisConfig {
+		transaction_storage: pallet_bulletin_transaction_storage::GenesisConfig {
+			retention_period: 10,
+			byte_fee: 0,
+			entry_fee: 0,
+			..Default::default()
+		},
+		..Default::default()
+	};
+	sp_io::TestExternalities::new(genesis.build_storage().unwrap())
+}
+
+/// See [`pallet_bulletin_transaction_storage::ensure_weight_sanity`].
+#[test]
+fn transaction_storage_weight_sanity() {
+	pallet_bulletin_transaction_storage::ensure_weight_sanity::<Runtime>(
+		// Collator-side PoV cap: default 85% of max_pov_size.
+		// See cumulus/client/consensus/aura/src/collators/slot_based/block_builder_task.rs
+		Some(85),
+	);
+}
+
+#[test]
+fn authorize_account_via_root_works() {
+	new_test_ext().execute_with(|| {
+		let who: AccountId = Sr25519Keyring::Alice.to_account_id();
+		assert_ok!(TransactionStorage::authorize_account(
+			RuntimeOrigin::root(),
+			who.clone(),
+			5,
+			1024 * 1024,
+		));
+		assert_eq!(
+			TransactionStorage::account_authorization_extent(who),
+			AuthorizationExtent { transactions: 5, bytes: 1024 * 1024 },
+		);
+	});
+}
+
+#[test]
+fn authorize_account_rejects_unsigned() {
+	new_test_ext().execute_with(|| {
+		let who: AccountId = Sr25519Keyring::Alice.to_account_id();
+		assert_noop!(
+			TransactionStorage::authorize_account(RuntimeOrigin::none(), who, 1, 100),
+			sp_runtime::DispatchError::BadOrigin,
+		);
+	});
+}
+
+#[test]
+fn authorize_account_rejects_signed_non_authorizer() {
+	new_test_ext().execute_with(|| {
+		let who: AccountId = Sr25519Keyring::Alice.to_account_id();
+		assert_noop!(
+			TransactionStorage::authorize_account(RuntimeOrigin::signed(who.clone()), who, 1, 100,),
+			sp_runtime::DispatchError::BadOrigin,
+		);
+	});
+}
+
+#[test]
+fn xcm_from_people_chain_is_accepted_as_authorizer() {
+	// Construct the XCM origin as it would arrive from the People chain (a sibling parachain).
+	// `EnsureXcm<Equals<PeopleLocation>>` accepts origins whose location equals PeopleLocation.
+	let people_origin = RuntimeOrigin::from(pallet_xcm::Origin::Xcm(PeopleLocation::get()));
+	new_test_ext().execute_with(|| {
+		let who: AccountId = Sr25519Keyring::Bob.to_account_id();
+		assert_ok!(TransactionStorage::authorize_account(
+			people_origin,
+			who.clone(),
+			3,
+			512 * 1024,
+		));
+		assert_eq!(
+			TransactionStorage::account_authorization_extent(who),
+			AuthorizationExtent { transactions: 3, bytes: 512 * 1024 },
+		);
+	});
+}
+
+#[test]
+fn xcm_from_non_people_sibling_is_rejected_as_authorizer() {
+	use polkadot_runtime_constants::system_parachain::ASSET_HUB_ID;
+	let asset_hub_location = Location::new(1, [Parachain(ASSET_HUB_ID)]);
+	let non_people_origin = RuntimeOrigin::from(pallet_xcm::Origin::Xcm(asset_hub_location));
+	new_test_ext().execute_with(|| {
+		let who: AccountId = Sr25519Keyring::Bob.to_account_id();
+		assert_noop!(
+			TransactionStorage::authorize_account(non_people_origin, who, 1, 100),
+			sp_runtime::DispatchError::BadOrigin,
+		);
+	});
+}
+
+#[test]
+fn authorize_preimage_via_root_works() {
+	new_test_ext().execute_with(|| {
+		let content_hash = [42u8; 32];
+		assert_ok!(TransactionStorage::authorize_preimage(
+			RuntimeOrigin::root(),
+			content_hash,
+			DEFAULT_MAX_TRANSACTION_SIZE as u64,
+		));
+		assert_eq!(
+			TransactionStorage::preimage_authorization_extent(content_hash),
+			AuthorizationExtent { transactions: 1, bytes: DEFAULT_MAX_TRANSACTION_SIZE as u64 },
+		);
+	});
+}
+
+#[test]
+fn store_with_cid_config_works() {
+	new_test_ext().execute_with(|| {
+		let data = vec![0u8; 4 * 1024];
+		let block_number = System::block_number();
+
+		// 1. Store data with plain `store` (defaults to Blake2b256, RAW_CODEC 0x55).
+		assert_ok!(TransactionStorage::store(RuntimeOrigin::root(), data.clone()));
+
+		// 2. Store with explicit Blake2b256 + RAW_CODEC — should produce the same content_hash.
+		assert_ok!(TransactionStorage::store_with_cid_config(
+			RuntimeOrigin::root(),
+			CidConfig { codec: RAW_CODEC, hashing: HashingAlgorithm::Blake2b256 },
+			data.clone(),
+		));
+
+		// 3. Store with Sha2_256 + dag-pb codec (0x70) — should produce a different content_hash.
+		assert_ok!(TransactionStorage::store_with_cid_config(
+			RuntimeOrigin::root(),
+			CidConfig { codec: 0x70, hashing: HashingAlgorithm::Sha2_256 },
+			data.clone(),
+		));
+
+		TransactionStorage::on_finalize(block_number);
+
+		let stored_txs = TransactionStorage::transaction_roots(block_number)
+			.unwrap()
+			.into_iter()
+			.enumerate()
+			.collect::<HashMap<_, _>>();
+
+		assert_eq!(stored_txs.len(), 3);
+
+		let default_hash =
+			calculate_cid(&data, CidConfig { codec: RAW_CODEC, hashing: HashingAlgorithm::Blake2b256 })
+				.unwrap()
+				.content_hash;
+		assert_eq!(stored_txs[&0].content_hash, default_hash);
+		// Explicit Blake2b256 matches the plain-store default.
+		assert_eq!(stored_txs[&0].content_hash, stored_txs[&1].content_hash);
+		// Sha2_256 produces a distinct hash.
+		assert_ne!(stored_txs[&0].content_hash, stored_txs[&2].content_hash);
+	});
+}
+
+#[test]
+fn transaction_storage_max_throughput_per_block() {
+	// The Polkadot Bulletin chain is configured for:
+	//   512 transactions × 8 MiB = 4 GiB of storage per block.
+	use frame_support::traits::Get;
+	use pallet_bulletin_transaction_storage::Config as TxStorageConfig;
+	let max_block_txs: u32 = <Runtime as TxStorageConfig>::MaxBlockTransactions::get();
+	assert_eq!(max_block_txs, 512u32);
+	let max_size: u32 = <Runtime as TxStorageConfig>::MaxTransactionSize::get();
+	assert_eq!(max_size, DEFAULT_MAX_TRANSACTION_SIZE);
+
+	new_test_ext().execute_with(|| {
+		let max_size: u32 = <Runtime as TxStorageConfig>::MaxTransactionSize::get();
+		let max_size = max_size as usize;
+
+		advance_block();
+
+		// A maximum-sized transaction (8 MiB) can be stored.
+		assert_ok!(TransactionStorage::store(RuntimeOrigin::root(), vec![0u8; max_size]));
+
+		// Data that exceeds MaxTransactionSize is rejected.
+		assert_err!(
+			TransactionStorage::store(RuntimeOrigin::root(), vec![0u8; max_size + 1]),
+			pallet_bulletin_transaction_storage::Error::<Runtime>::BadDataSize,
+		);
+	});
 }
