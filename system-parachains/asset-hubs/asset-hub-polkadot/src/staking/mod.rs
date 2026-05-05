@@ -149,7 +149,7 @@ impl pallet_dap::Config for Runtime {
 	type Time = pallet_timestamp::Pallet<Runtime>;
 	type IssuanceCadence = DapIssuanceCadence;
 	type MaxElapsedPerDrip = DapMaxElapsedPerDrip;
-	type BudgetOrigin = frame_system::EnsureRoot<AccountId>;
+	type BudgetOrigin = EitherOfDiverse<EnsureRoot<AccountId>, StakingAdmin>;
 	type WeightInfo = ();
 }
 
