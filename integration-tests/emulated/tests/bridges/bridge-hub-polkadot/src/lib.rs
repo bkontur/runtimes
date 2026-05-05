@@ -35,7 +35,6 @@ pub use bp_messages::LegacyLaneId;
 // Cumulus
 pub use emulated_integration_tests_common::{
 	accounts::{ALICE, BOB},
-	create_pool_with_native_on,
 	impls::Inspect,
 	test_parachain_is_trusted_teleporter, test_parachain_is_trusted_teleporter_for_relay,
 	test_relay_is_trusted_teleporter,

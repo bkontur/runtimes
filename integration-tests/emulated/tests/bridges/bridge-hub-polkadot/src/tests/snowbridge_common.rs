@@ -19,7 +19,7 @@ use asset_hub_polkadot_runtime::xcm_config::{
 };
 use bp_bridge_hub_polkadot::snowbridge::EthereumNetwork;
 use emulated_integration_tests_common::{
-	create_pool_with_native_on, PenpalBTeleportableAssetLocation,
+	create_pool_with_native_on, PenpalBPen2TeleportableAssetLocation,
 };
 use frame_support::traits::fungibles::Mutate;
 use hex_literal::hex;
@@ -244,7 +244,7 @@ pub fn register_pal_on_polkadot_bh() {
 
 		assert_ok!(<BridgeHubPolkadot as BridgeHubPolkadotPallet>::EthereumSystem::register_token(
 			RuntimeOrigin::root(),
-			Box::new(VersionedLocation::from(PenpalBTeleportableAssetLocation::get())),
+			Box::new(VersionedLocation::from(PenpalBPen2TeleportableAssetLocation::get())),
 			AssetMetadata {
 				name: "pal".as_bytes().to_vec().try_into().unwrap(),
 				symbol: "pal".as_bytes().to_vec().try_into().unwrap(),

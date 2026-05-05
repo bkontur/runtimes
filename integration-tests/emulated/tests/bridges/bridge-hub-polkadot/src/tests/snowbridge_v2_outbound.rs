@@ -20,7 +20,7 @@ use crate::{
 use bridge_hub_polkadot_runtime::{
 	bridge_to_ethereum_config::EthereumGatewayAddress, EthereumOutboundQueueV2,
 };
-use emulated_integration_tests_common::{impls::Decode, PenpalBTeleportableAssetLocation};
+use emulated_integration_tests_common::{impls::Decode, PenpalBPen2TeleportableAssetLocation};
 use frame_support::{assert_err_ignore_postinfo, pallet_prelude::TypeInfo, BoundedVec};
 use polkadot_system_emulated_network::penpal_emulated_chain::penpal_runtime::xcm_config::LocalTeleportableToAssetHub;
 use snowbridge_core::{reward::MessageId, AssetMetadata, BasicOperatingMode};
@@ -693,7 +693,7 @@ fn register_token_from_penpal() {
 			AccountId32 { network: Some(NetworkId::Polkadot), id: PenpalBSender::get().into() },
 		],
 	);
-	let asset_location_on_penpal = PenpalBTeleportableAssetLocation::get();
+	let asset_location_on_penpal = PenpalBPen2TeleportableAssetLocation::get();
 	let foreign_asset_at_asset_hub =
 		Location::new(1, [Junction::Parachain(PenpalB::para_id().into())])
 			.appended_with(asset_location_on_penpal)
@@ -824,7 +824,7 @@ fn send_message_from_penpal_to_ethereum(sudo: bool) {
 		let ena = Asset { id: AssetId(weth_location()), fun: Fungible(TOKEN_AMOUNT / 2) };
 
 		let transfer_asset_reanchor_on_ah = Asset {
-			id: AssetId(PenpalBTeleportableAssetLocation::get()),
+			id: AssetId(PenpalBPen2TeleportableAssetLocation::get()),
 			fun: Fungible(TOKEN_AMOUNT),
 		};
 

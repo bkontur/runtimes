@@ -505,7 +505,8 @@ fn verify_foreign_asset_origin_checks() {
 	});
 	// Now set asset reserves using remote XCM from correct origin chain.
 	// Use wrong `{origin, asset}` combination.
-	let asset_id_on_ah = emulated_integration_tests_common::PenpalBTeleportableAssetLocation::get();
+	let asset_id_on_ah =
+		emulated_integration_tests_common::PenpalBPen2TeleportableAssetLocation::get();
 	penpal_set_foreign_asset_reserves_on_asset_hub(asset_id_on_ah, vec![]);
 	// Verify it failed.
 	AssetHubPolkadot::execute_with(|| {
