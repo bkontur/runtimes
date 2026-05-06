@@ -2808,6 +2808,7 @@ dependencies = [
 name = "bulletin-pallets-common"
 version = "0.2.0-draft"
 source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7d4ef66d01cd740a34dc36116b398d283e341ee44528cedd08fd308c31f2f202"
 dependencies = [
  "pallet-proxy",
  "pallet-sudo",
@@ -2921,11 +2922,13 @@ dependencies = [
 name = "bulletin-transaction-storage-primitives"
 version = "0.2.0-draft"
 source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8c353fd5fa6f46ff15a0b8fc3b4fea5b04b5d854b1b9409485562eb8c6a143ac"
 dependencies = [
  "cid 0.11.1",
  "parity-scale-codec",
  "scale-info",
- "sp-io 45.0.0",
+ "sp-io 46.0.0",
+ "sp-transaction-storage-proof",
  "tracing",
 ]
 
@@ -9961,6 +9964,7 @@ dependencies = [
 name = "pallet-bulletin-transaction-storage"
 version = "0.2.0-draft"
 source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e15bc281eaf762925191ab87f1be50537e920d66590753698991e4d07ef0fa02"
 dependencies = [
  "array-bytes 6.2.3",
  "bulletin-transaction-storage-primitives",
@@ -17685,18 +17689,18 @@ dependencies = [
 
 [[package]]
 name = "sp-transaction-storage-proof"
-version = "41.0.0"
+version = "42.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f4112668080223eeef01571b6a9fda84ea6a40123c89f178bcc84325497bd577"
+checksum = "ce86ffe8a02bf8363dea6836438f96dfd0812ef0dc35324fef1827592b921f1f"
 dependencies = [
  "async-trait",
  "parity-scale-codec",
  "scale-info",
- "sp-api 41.0.0",
- "sp-core 40.0.0",
- "sp-inherents 41.0.0",
- "sp-runtime 46.0.0",
- "sp-trie 43.0.0",
+ "sp-api 42.0.0",
+ "sp-core 41.0.0",
+ "sp-inherents 42.0.0",
+ "sp-runtime 47.0.0",
+ "sp-trie 44.0.0",
 ]
 
 [[package]]
