@@ -578,4 +578,37 @@ impl_runtime_apis! {
 				.unwrap_or_default()
 		}
 	}
+
+	impl sp_hop::HopRuntimeApi<Block, AccountId> for Runtime {
+		fn can_account_promote(who: AccountId, data_len: u32) -> bool {
+			pallet_bulletin_hop_promotion::Pallet::<Runtime>::can_account_promote(&who, data_len)
+		}
+
+		fn create_promotion_extrinsic(
+			data: alloc::vec::Vec<u8>,
+			signer: sp_runtime::MultiSigner,
+			signature: sp_runtime::MultiSignature,
+			submit_timestamp: u64,
+		) -> <Block as BlockT>::Extrinsic {
+			use frame_system::offchain::CreateAuthorizedTransaction;
+			<Runtime as CreateAuthorizedTransaction<pallet_bulletin_hop_promotion::Call<Runtime>>>::create_authorized_transaction(
+				pallet_bulletin_hop_promotion::Call::<Runtime>::promote {
+					data,
+					signer,
+					signature,
+					submit_timestamp,
+				}
+				.into(),
+			)
+		}
+
+		fn max_promotion_size() -> u32 {
+			use frame_support::traits::Get;
+			<Runtime as pallet_bulletin_transaction_storage::Config>::MaxTransactionSize::get()
+		}
+
+		fn is_promoted_on_chain(hash: [u8; 32]) -> bool {
+			pallet_bulletin_hop_promotion::Pallet::<Runtime>::is_promoted_on_chain(hash)
+		}
+	}
 }

@@ -462,6 +462,51 @@ impl pallet_utility::Config for Runtime {
 	type WeightInfo = weights::pallet_utility::WeightInfo<Runtime>;
 }
 
+impl<C> frame_system::offchain::CreateTransactionBase<C> for Runtime
+where
+	RuntimeCall: From<C>,
+{
+	type Extrinsic = UncheckedExtrinsic;
+	type RuntimeCall = RuntimeCall;
+}
+
+impl<C> frame_system::offchain::CreateTransaction<C> for Runtime
+where
+	RuntimeCall: From<C>,
+{
+	type Extension = TxExtension;
+
+	fn create_transaction(call: RuntimeCall, extension: TxExtension) -> UncheckedExtrinsic {
+		generic::UncheckedExtrinsic::new_transaction(call, extension)
+	}
+}
+
+impl<C> frame_system::offchain::CreateAuthorizedTransaction<C> for Runtime
+where
+	RuntimeCall: From<C>,
+{
+	fn create_extension() -> Self::Extension {
+		cumulus_pallet_weight_reclaim::StorageWeightReclaim::new((
+			frame_system::AuthorizeCall::<Runtime>::new(),
+			frame_system::CheckNonZeroSender::<Runtime>::new(),
+			frame_system::CheckSpecVersion::<Runtime>::new(),
+			frame_system::CheckTxVersion::<Runtime>::new(),
+			frame_system::CheckGenesis::<Runtime>::new(),
+			frame_system::CheckEra::<Runtime>::from(generic::Era::Immortal),
+			frame_system::CheckNonce::<Runtime>::from(0),
+			frame_system::CheckWeight::<Runtime>::new(),
+			pallet_skip_feeless_payment::SkipCheckIfFeeless::from(
+				pallet_transaction_payment::ChargeTransactionPayment::<Runtime>::from(0),
+			),
+			frame_metadata_hash_extension::CheckMetadataHash::<Runtime>::new(false),
+			pallet_bulletin_transaction_storage::extension::ValidateStorageCalls::<
+				Runtime,
+				storage::StorageCallInspector,
+			>::default(),
+		))
+	}
+}
+
 #[frame_support::runtime]
 mod runtime {
 	#[runtime::runtime]
@@ -516,6 +561,8 @@ mod runtime {
 	// The main business of the Bulletin chain.
 	#[runtime::pallet_index(40)]
 	pub type TransactionStorage = pallet_bulletin_transaction_storage;
+	#[runtime::pallet_index(41)]
+	pub type HopPromotion = pallet_bulletin_hop_promotion;
 
 	// XCM & related
 	#[runtime::pallet_index(30)]
