@@ -557,5 +557,25 @@ impl_runtime_apis! {
 		fn retention_period() -> sp_runtime::traits::NumberFor<Block> {
 			TransactionStorage::retention_period()
 		}
+
+		fn indexed_transactions(
+			block: sp_runtime::traits::NumberFor<Block>,
+		) -> alloc::vec::Vec<sp_transaction_storage_proof::IndexedTransactionInfo> {
+			use sp_transaction_storage_proof::IndexedTransactionInfo;
+
+			TransactionStorage::transactions_at(block)
+				.map(|txs| {
+					txs.into_iter()
+						.map(|tx| IndexedTransactionInfo {
+							content_hash: tx.content_hash,
+							size: tx.size,
+							hashing: tx.hashing.into(),
+							cid_codec: tx.cid_codec,
+							extrinsic_index: tx.extrinsic_index,
+						})
+						.collect()
+				})
+				.unwrap_or_default()
+		}
 	}
 }

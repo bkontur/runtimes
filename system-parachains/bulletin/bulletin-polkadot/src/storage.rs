@@ -31,7 +31,14 @@ use pallet_xcm::EnsureXcm;
 use sp_runtime::transaction_validity::{TransactionLongevity, TransactionPriority};
 
 parameter_types! {
-	// TODO: @bkontur @franciscoaguirre @karolk91 confirm   
+	/// Cap on the total bytes committed to permanent storage (via `renew`) across all
+	/// authorizations on this chain. Seeded at 1.7 TiB; storage-backed so governance
+	/// (root) can raise/lower it via `system.set_storage` without a runtime upgrade.
+	pub storage MaxPermanentStorageSize: u64 = 17 * 1024 * 1024 * 1024 * 1024 / 10;
+}
+
+parameter_types! {
+	// TODO: @bkontur @franciscoaguirre @karolk91 confirm
 	pub const AuthorizationPeriod: crate::BlockNumber = 14 * DAYS;
 	// Priorities and longevities used by the transaction storage pallet extrinsics.
 	//
@@ -88,6 +95,7 @@ impl pallet_bulletin_transaction_storage::Config for Runtime {
 	type WeightInfo = crate::weights::pallet_bulletin_transaction_storage::WeightInfo<Runtime>;
 	type MaxBlockTransactions = crate::ConstU32<{ DEFAULT_MAX_BLOCK_TRANSACTIONS }>;
 	type MaxTransactionSize = crate::ConstU32<{ DEFAULT_MAX_TRANSACTION_SIZE }>;
+	type MaxPermanentStorageSize = MaxPermanentStorageSize;
 	type AuthorizationPeriod = AuthorizationPeriod;
 	type Authorizer = EitherOfDiverse<
 		// Root can do whatever.

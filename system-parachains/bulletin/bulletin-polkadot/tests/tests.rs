@@ -255,7 +255,13 @@ fn authorize_account_via_root_works() {
 		));
 		assert_eq!(
 			TransactionStorage::account_authorization_extent(who),
-			AuthorizationExtent { transactions: 5, bytes: 1024 * 1024 },
+			AuthorizationExtent {
+				transactions: 0,
+				transactions_allowance: 5,
+				bytes: 0,
+				bytes_permanent: 0,
+				bytes_allowance: 1024 * 1024,
+			},
 		);
 	});
 }
@@ -297,7 +303,13 @@ fn xcm_from_people_chain_is_accepted_as_authorizer() {
 		));
 		assert_eq!(
 			TransactionStorage::account_authorization_extent(who),
-			AuthorizationExtent { transactions: 3, bytes: 512 * 1024 },
+			AuthorizationExtent {
+				transactions: 0,
+				transactions_allowance: 3,
+				bytes: 0,
+				bytes_permanent: 0,
+				bytes_allowance: 512 * 1024,
+			},
 		);
 	});
 }
@@ -327,7 +339,13 @@ fn authorize_preimage_via_root_works() {
 		));
 		assert_eq!(
 			TransactionStorage::preimage_authorization_extent(content_hash),
-			AuthorizationExtent { transactions: 1, bytes: DEFAULT_MAX_TRANSACTION_SIZE as u64 },
+			AuthorizationExtent {
+				transactions: 0,
+				transactions_allowance: 1,
+				bytes: 0,
+				bytes_permanent: 0,
+				bytes_allowance: DEFAULT_MAX_TRANSACTION_SIZE as u64,
+			},
 		);
 	});
 }
