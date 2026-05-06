@@ -20,18 +20,27 @@ use bulletin_polkadot_runtime::{
 	xcm_config::{GovernanceLocation, LocationToAccountId, PeopleLocation},
 	Block, Runtime, RuntimeCall, RuntimeOrigin, System, TransactionStorage,
 };
-use pallet_bulletin_transaction_storage::DEFAULT_MAX_TRANSACTION_SIZE;
 use bulletin_transaction_storage_primitives::cids::{
 	calculate_cid, CidConfig, HashingAlgorithm, RAW_CODEC,
 };
-use frame_support::{assert_err, assert_noop, assert_ok, traits::Hooks};
-use pallet_bulletin_transaction_storage::AuthorizationExtent;
+use frame_support::{
+	assert_err, assert_noop, assert_ok, dispatch::GetDispatchInfo, traits::Hooks,
+};
+use pallet_bulletin_transaction_storage::{
+	extension::{AllowanceBasedPriority, ALLOWANCE_PRIORITY_BOOST},
+	AuthorizationExtent, AuthorizationScope, Call as TxStorageCall, DEFAULT_MAX_TRANSACTION_SIZE,
+	Origin as TxStorageOrigin,
+};
 use parachains_common::AccountId;
 use parachains_runtimes_test_utils::GovernanceOrigin;
 use sp_core::crypto::Ss58Codec;
 use sp_io::TestExternalities;
 use sp_keyring::Sr25519Keyring;
-use sp_runtime::Either;
+use sp_runtime::{
+	traits::{TransactionExtension, TxBaseImplication},
+	transaction_validity::{TransactionPriority, TransactionSource},
+	Either,
+};
 use std::collections::HashMap;
 use system_parachains_constants::polkadot::fee::WeightToFee;
 use xcm::latest::prelude::*;
@@ -420,5 +429,57 @@ fn transaction_storage_max_throughput_per_block() {
 			TransactionStorage::store(RuntimeOrigin::root(), vec![0u8; max_size + 1]),
 			pallet_bulletin_transaction_storage::Error::<Runtime>::BadDataSize,
 		);
+	});
+}
+
+#[test]
+fn allowance_based_priority_works() {
+	new_test_ext().execute_with(|| {
+		let who: AccountId = Sr25519Keyring::Eve.to_account_id();
+		// `ValidateStorageCalls` rewrites the origin to `Origin::Authorized` before
+		// `AllowanceBasedPriority` runs; build that origin directly here.
+		let origin: RuntimeOrigin = TxStorageOrigin::<Runtime>::Authorized {
+			who: who.clone(),
+			scope: AuthorizationScope::Account(who.clone()),
+		}
+		.into();
+		let store =
+			RuntimeCall::TransactionStorage(TxStorageCall::<Runtime>::store { data: vec![0u8; 1] });
+		let priority = |origin: RuntimeOrigin, call: &RuntimeCall| -> TransactionPriority {
+			let info = call.get_dispatch_info();
+			AllowanceBasedPriority::<Runtime>::default()
+				.validate(
+					origin,
+					call,
+					&info,
+					0,
+					(),
+					&TxBaseImplication(()),
+					TransactionSource::External,
+				)
+				.expect("validate should not fail")
+				.0
+				.priority
+		};
+
+		// No authorization → no boost.
+		assert_eq!(priority(origin.clone(), &store), 0);
+
+		// In-budget → flat boost.
+		assert_ok!(TransactionStorage::authorize_account(
+			RuntimeOrigin::root(),
+			who.clone(),
+			10,
+			4_000,
+		));
+		assert_eq!(priority(origin.clone(), &store), ALLOWANCE_PRIORITY_BOOST);
+
+		// `renew` carries `Origin::Authorized` too, but must not be boosted: only fresh
+		// `store`/`store_with_cid_config` submissions compete for the boost slots.
+		let renew = RuntimeCall::TransactionStorage(TxStorageCall::<Runtime>::renew {
+			block: 1,
+			index: 0,
+		});
+		assert_eq!(priority(origin, &renew), 0);
 	});
 }

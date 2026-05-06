@@ -2873,6 +2873,7 @@ dependencies = [
  "pallet-aura",
  "pallet-authorship",
  "pallet-balances",
+ "pallet-bulletin-hop-promotion",
  "pallet-bulletin-transaction-storage",
  "pallet-collator-selection",
  "pallet-message-queue",
@@ -2898,6 +2899,7 @@ dependencies = [
  "sp-consensus-aura",
  "sp-core 41.0.0",
  "sp-genesis-builder 0.23.0",
+ "sp-hop",
  "sp-inherents 42.0.0",
  "sp-io 46.0.0",
  "sp-keyring",
@@ -9957,6 +9959,24 @@ dependencies = [
  "sp-api 42.0.0",
  "sp-arithmetic",
  "sp-core 41.0.0",
+ "sp-runtime 47.0.0",
+]
+
+[[package]]
+name = "pallet-bulletin-hop-promotion"
+version = "0.2.0-draft"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6af9d8a4824dab9ae13aa3ac920410bd940503beef3c040a9aa9682bc6a10c29"
+dependencies = [
+ "bulletin-transaction-storage-primitives",
+ "frame-support",
+ "frame-system",
+ "pallet-bulletin-transaction-storage",
+ "pallet-timestamp",
+ "parity-scale-codec",
+ "polkadot-sdk-frame",
+ "scale-info",
+ "sp-io 46.0.0",
  "sp-runtime 47.0.0",
 ]
 
@@ -17163,6 +17183,17 @@ dependencies = [
  "parity-scale-codec",
  "scale-info",
  "serde_json",
+ "sp-api 42.0.0",
+ "sp-runtime 47.0.0",
+]
+
+[[package]]
+name = "sp-hop"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fca325b1970c01a8ba3b085cba67f6cb507dbb128e11a8ed248d6684edcd162a"
+dependencies = [
+ "parity-scale-codec",
  "sp-api 42.0.0",
  "sp-runtime 47.0.0",
 ]

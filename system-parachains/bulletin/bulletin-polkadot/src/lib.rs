@@ -128,6 +128,10 @@ pub type TxExtension = cumulus_pallet_weight_reclaim::StorageWeightReclaim<
 			Runtime,
 			storage::StorageCallInspector,
 		>,
+		pallet_bulletin_transaction_storage::extension::AllowanceBasedPriority<
+			Runtime,
+			pallet_bulletin_transaction_storage::extension::FlatBoost,
+		>,
 	),
 >;
 
@@ -502,6 +506,10 @@ where
 			pallet_bulletin_transaction_storage::extension::ValidateStorageCalls::<
 				Runtime,
 				storage::StorageCallInspector,
+			>::default(),
+			pallet_bulletin_transaction_storage::extension::AllowanceBasedPriority::<
+				Runtime,
+				pallet_bulletin_transaction_storage::extension::FlatBoost,
 			>::default(),
 		))
 	}
