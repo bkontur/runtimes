@@ -107,9 +107,10 @@ pub fn get_preset(id: &PresetId) -> Option<Vec<u8>> {
 			testnet_accounts(),
 			DOT * 1_000_000,
 			BULLETIN_PARA_ID,
-			// Local: seed Alice so zombienet tests can authorize without Root/XCM.
+			// Local: seed Eve so zombienet tests can authorize without Root/XCM
+			// (bulletin-chain integration tests authorize with //Eve).
 			vec![(
-				get_account_id_from_seed::<sr25519::Public>("Alice"),
+				get_account_id_from_seed::<sr25519::Public>("Eve"),
 				100_000,
 				100 * 1024 * 1024 * 1024,
 			)],
