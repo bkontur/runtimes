@@ -128,11 +128,7 @@ pub fn get_preset(id: &PresetId) -> Option<Vec<u8>> {
 			],
 			DOT * 1_000_000,
 			BULLETIN_PARA_ID,
-			vec![(
-				get_account_id_from_seed::<sr25519::Public>("Alice"),
-				100_000,
-				100 * 1024 * 1024 * 1024,
-			)],
+			Vec::new(),
 		),
 		_ => return None,
 	};
