@@ -56,7 +56,6 @@ fn bulletin_polkadot_live_genesis(id: ParaId) -> serde_json::Value {
 		Vec::new(),
 		0,
 		id,
-		// Live: governance adds authorizers post-launch.
 		Vec::new(),
 	)
 }
