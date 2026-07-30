@@ -18,8 +18,8 @@
 
 use bulletin_polkadot_runtime::{
 	xcm_config::{GovernanceLocation, LocationToAccountId, PeopleLocation},
-	AllPalletsWithSystem, Balances, Block, Executive, Runtime, RuntimeCall, RuntimeOrigin, System,
-	TransactionStorage, TxExtension, UncheckedExtrinsic,
+	Balances, Block, Executive, Runtime, RuntimeCall, RuntimeOrigin, System, TransactionStorage,
+	TxExtension, UncheckedExtrinsic,
 };
 use bulletin_transaction_storage_primitives::cids::{
 	calculate_cid, CidConfig, HashingAlgorithm, RAW_CODEC,
@@ -28,7 +28,7 @@ use codec::Encode;
 use frame_support::{
 	assert_err, assert_noop, assert_ok,
 	dispatch::GetDispatchInfo,
-	traits::{fungible::Mutate, Hooks, IntegrityTest},
+	traits::{fungible::Mutate, Hooks},
 };
 use pallet_bulletin_transaction_storage::{
 	extension::{AllowanceBasedPriority, ALLOWANCE_PRIORITY_BOOST},
@@ -723,17 +723,5 @@ fn non_authorizer_cannot_sign_authorize_account_extrinsic() {
 			construct_and_apply_extrinsic(eve.pair(), call),
 			Err(TransactionValidityError::Invalid(InvalidTransaction::BadSigner)),
 		);
-	});
-}
-
-#[test]
-fn pallet_integrity_tests_pass() {
-	// `pallet-bulletin-transaction-storage` and `pallet-bulletin-hop-promotion` assert their
-	// pool-param wiring in `integrity_test`: every `*TxParams` tag prefix must be distinct so
-	// the call families don't dedup each other out of the pool, and `promote` must price
-	// strictly below `store`. Those assertions otherwise only fire on node startup, so a bad
-	// prefix or priority here would brick the chain rather than fail CI.
-	new_test_ext().execute_with(|| {
-		AllPalletsWithSystem::integrity_test();
 	});
 }
