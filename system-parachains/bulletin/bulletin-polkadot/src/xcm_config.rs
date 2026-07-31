@@ -29,7 +29,7 @@ use frame_support::{
 	parameter_types,
 	traits::{
 		fungible::HoldConsideration, tokens::imbalance::ResolveTo, ConstU32, Contains, Equals,
-		Everything, LinearStoragePrice, Nothing,
+		Everything, EverythingBut, LinearStoragePrice, Nothing,
 	},
 };
 use frame_system::EnsureRoot;
@@ -244,7 +244,13 @@ impl xcm_executor::Config for XcmConfig {
 	type MessageExporter = ();
 	type UniversalAliases = Nothing;
 	type CallDispatcher = RuntimeCall;
-	type SafeCallFilter = Everything;
+	// Storage-mutating calls (`store`, `store_with_cid_config`, `renew`, including when nested in
+	// `Utility` wrappers) require on-chain authorization that XCM cannot provide, so they must
+	// not be dispatchable via `Transact`.
+	// Storage-mutating calls (`store`, `store_with_cid_config`, `renew`, including when nested in
+	// `Utility` wrappers) require on-chain authorization that XCM cannot provide, so they must
+	// not be dispatchable via `Transact`.
+	type SafeCallFilter = EverythingBut<crate::storage::StorageCallInspector>;
 	type Aliasers = TrustedAliasers;
 	type TransactionalProcessor = FrameTransactionalProcessor;
 	type HrmpNewChannelOpenRequestHandler = ();
