@@ -244,12 +244,8 @@ impl xcm_executor::Config for XcmConfig {
 	type MessageExporter = ();
 	type UniversalAliases = Nothing;
 	type CallDispatcher = RuntimeCall;
-	// Storage-mutating calls (`store`, `store_with_cid_config`, `renew`, including when nested in
-	// `Utility` wrappers) require on-chain authorization that XCM cannot provide, so they must
-	// not be dispatchable via `Transact`.
-	// Storage-mutating calls (`store`, `store_with_cid_config`, `renew`, including when nested in
-	// `Utility` wrappers) require on-chain authorization that XCM cannot provide, so they must
-	// not be dispatchable via `Transact`.
+	// Storage calls (`store`, `store_with_cid_config`, `renew`) cannot be dispatched over XCM.
+	// TODO: renew over XCM - https://github.com/paritytech/polkadot-bulletin-chain/issues/342
 	type SafeCallFilter = EverythingBut<crate::storage::StorageCallInspector>;
 	type Aliasers = TrustedAliasers;
 	type TransactionalProcessor = FrameTransactionalProcessor;
