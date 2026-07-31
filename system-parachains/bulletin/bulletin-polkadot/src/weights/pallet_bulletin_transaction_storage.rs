@@ -21,10 +21,6 @@
 //! WORST CASE MAP SIZE: `1000000`
 //! HOSTNAME: `400326827deb`, CPU: `Intel(R) Xeon(R) CPU @ 2.60GHz`
 //! WASM-EXECUTION: `Compiled`, CHAIN: `None`, DB CACHE: 1024
-//!
-//! `store_with_cid_config` was added by hand, copied from `store` (identical storage
-//! footprint) so the runtime compiles against pallet 0.7.0-draft. Regenerate with the
-//! bench bot to get measured numbers.
 
 // Executed Command:
 // frame-omni-bencher
