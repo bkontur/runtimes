@@ -18,4 +18,3 @@ mod aliases;
 mod claim_assets;
 mod storage;
 mod teleport;
-mod transact;
