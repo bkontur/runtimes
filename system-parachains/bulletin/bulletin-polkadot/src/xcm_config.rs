@@ -244,7 +244,7 @@ impl xcm_executor::Config for XcmConfig {
 	type MessageExporter = ();
 	type UniversalAliases = Nothing;
 	type CallDispatcher = RuntimeCall;
-	// Storage calls (`store`, `store_with_cid_config`, `renew`) cannot be dispatched over XCM.
+	// Storage calls (`store*`, `renew*`) cannot be dispatched over XCM.
 	// TODO: renew over XCM - https://github.com/paritytech/polkadot-bulletin-chain/issues/342
 	type SafeCallFilter = EverythingBut<crate::storage::StorageCallInspector>;
 	type Aliasers = TrustedAliasers;
