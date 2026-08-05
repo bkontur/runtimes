@@ -583,7 +583,20 @@ impl_runtime_apis! {
 		fn account_authorization(
 			account: AccountId,
 		) -> Option<pallet_bulletin_transaction_storage_runtime_api::AccountAuthorization<BlockNumber>> {
-			pallet_bulletin_transaction_storage::Pallet::<Runtime>::account_authorization(account)
+			// Composed here rather than in the pallet: upstream builds this summary in
+			// `pallet-bulletin-data-renewal`, which this chain does not ship. Without renewal
+			// nothing ever consumes permanent storage, so `bytes_permanent_used` is always 0.
+			let auth = pallet_bulletin_transaction_storage::Pallet::<Runtime>::get_active_authorization(
+				&pallet_bulletin_transaction_storage::AuthorizationScope::Account(account),
+			)?;
+			Some(pallet_bulletin_transaction_storage_runtime_api::AccountAuthorization {
+				expires_at: auth.expiration,
+				bytes_allowance: auth.extent.bytes_allowance,
+				bytes_used: auth.extent.bytes,
+				bytes_permanent_used: 0,
+				transactions_allowance: auth.extent.transactions_allowance,
+				transactions_used: auth.extent.transactions,
+			})
 		}
 
 		fn can_store(account: AccountId, data_len: u32) -> bool {
@@ -591,10 +604,12 @@ impl_runtime_apis! {
 		}
 
 		fn can_renew(
-			account: AccountId,
-			entry: pallet_bulletin_transaction_storage::TransactionRef<BlockNumber>,
+			_account: AccountId,
+			_entry: pallet_bulletin_transaction_storage::TransactionRef<BlockNumber>,
 		) -> bool {
-			pallet_bulletin_transaction_storage::Pallet::<Runtime>::can_renew(&account, &entry)
+			// `renew` lives in `pallet-bulletin-data-renewal`, which this chain does not ship,
+			// so no renewal call can ever pass validation here.
+			false
 		}
 	}
 

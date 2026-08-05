@@ -31,17 +31,10 @@ use pallet_bulletin_transaction_storage::{
 use pallet_xcm::EnsureXcm;
 use sp_runtime::transaction_validity::{TransactionLongevity, TransactionPriority};
 
-parameter_types! {
-	/// Cap on the total bytes committed to permanent storage (via `renew`) across all
-	/// authorizations on this chain. Seeded at 1.7 TiB; storage-backed so governance
-	/// (root) can raise/lower it via `system.set_storage` without a runtime upgrade.
-	pub storage MaxPermanentStorageSize: u64 = 17 * 1024 * 1024 * 1024 * 1024 / 10;
-}
-
 // Permissionless cleanup sits at the top so it always runs before stores compete for
 // blockspace.
 const CLEANUP_PRIORITY: TransactionPriority = TransactionPriority::MAX;
-// Base priority for `store` / `renew`. Picked well below `TransactionPriority::MAX` so
+// Base priority for `store`. Picked well below `TransactionPriority::MAX` so
 // `AllowanceBasedPriority` can add its boost without saturating `u64`, while still
 // leaving plenty of headroom above generic transactions.
 const STORE_PRIORITY: TransactionPriority = TransactionPriority::MAX / 4;
@@ -55,8 +48,6 @@ parameter_types! {
 	// the pool.
 	pub const StoreTxParams: ValidTransactionParams =
 		ValidTransactionParams::new("TransactionStorageStore", STORE_PRIORITY, TX_LONGEVITY);
-	pub const RenewTxParams: ValidTransactionParams =
-		ValidTransactionParams::new("TransactionStorageRenew", STORE_PRIORITY, TX_LONGEVITY);
 	pub const AuthorizeTxParams: ValidTransactionParams =
 		ValidTransactionParams::new("TransactionStorageAuthorize", STORE_PRIORITY, TX_LONGEVITY);
 	pub const RemoveExpiredAccountAuthorizationTxParams: ValidTransactionParams =
@@ -79,12 +70,12 @@ parameter_types! {
 		);
 }
 
-/// Tells [`pallet_bulletin_transaction_storage::extension::ValidateStorageCalls`] how to find
+/// Tells [`pallet_bulletin_transaction_storage::extension::ValidateAuthorizedCalls`] how to find
 /// storage calls inside wrapper extrinsics so it can recursively validate and consume
 /// authorization.
 ///
 /// Also implements [`Contains<RuntimeCall>`] returning `true` for storage-mutating calls
-/// (store, store_with_cid_config, renew). Used with `EverythingBut` as the XCM
+/// (store, store_with_cid_config). Used with `EverythingBut` as the XCM
 /// `SafeCallFilter` to block these calls from XCM dispatch — they require on-chain
 /// authorization that XCM cannot provide.
 #[derive(Clone, PartialEq, Eq, Default)]
@@ -102,8 +93,9 @@ impl pallet_bulletin_transaction_storage::CallInspector<Runtime> for StorageCall
 	}
 }
 
-/// Returns `true` for storage-mutating TransactionStorage calls (store, store_with_cid_config,
-/// renew). Recursively inspects wrapper calls (Utility) to prevent bypass via nesting.
+/// Returns `true` for storage-mutating TransactionStorage calls (store,
+/// store_with_cid_config). Recursively inspects wrapper calls (Utility) to prevent bypass via
+/// nesting.
 /// Used with `EverythingBut` as the XCM `SafeCallFilter`.
 impl Contains<RuntimeCall> for StorageCallInspector {
 	fn contains(call: &RuntimeCall) -> bool {
@@ -121,7 +113,6 @@ impl pallet_bulletin_transaction_storage::Config for Runtime {
 	type WeightInfo = crate::weights::pallet_bulletin_transaction_storage::WeightInfo<Runtime>;
 	type MaxBlockTransactions = crate::ConstU32<{ DEFAULT_MAX_BLOCK_TRANSACTIONS }>;
 	type MaxTransactionSize = crate::ConstU32<{ DEFAULT_MAX_TRANSACTION_SIZE }>;
-	type MaxPermanentStorageSize = MaxPermanentStorageSize;
 	type AuthorizationPeriod = AuthorizationPeriod;
 	type AuthorizerRegistrarOrigin = frame_system::EnsureRoot<Self::AccountId>;
 	type Authorizer = EitherOf<
@@ -144,11 +135,15 @@ impl pallet_bulletin_transaction_storage::Config for Runtime {
 		EnsureAllowedAuthorizers<Runtime>,
 	>;
 	type StoreTxParams = StoreTxParams;
-	type RenewTxParams = RenewTxParams;
 	type AuthorizeTxParams = AuthorizeTxParams;
 	type RemoveExpiredAccountAuthorizationTxParams = RemoveExpiredAccountAuthorizationTxParams;
 	type RemoveExpiredPreimageAuthorizationTxParams = RemoveExpiredPreimageAuthorizationTxParams;
 	type RemoveExhaustedAuthorizerTxParams = RemoveExhaustedAuthorizerTxParams;
+	// Renewal is not shipped on this chain: `pallet-bulletin-data-renewal` is not wired in, so
+	// the renewal-facing hooks stay at their no-op defaults and entries simply age out.
+	type EntryMeta = ();
+	type AuthorizationExtra = ();
+	type OnObsoleteTransactions = ();
 	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = pallet_bulletin_transaction_storage::benchmarking::DefaultCheckProofHelper;
 }

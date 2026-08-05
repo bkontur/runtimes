@@ -124,9 +124,12 @@ pub type TxExtension = cumulus_pallet_weight_reclaim::StorageWeightReclaim<
 			pallet_transaction_payment::ChargeTransactionPayment<Runtime>,
 		>,
 		frame_metadata_hash_extension::CheckMetadataHash<Runtime>,
-		pallet_bulletin_transaction_storage::extension::ValidateStorageCalls<
+		// Walks the call tree once and dispatches each leaf to the storage validator. Renewal
+		// is not shipped here, so `StorageLeaves` is the only leaf validator.
+		pallet_bulletin_transaction_storage::extension::ValidateAuthorizedCalls<
 			Runtime,
 			storage::StorageCallInspector,
+			(pallet_bulletin_transaction_storage::extension::StorageLeaves<Runtime>,),
 		>,
 		pallet_bulletin_transaction_storage::extension::AllowanceBasedPriority<
 			Runtime,
@@ -504,9 +507,10 @@ where
 				pallet_transaction_payment::ChargeTransactionPayment::<Runtime>::from(0),
 			),
 			frame_metadata_hash_extension::CheckMetadataHash::<Runtime>::new(false),
-			pallet_bulletin_transaction_storage::extension::ValidateStorageCalls::<
+			pallet_bulletin_transaction_storage::extension::ValidateAuthorizedCalls::<
 				Runtime,
 				storage::StorageCallInspector,
+				(pallet_bulletin_transaction_storage::extension::StorageLeaves<Runtime>,),
 			>::default(),
 			pallet_bulletin_transaction_storage::extension::AllowanceBasedPriority::<
 				Runtime,

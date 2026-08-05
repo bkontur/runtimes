@@ -100,7 +100,7 @@ fn people_chain_can_authorize_account_on_bulletin() {
 				transactions: 0,
 				transactions_allowance: transactions,
 				bytes: 0,
-				bytes_permanent: 0,
+				extra: (),
 				bytes_allowance: bytes,
 			},
 		);
