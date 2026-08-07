@@ -68,4 +68,26 @@ impl<T: frame_system::Config> pallet_bulletin_hop_promotion::WeightInfo for Weig
 			.saturating_add(Weight::from_parts(1_510, 0).saturating_mul(d.into()))
 			.saturating_add(T::DbWeight::get().reads(3))
 	}
+	// PROVISIONAL: taken from the bulletin-westend reference weights. Re-run the benchmarks
+	// for this runtime before release.
+	/// Storage: `TransactionStorage::BlockTransactions` (r:1 w:0)
+	/// Proof: `TransactionStorage::BlockTransactions` (`max_values`: Some(1), `max_size`: Some(44034), added: 44529, mode: `MaxEncodedLen`)
+	/// Storage: `Timestamp::Now` (r:1 w:0)
+	/// Proof: `Timestamp::Now` (`max_values`: Some(1), `max_size`: Some(8), added: 503, mode: `MaxEncodedLen`)
+	/// Storage: `TransactionStorage::Authorizations` (r:1 w:0)
+	/// Proof: `TransactionStorage::Authorizations` (`max_values`: None, `max_size`: Some(85), added: 2560, mode: `MaxEncodedLen`)
+	/// Storage: `System::BlockHash` (r:1 w:0)
+	/// Proof: `System::BlockHash` (`max_values`: None, `max_size`: Some(44), added: 2519, mode: `MaxEncodedLen`)
+	/// The range of component `d` is `[1, 2097152]`.
+	fn authorize_promote_v2(d: u32, ) -> Weight {
+		// Proof Size summary in bytes:
+		//  Measured:  `444`
+		//  Estimated: `45519`
+		// Minimum execution time: 62_805_000 picoseconds.
+		Weight::from_parts(63_711_000, 0)
+			.saturating_add(Weight::from_parts(0, 45519))
+			// Standard Error: 6
+			.saturating_add(Weight::from_parts(1_689, 0).saturating_mul(d.into()))
+			.saturating_add(T::DbWeight::get().reads(4))
+	}
 }
