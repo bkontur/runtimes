@@ -145,6 +145,7 @@ impl pallet_bulletin_transaction_storage::Config for Runtime {
 	type AuthorizationExtra = ();
 	type OnObsoleteTransactions = ();
 	#[cfg(feature = "runtime-benchmarks")]
+    // TODO: just comment for me - use RenewalBenchmarkHelper when 0-9-0-draft
 	type BenchmarkHelper = pallet_bulletin_transaction_storage::benchmarking::DefaultCheckProofHelper;
 }
 
