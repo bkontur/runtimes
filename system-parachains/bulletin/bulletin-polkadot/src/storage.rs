@@ -82,11 +82,6 @@ parameter_types! {
 /// Tells [`pallet_bulletin_transaction_storage::extension::ValidateAuthorizedCalls`] how to find
 /// storage calls inside wrapper extrinsics so it can recursively validate and consume
 /// authorization.
-///
-/// Also implements [`Contains<RuntimeCall>`] returning `true` for storage-mutating calls
-/// (store, store_with_cid_config, renew, force_renew, enable_auto_renew). Used with
-/// `EverythingBut` as the XCM `SafeCallFilter` to block these calls from XCM dispatch — they
-/// require on-chain authorization that XCM cannot provide.
 #[derive(Clone, PartialEq, Eq, Default)]
 pub struct StorageCallInspector;
 
@@ -102,10 +97,8 @@ impl pallet_bulletin_transaction_storage::CallInspector<Runtime> for StorageCall
 	}
 }
 
-/// Returns `true` for calls that commit data to storage — the TransactionStorage stores plus
-/// the renewals that extend their retention. Recursively inspects wrapper calls (Utility) to
-/// prevent bypass via nesting.
-/// Used with `EverythingBut` as the XCM `SafeCallFilter`.
+/// XCM `SafeCallFilter` (via `EverythingBut`): `true` for calls that commit data — stores plus
+/// renewals — including inside `Utility` wrappers.
 impl Contains<RuntimeCall> for StorageCallInspector {
 	fn contains(call: &RuntimeCall) -> bool {
 		Self::is_storage_mutating_call(call, 0) || Self::is_renewal_committing_call(call, 0)
@@ -113,38 +106,57 @@ impl Contains<RuntimeCall> for StorageCallInspector {
 }
 
 impl StorageCallInspector {
-	/// Renewal counterpart to
-	/// [`CallInspector::is_storage_mutating_call`], which only knows the storage pallet's own
-	/// calls — the pallet leaves renewals to the runtime.
+	/// Renewal counterpart to [`CallInspector::is_storage_mutating_call`], which only knows the
+	/// storage pallet's own calls.
 	///
-	/// These have to be claimed explicitly rather than left to each dispatchable's origin
-	/// check: `ensure_authorized` accepts Root, and `LocationAsSuperuser` hands Root to
-	/// `Transact` from the Relay Chain and Asset Hub, so `force_renew` over XCM would commit
-	/// permanent bytes against no authorization at all. `disable_auto_renew` is deliberately
-	/// absent — it releases a registration rather than committing one, and Root needs it for
-	/// governance cleanup.
+	/// Needed because `ensure_authorized` accepts Root and `LocationAsSuperuser` hands Root to
+	/// Relay/Asset Hub `Transact` — an XCM `force_renew` would otherwise commit permanent bytes
+	/// for free.
+	///
+	/// Phrased as an allowlist so a dispatchable added by a future pallet bump is blocked, not
+	/// silently exposed.
+	// TODO(upstream): drop this once the pallets expose a composable committing-call predicate,
+	// so the walk and the call lists live in one place.
 	fn is_renewal_committing_call(call: &RuntimeCall, depth: u32) -> bool {
 		use pallet_bulletin_data_renewal::Call as RenewalCall;
 		if let RuntimeCall::DataRenewal(inner) = call {
-			return matches!(
+			return !matches!(
 				inner,
-				RenewalCall::renew { .. } |
-					RenewalCall::force_renew { .. } |
-					RenewalCall::enable_auto_renew { .. }
+				// Releases a registration rather than committing one; Root needs it for cleanup.
+				RenewalCall::disable_auto_renew { .. } |
+					// Mandatory inherent — `ensure_none` rejects any `Transact` origin anyway.
+					RenewalCall::process_pending_renewals { .. }
 			);
 		}
-		if depth >= MAX_WRAPPER_DEPTH {
-			// Same fail-safe as the storage-call walk: treat excessively nested wrappers as
-			// committing rather than risk letting a hidden renewal through.
-			return true;
-		}
 		<Self as CallInspector<Runtime>>::inspect_wrapper(call).is_some_and(|inner_calls| {
-			inner_calls
-				.into_iter()
-				.any(|inner| Self::is_renewal_committing_call(inner, depth + 1))
+			// Fail-safe matching the storage-call walk: a wrapper too deep to inspect counts as
+			// committing. Only wrappers — anything else is left to that walk's own verdict.
+			depth >= MAX_WRAPPER_DEPTH ||
+				inner_calls
+					.into_iter()
+					.any(|inner| Self::is_renewal_committing_call(inner, depth + 1))
 		})
 	}
 }
+
+/// One extension for both pallets' authorization-gated calls: each leaf of the call tree is
+/// offered to `StorageLeaves`, then `RenewalLeaves`.
+pub type ValidateBulletinCalls =
+	pallet_bulletin_transaction_storage::extension::ValidateAuthorizedCalls<
+		Runtime,
+		StorageCallInspector,
+		(
+			pallet_bulletin_transaction_storage::extension::StorageLeaves<Runtime>,
+			pallet_bulletin_data_renewal::extension::RenewalLeaves<Runtime>,
+		),
+	>;
+
+/// Priority boost for in-allowance stores.
+pub type StoragePriorityBoost =
+	pallet_bulletin_transaction_storage::extension::AllowanceBasedPriority<
+		Runtime,
+		pallet_bulletin_transaction_storage::extension::FlatBoost,
+	>;
 
 /// The main business of the Bulletin chain.
 impl pallet_bulletin_transaction_storage::Config for Runtime {
@@ -178,11 +190,9 @@ impl pallet_bulletin_transaction_storage::Config for Runtime {
 	type RemoveExpiredAccountAuthorizationTxParams = RemoveExpiredAccountAuthorizationTxParams;
 	type RemoveExpiredPreimageAuthorizationTxParams = RemoveExpiredPreimageAuthorizationTxParams;
 	type RemoveExhaustedAuthorizerTxParams = RemoveExhaustedAuthorizerTxParams;
-	// Opaque payloads owned by the renewal pallet: `EntryKind` marks which entries were
-	// appended by a renewal, `PermanentExtent` carries the per-authorization renewed-byte
-	// counter, and `DataRenewal` gets the expiry sweep so registered entries are requeued.
 	type EntryMeta = bulletin_transaction_storage_primitives::EntryKind;
 	type AuthorizationExtra = pallet_bulletin_data_renewal::PermanentExtent;
+	// Hands the expiry sweep to the renewal pallet, so registered entries are requeued.
 	type OnObsoleteTransactions = crate::DataRenewal;
 	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = pallet_bulletin_data_renewal::RenewalBenchmarkHelper;

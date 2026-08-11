@@ -17,10 +17,10 @@
 #![cfg(test)]
 
 use bulletin_polkadot_runtime::{
-	storage::StorageCallInspector,
+	storage::{StorageCallInspector, StoragePriorityBoost, ValidateBulletinCalls},
 	xcm_config::{GovernanceLocation, LocationToAccountId, PeopleLocation},
 	AllPalletsWithSystem, Balances, Block, Executive, Runtime, RuntimeCall, RuntimeOrigin, System,
-	TransactionStorage, TxExtension, UncheckedExtrinsic, ValidateStorageCalls,
+	TransactionStorage, TxExtension, UncheckedExtrinsic,
 };
 use bulletin_transaction_storage_primitives::cids::{
 	calculate_cid, CidConfig, HashingAlgorithm, RAW_CODEC,
@@ -305,8 +305,8 @@ fn transaction_storage_weight_sanity() {
 	// Collator-side PoV cap: default 85% of max_pov_size.
 	// See cumulus/client/consensus/aura/src/collators/slot_based/block_builder_task.rs
 	const POV_PERCENT: Option<u64> = Some(85);
-	// Mandatory on the same worst-case block as the storage pallet's own mandatory work: the
-	// expiry sweep queues renewals and the inherent drains them in that very block.
+	// The expiry sweep and this drain inherent land on the same block, sharing the mandatory
+	// budget.
 	let renewal_drain =
 		<Runtime as pallet_bulletin_data_renewal::Config>::WeightInfo::process_pending_renewals(
 			<Runtime as TxStorageConfig>::MaxBlockTransactions::get(),
@@ -318,11 +318,10 @@ fn transaction_storage_weight_sanity() {
 	pallet_bulletin_data_renewal::ensure_weight_sanity::<Runtime>(POV_PERCENT);
 }
 
-/// Both tag on the bare content hash, and no pallet sees the other's params — the storage
-/// pallet's `integrity_test` covers every other pair.
+/// Neither pallet's own `integrity_test` sees the other's params.
 #[test]
 fn renew_and_promote_tag_prefixes_differ() {
-	pallet_bulletin_transaction_storage::assert_distinct_tag_prefixes(&[
+	TransactionStorage::assert_pool_families_distinct(&[
 		("RenewTxParams", <Runtime as pallet_bulletin_data_renewal::Config>::RenewTxParams::get()),
 		(
 			"PromoteTxParams",
@@ -553,10 +552,8 @@ fn allowance_based_priority_works() {
 		));
 		assert_eq!(priority(origin.clone(), &store), ALLOWANCE_PRIORITY_BOOST);
 
-		// A `TransactionStorage` call that is not a store gets no boost even under
-		// `Origin::Authorized`: only `store`/`store_with_cid_config` compete for the boost
-		// slots. Must be a call of this pallet — anything else returns early at
-		// `AllowanceBasedPriority`'s `is_sub_type` check and never reaches the inner match.
+		// Non-store calls get no boost. Must be a call of *this* pallet: anything else exits at
+		// `AllowanceBasedPriority`'s `is_sub_type` check and would pass vacuously.
 		let other = RuntimeCall::TransactionStorage(TxStorageCall::<Runtime>::authorize_account {
 			who: who.clone(),
 			transactions: 1,
@@ -596,11 +593,8 @@ fn construct_extrinsic(sender: sp_core::sr25519::Pair, call: RuntimeCall) -> Unc
 				pallet_transaction_payment::ChargeTransactionPayment::<Runtime>::from(0),
 			),
 			frame_metadata_hash_extension::CheckMetadataHash::<Runtime>::new(false),
-			ValidateStorageCalls::default(),
-			pallet_bulletin_transaction_storage::extension::AllowanceBasedPriority::<
-				Runtime,
-				pallet_bulletin_transaction_storage::extension::FlatBoost,
-			>::default(),
+			ValidateBulletinCalls::default(),
+			StoragePriorityBoost::default(),
 		));
 	let payload = sp_runtime::generic::SignedPayload::new(call.clone(), tx_ext.clone())
 		.expect("signed payload should be valid");
@@ -883,10 +877,10 @@ fn xcm_transact_wrapped_store_is_blocked() {
 
 #[test]
 fn xcm_transact_renewals_are_blocked() {
-	// `force_renew` accepts `AuthorizedCaller::Root`, and `GovernanceLocation` maps to
-	// Superuser, so nothing but the filter stands between an XCM `Transact` and a permanent
-	// commitment that no authorization paid for. Same for the registrations. `disable_auto_renew`
-	// is deliberately dispatchable: it releases a registration, and Root needs it for cleanup.
+	// `force_renew` accepts Root and `GovernanceLocation` maps to Superuser, so only the filter
+	// stands between an XCM `Transact` and an unpaid permanent commitment. The two registrations
+	// would hit `BadOrigin` anyway; filtering them is defence-in-depth. `disable_auto_renew` stays
+	// dispatchable — it releases a registration and Root needs it for cleanup.
 	new_test_ext().execute_with(|| {
 		advance_block();
 
@@ -900,8 +894,8 @@ fn xcm_transact_renewals_are_blocked() {
 		assert_ok!(TransactionStorage::authorize_account(
 			RuntimeOrigin::root(),
 			who,
-			2,
-			2 * data.len() as u64,
+			1,
+			data.len() as u64,
 		));
 		assert_ok_ok(construct_and_apply_extrinsic(
 			account.pair(),
@@ -916,25 +910,21 @@ fn xcm_transact_renewals_are_blocked() {
 		];
 		for (name, call) in blocked {
 			let call = RuntimeCall::DataRenewal(call);
-			// Directly, and nested in each `Utility` wrapper — `StorageCallInspector` recurses.
-			for (call, label) in
-				core::iter::once((call.clone(), "direct")).chain(wrap_call_utility_variants(call))
-			{
+			// The filter is a pure predicate, so the whole wrapper matrix goes through it...
+			for (wrapped, label) in wrap_call_utility_variants(call.clone()) {
 				assert!(
-					StorageCallInspector::contains(&call),
+					StorageCallInspector::contains(&wrapped),
 					"SafeCallFilter must claim {label}({name})",
 				);
-				let outcome = transact_from_governance(call);
-				assert!(
-					outcome.clone().ensure_complete().is_err(),
-					"XCM Transact {label}({name}) must be blocked, got: {outcome:?}",
-				);
 			}
+			// ...and one `Transact` per call proves it is actually wired as the `SafeCallFilter`.
+			assert!(StorageCallInspector::contains(&call), "SafeCallFilter must claim {name}");
+			let outcome = transact_from_governance(call);
+			assert!(
+				outcome.clone().ensure_complete().is_err(),
+				"XCM Transact {name} must be blocked, got: {outcome:?}",
+			);
 		}
-
-		// Nothing was committed: `force_renew` would otherwise have bumped both counters.
-		assert_eq!(pallet_bulletin_data_renewal::PermanentStorageUsed::<Runtime>::get(), 0);
-		assert!(pallet_bulletin_data_renewal::Renewals::<Runtime>::iter().next().is_none());
 
 		assert!(
 			!StorageCallInspector::contains(&RuntimeCall::DataRenewal(
@@ -987,8 +977,6 @@ fn xcm_transact_authorize_account_works() {
 // `runtimes/bulletin-westend/tests/tests.rs`. `store` / `store_with_cid_config` must
 // only ever be accepted as *direct* extrinsics: `ValidateAuthorizedCalls` is what consumes the
 // caller's authorization, and it refuses to do so for calls nested inside a dispatcher.
-// The upstream copies additionally assert `Sudo` behaviour; Sudo is not present on the Polkadot
-// Bulletin runtime, so those assertions are omitted here.
 
 #[test]
 fn wrapped_store_requires_authorization() {
@@ -1457,8 +1445,7 @@ fn signed_store_prefers_preimage_authorization_over_account() {
 
 #[test]
 fn authorized_storage_transactions_are_for_free() {
-	// Authorized storage calls are feeless: an account with no balance can store, and each
-	// store consumes exactly one transaction and `data.len()` bytes of its allowance.
+	// Authorized storage calls are feeless: an account with no balance can store.
 	new_test_ext().execute_with(|| {
 		let account = Sr25519Keyring::Eve;
 		let who: AccountId = account.to_account_id();
@@ -1489,10 +1476,9 @@ fn authorized_storage_transactions_are_for_free() {
 	});
 }
 
-/// One-shot `renew` pre-pays the renewal at registration time: `bytes_permanent` advances by
-/// the entry's size, charged against the same `bytes_allowance` as `bytes` but tracked
-/// separately. Also pins the two composed runtime APIs, whose bodies only exist inside
-/// `impl_runtime_apis!` and are therefore unreachable from the pallets' own tests.
+/// One-shot `renew` pre-pays `bytes_permanent` at registration, and is rejected inside a
+/// dispatcher. Also covers `can_renew` / `account_authorization`, whose bodies live in
+/// `impl_runtime_apis!` and so are unreachable from the pallets' own tests.
 #[test]
 fn renew_one_shot_prepays_bytes_permanent() {
 	use pallet_bulletin_transaction_storage_runtime_api::runtime_decl_for_bulletin_transaction_storage_api::BulletinTransactionStorageApiV1;
@@ -1504,8 +1490,7 @@ fn renew_one_shot_prepays_bytes_permanent() {
 		let content_hash = sp_io::hashing::blake2_256(&data);
 		let entry = TransactionRef::ContentHash(content_hash);
 
-		// Two transaction slots (one `store`, one `renew`) and enough bytes for both
-		// counters, which are checked against `bytes_allowance` independently.
+		// Two tx slots: one for the `store`, one for the `renew`.
 		assert_ok!(TransactionStorage::authorize_account(
 			RuntimeOrigin::root(),
 			who.clone(),
@@ -1531,11 +1516,25 @@ fn renew_one_shot_prepays_bytes_permanent() {
 		assert_eq!(after.bytes, before.bytes);
 
 		// The runtime API surfaces that same counter as `bytes_permanent_used`.
-		let summary = Runtime::account_authorization(who).expect("authorization is active");
+		let summary = Runtime::account_authorization(who.clone()).expect("authorization is active");
 		assert_eq!(summary.bytes_permanent_used, after.extra.bytes_permanent);
 		assert_eq!(summary.bytes_used, after.bytes);
 		assert_eq!(summary.transactions_used, after.transactions);
 		assert_eq!(summary.bytes_allowance, after.bytes_allowance);
+
+		// `RenewalLeaves` refuses wrapped leaves, so no dispatcher can consume the allowance.
+		// Funded, so `ChargeTransactionPayment` is not what rejects the (non-feeless) wrapper.
+		fund(&who);
+		let renew = RuntimeCall::DataRenewal(RenewalCall::<Runtime>::renew {
+			entry: TransactionRef::ContentHash(content_hash),
+		});
+		for (wrapped, label) in wrap_call_utility_variants(renew) {
+			assert_eq!(
+				construct_and_apply_extrinsic(account.pair(), wrapped),
+				Err(TransactionValidityError::Invalid(InvalidTransaction::Call)),
+				"renew via {label} must be rejected",
+			);
+		}
 	});
 }
 

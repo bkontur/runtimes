@@ -18,15 +18,6 @@
 use super::*;
 
 /// Unreleased migrations. Add new ones here:
-///
-/// NOTE: `pallet-bulletin-data-renewal` enters this runtime at genesis, so
-/// `pallet_bulletin_data_renewal::migrations::RelocateFromTransactionStorage` — which the
-/// upstream bulletin runtimes wire to move `AutoRenewals`/`PendingAutoRenewals`/
-/// `PermanentStorageUsed` out of the `TransactionStorage` prefix — is intentionally not wired
-/// here: there is no pre-split state to relocate. The same premise covers the
-/// `AuthorizationExtra` layout change (`()` → `PermanentExtent`, 0 → 8 bytes per
-/// `Authorizations` entry), which is likewise unmigrated. Both need revisiting if this runtime
-/// is ever deployed onto a chain that already carries `TransactionStorage` state.
 pub type Unreleased = (
 	// Initialize TransactionStorage retention period on first upgrade.
 	pallet_bulletin_transaction_storage::migrations::SetRetentionPeriodIfZero<

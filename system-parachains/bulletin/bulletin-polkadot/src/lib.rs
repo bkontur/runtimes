@@ -107,20 +107,6 @@ pub type SignedBlock = generic::SignedBlock<Block>;
 /// BlockId type as expected by this runtime.
 pub type BlockId = generic::BlockId<Block>;
 
-/// Single extension that walks the call tree once and dispatches each leaf to either
-/// pallet's validator. The tuple order is load-bearing — each leaf is offered to the
-/// elements in turn until one claims it — so [`TxExtension`], `create_extension` and the
-/// test harness all go through this alias rather than respelling the tuple.
-pub type ValidateStorageCalls =
-	pallet_bulletin_transaction_storage::extension::ValidateAuthorizedCalls<
-		Runtime,
-		storage::StorageCallInspector,
-		(
-			pallet_bulletin_transaction_storage::extension::StorageLeaves<Runtime>,
-			pallet_bulletin_data_renewal::extension::RenewalLeaves<Runtime>,
-		),
-	>;
-
 /// The TransactionExtension to the basic transaction logic.
 pub type TxExtension = cumulus_pallet_weight_reclaim::StorageWeightReclaim<
 	Runtime,
@@ -138,11 +124,8 @@ pub type TxExtension = cumulus_pallet_weight_reclaim::StorageWeightReclaim<
 			pallet_transaction_payment::ChargeTransactionPayment<Runtime>,
 		>,
 		frame_metadata_hash_extension::CheckMetadataHash<Runtime>,
-		ValidateStorageCalls,
-		pallet_bulletin_transaction_storage::extension::AllowanceBasedPriority<
-			Runtime,
-			pallet_bulletin_transaction_storage::extension::FlatBoost,
-		>,
+		storage::ValidateBulletinCalls,
+		storage::StoragePriorityBoost,
 	),
 >;
 
@@ -515,11 +498,8 @@ where
 				pallet_transaction_payment::ChargeTransactionPayment::<Runtime>::from(0),
 			),
 			frame_metadata_hash_extension::CheckMetadataHash::<Runtime>::new(false),
-			ValidateStorageCalls::default(),
-			pallet_bulletin_transaction_storage::extension::AllowanceBasedPriority::<
-				Runtime,
-				pallet_bulletin_transaction_storage::extension::FlatBoost,
-			>::default(),
+			storage::ValidateBulletinCalls::default(),
+			storage::StoragePriorityBoost::default(),
 		))
 	}
 }
@@ -580,8 +560,7 @@ mod runtime {
 	pub type TransactionStorage = pallet_bulletin_transaction_storage;
 	#[runtime::pallet_index(41)]
 	pub type HopPromotion = pallet_bulletin_hop_promotion;
-	// TODO: we may want to disable renewals for the initial launch — decide before release
-	// whether to ship this pallet or wire it in a later runtime upgrade.
+	// TODO: decide before release whether to ship renewals at launch or in a later upgrade.
 	#[runtime::pallet_index(42)]
 	pub type DataRenewal = pallet_bulletin_data_renewal;
 
