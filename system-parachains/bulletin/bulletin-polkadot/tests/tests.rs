@@ -17,9 +17,10 @@
 #![cfg(test)]
 
 use bulletin_polkadot_runtime::{
+	storage::StorageCallInspector,
 	xcm_config::{GovernanceLocation, LocationToAccountId, PeopleLocation},
 	AllPalletsWithSystem, Balances, Block, Executive, Runtime, RuntimeCall, RuntimeOrigin, System,
-	TransactionStorage, TxExtension, UncheckedExtrinsic,
+	TransactionStorage, TxExtension, UncheckedExtrinsic, ValidateStorageCalls,
 };
 use bulletin_transaction_storage_primitives::cids::{
 	calculate_cid, CidConfig, HashingAlgorithm, RAW_CODEC,
@@ -28,13 +29,14 @@ use codec::Encode;
 use frame_support::{
 	assert_err, assert_noop, assert_ok,
 	dispatch::GetDispatchInfo,
-	traits::{fungible::Mutate, Hooks, IntegrityTest},
+	traits::{fungible::Mutate, Contains, Get, Hooks, IntegrityTest},
 };
+use pallet_bulletin_data_renewal::{Call as RenewalCall, PermanentExtent, WeightInfo as _};
 use pallet_bulletin_transaction_storage::{
 	extension::{AllowanceBasedPriority, ALLOWANCE_PRIORITY_BOOST},
 	AllowedAuthorizers, AuthorizationExtent, AuthorizationScope, AuthorizerBudget,
-	Call as TxStorageCall, Origin as TxStorageOrigin, Quota, DEFAULT_MAX_TRANSACTION_SIZE,
-	MAX_WRAPPER_DEPTH,
+	Call as TxStorageCall, Config as TxStorageConfig, Origin as TxStorageOrigin, Quota,
+	TransactionRef, DEFAULT_MAX_TRANSACTION_SIZE, MAX_WRAPPER_DEPTH,
 };
 use parachains_common::{AccountId, BlockNumber, Signature};
 use parachains_runtimes_test_utils::GovernanceOrigin;
@@ -300,15 +302,33 @@ fn wrap_call_utility_variants(call: RuntimeCall) -> Vec<(RuntimeCall, &'static s
 /// See [`pallet_bulletin_transaction_storage::ensure_weight_sanity`].
 #[test]
 fn transaction_storage_weight_sanity() {
+	// Collator-side PoV cap: default 85% of max_pov_size.
+	// See cumulus/client/consensus/aura/src/collators/slot_based/block_builder_task.rs
+	const POV_PERCENT: Option<u64> = Some(85);
+	// Mandatory on the same worst-case block as the storage pallet's own mandatory work: the
+	// expiry sweep queues renewals and the inherent drains them in that very block.
+	let renewal_drain =
+		<Runtime as pallet_bulletin_data_renewal::Config>::WeightInfo::process_pending_renewals(
+			<Runtime as TxStorageConfig>::MaxBlockTransactions::get(),
+		);
 	pallet_bulletin_transaction_storage::ensure_weight_sanity::<Runtime>(
-		// Collator-side PoV cap: default 85% of max_pov_size.
-		// See cumulus/client/consensus/aura/src/collators/slot_based/block_builder_task.rs
-		Some(85),
-		// Mandatory work on the same worst-case block, on top of the storage pallet's own.
-		// Upstream accounts for the renewal drain here; this chain does not ship
-		// `pallet-bulletin-data-renewal`, so there is none.
-		Weight::zero(),
+		POV_PERCENT,
+		renewal_drain,
 	);
+	pallet_bulletin_data_renewal::ensure_weight_sanity::<Runtime>(POV_PERCENT);
+}
+
+/// Both tag on the bare content hash, and no pallet sees the other's params — the storage
+/// pallet's `integrity_test` covers every other pair.
+#[test]
+fn renew_and_promote_tag_prefixes_differ() {
+	pallet_bulletin_transaction_storage::assert_distinct_tag_prefixes(&[
+		("RenewTxParams", <Runtime as pallet_bulletin_data_renewal::Config>::RenewTxParams::get()),
+		(
+			"PromoteTxParams",
+			<Runtime as pallet_bulletin_hop_promotion::Config>::PromoteTxParams::get(),
+		),
+	]);
 }
 
 #[test]
@@ -327,7 +347,7 @@ fn authorize_account_via_root_works() {
 				transactions: 0,
 				transactions_allowance: 5,
 				bytes: 0,
-				extra: (),
+				extra: PermanentExtent { bytes_permanent: 0 },
 				bytes_allowance: 1024 * 1024,
 			},
 		);
@@ -375,7 +395,7 @@ fn xcm_from_people_chain_is_accepted_as_authorizer() {
 				transactions: 0,
 				transactions_allowance: 3,
 				bytes: 0,
-				extra: (),
+				extra: PermanentExtent { bytes_permanent: 0 },
 				bytes_allowance: 512 * 1024,
 			},
 		);
@@ -411,7 +431,7 @@ fn authorize_preimage_via_root_works() {
 				transactions: 0,
 				transactions_allowance: 1,
 				bytes: 0,
-				extra: (),
+				extra: PermanentExtent { bytes_permanent: 0 },
 				bytes_allowance: DEFAULT_MAX_TRANSACTION_SIZE as u64,
 			},
 		);
@@ -469,8 +489,6 @@ fn store_with_cid_config_works() {
 fn transaction_storage_max_throughput_per_block() {
 	// The Polkadot Bulletin chain is configured for:
 	//   512 transactions × 8 MiB = 4 GiB of storage per block.
-	use frame_support::traits::Get;
-	use pallet_bulletin_transaction_storage::Config as TxStorageConfig;
 	let max_block_txs: u32 = <Runtime as TxStorageConfig>::MaxBlockTransactions::get();
 	assert_eq!(max_block_txs, 512u32);
 	let max_size: u32 = <Runtime as TxStorageConfig>::MaxTransactionSize::get();
@@ -535,9 +553,15 @@ fn allowance_based_priority_works() {
 		));
 		assert_eq!(priority(origin.clone(), &store), ALLOWANCE_PRIORITY_BOOST);
 
-		// A call that is not a storage leaf gets no boost even under `Origin::Authorized`:
-		// only `store`/`store_with_cid_config` compete for the boost slots.
-		let other = RuntimeCall::System(frame_system::Call::<Runtime>::remark { remark: vec![1] });
+		// A `TransactionStorage` call that is not a store gets no boost even under
+		// `Origin::Authorized`: only `store`/`store_with_cid_config` compete for the boost
+		// slots. Must be a call of this pallet — anything else returns early at
+		// `AllowanceBasedPriority`'s `is_sub_type` check and never reaches the inner match.
+		let other = RuntimeCall::TransactionStorage(TxStorageCall::<Runtime>::authorize_account {
+			who: who.clone(),
+			transactions: 1,
+			bytes: 1,
+		});
 		assert_eq!(priority(origin, &other), 0);
 	});
 }
@@ -572,11 +596,7 @@ fn construct_extrinsic(sender: sp_core::sr25519::Pair, call: RuntimeCall) -> Unc
 				pallet_transaction_payment::ChargeTransactionPayment::<Runtime>::from(0),
 			),
 			frame_metadata_hash_extension::CheckMetadataHash::<Runtime>::new(false),
-			pallet_bulletin_transaction_storage::extension::ValidateAuthorizedCalls::<
-				Runtime,
-				bulletin_polkadot_runtime::storage::StorageCallInspector,
-				(pallet_bulletin_transaction_storage::extension::StorageLeaves<Runtime>,),
-			>::default(),
+			ValidateStorageCalls::default(),
 			pallet_bulletin_transaction_storage::extension::AllowanceBasedPriority::<
 				Runtime,
 				pallet_bulletin_transaction_storage::extension::FlatBoost,
@@ -625,7 +645,7 @@ fn account_authorizer_consumes_quota() {
 				transactions: 0,
 				transactions_allowance: 3,
 				bytes: 0,
-				extra: (),
+				extra: PermanentExtent { bytes_permanent: 0 },
 				bytes_allowance: 1024,
 			},
 		);
@@ -667,7 +687,7 @@ fn valid_until_clamps_granted_authorization_expiry() {
 				transactions: 0,
 				transactions_allowance: 1,
 				bytes: 0,
-				extra: (),
+				extra: PermanentExtent { bytes_permanent: 0 },
 				bytes_allowance: 1024,
 			},
 		);
@@ -862,6 +882,70 @@ fn xcm_transact_wrapped_store_is_blocked() {
 }
 
 #[test]
+fn xcm_transact_renewals_are_blocked() {
+	// `force_renew` accepts `AuthorizedCaller::Root`, and `GovernanceLocation` maps to
+	// Superuser, so nothing but the filter stands between an XCM `Transact` and a permanent
+	// commitment that no authorization paid for. Same for the registrations. `disable_auto_renew`
+	// is deliberately dispatchable: it releases a registration, and Root needs it for cleanup.
+	new_test_ext().execute_with(|| {
+		advance_block();
+
+		// Store a real entry first, so a `RenewedNotFound` dispatch error cannot be what makes
+		// the `Transact` fail — the filter has to be the only thing rejecting it.
+		let account = Sr25519Keyring::Alice;
+		let who: AccountId = account.to_account_id();
+		let data = vec![42u8; 100];
+		let content_hash = sp_io::hashing::blake2_256(&data);
+		let entry = TransactionRef::ContentHash(content_hash);
+		assert_ok!(TransactionStorage::authorize_account(
+			RuntimeOrigin::root(),
+			who,
+			2,
+			2 * data.len() as u64,
+		));
+		assert_ok_ok(construct_and_apply_extrinsic(
+			account.pair(),
+			RuntimeCall::TransactionStorage(TxStorageCall::<Runtime>::store { data }),
+		));
+		advance_block();
+
+		let blocked = [
+			("renew", RenewalCall::<Runtime>::renew { entry: entry.clone() }),
+			("force_renew", RenewalCall::<Runtime>::force_renew { entry }),
+			("enable_auto_renew", RenewalCall::<Runtime>::enable_auto_renew { content_hash }),
+		];
+		for (name, call) in blocked {
+			let call = RuntimeCall::DataRenewal(call);
+			// Directly, and nested in each `Utility` wrapper — `StorageCallInspector` recurses.
+			for (call, label) in
+				core::iter::once((call.clone(), "direct")).chain(wrap_call_utility_variants(call))
+			{
+				assert!(
+					StorageCallInspector::contains(&call),
+					"SafeCallFilter must claim {label}({name})",
+				);
+				let outcome = transact_from_governance(call);
+				assert!(
+					outcome.clone().ensure_complete().is_err(),
+					"XCM Transact {label}({name}) must be blocked, got: {outcome:?}",
+				);
+			}
+		}
+
+		// Nothing was committed: `force_renew` would otherwise have bumped both counters.
+		assert_eq!(pallet_bulletin_data_renewal::PermanentStorageUsed::<Runtime>::get(), 0);
+		assert!(pallet_bulletin_data_renewal::Renewals::<Runtime>::iter().next().is_none());
+
+		assert!(
+			!StorageCallInspector::contains(&RuntimeCall::DataRenewal(
+				RenewalCall::<Runtime>::disable_auto_renew { content_hash }
+			)),
+			"disable_auto_renew must stay dispatchable for governance cleanup",
+		);
+	});
+}
+
+#[test]
 fn xcm_transact_authorize_account_works() {
 	// The counterpart to the two tests above: `authorize_account` is a management call, not a
 	// storage-mutating one, so the filter must let it through.
@@ -892,7 +976,7 @@ fn xcm_transact_authorize_account_works() {
 				transactions: 0,
 				transactions_allowance: 0,
 				bytes: 0,
-				extra: (),
+				extra: PermanentExtent { bytes_permanent: 0 },
 				bytes_allowance: 1024,
 			},
 		);
@@ -1002,7 +1086,7 @@ fn authorized_wrapped_store_rejected() {
 				transactions: 1,
 				transactions_allowance: 0,
 				bytes: data.len() as u64,
-				extra: (),
+				extra: PermanentExtent { bytes_permanent: 0 },
 				bytes_allowance: 4 * data.len() as u64,
 			},
 		);
@@ -1053,7 +1137,7 @@ fn batch_store_with_mixed_preimage_and_account_auth_rejected() {
 				transactions: 0,
 				transactions_allowance: 1,
 				bytes: 0,
-				extra: (),
+				extra: PermanentExtent { bytes_permanent: 0 },
 				bytes_allowance: 100,
 			},
 			"preimage authorization must not be consumed",
@@ -1064,7 +1148,7 @@ fn batch_store_with_mixed_preimage_and_account_auth_rejected() {
 				transactions: 0,
 				transactions_allowance: 0,
 				bytes: 0,
-				extra: (),
+				extra: PermanentExtent { bytes_permanent: 0 },
 				bytes_allowance: 200,
 			},
 			"account authorization must not be consumed",
@@ -1120,7 +1204,7 @@ fn mixed_batch_store_and_authorize_rejected() {
 				transactions: 0,
 				transactions_allowance: 0,
 				bytes: 0,
-				extra: (),
+				extra: PermanentExtent { bytes_permanent: 0 },
 				bytes_allowance: data.len() as u64,
 			},
 		);
@@ -1164,7 +1248,7 @@ fn mixed_batch_store_and_non_storage_call_rejected() {
 				transactions: 0,
 				transactions_allowance: 0,
 				bytes: 0,
-				extra: (),
+				extra: PermanentExtent { bytes_permanent: 0 },
 				bytes_allowance: data.len() as u64,
 			},
 		);
@@ -1263,7 +1347,7 @@ fn wrapped_authorize_account_succeeds() {
 				transactions: 0,
 				transactions_allowance: 10,
 				bytes: 0,
-				extra: (),
+				extra: PermanentExtent { bytes_permanent: 0 },
 				bytes_allowance: 10 * 1024,
 			},
 		);
@@ -1311,7 +1395,7 @@ fn preimage_authorized_storage_transactions_work() {
 				transactions: 1,
 				transactions_allowance: 1,
 				bytes: 24,
-				extra: (),
+				extra: PermanentExtent { bytes_permanent: 0 },
 				bytes_allowance: 24,
 			},
 		);
@@ -1352,7 +1436,7 @@ fn signed_store_prefers_preimage_authorization_over_account() {
 				transactions: 1,
 				transactions_allowance: 1,
 				bytes: 100,
-				extra: (),
+				extra: PermanentExtent { bytes_permanent: 0 },
 				bytes_allowance: 100,
 			},
 			"preimage authorization should be consumed",
@@ -1363,7 +1447,7 @@ fn signed_store_prefers_preimage_authorization_over_account() {
 				transactions: 0,
 				transactions_allowance: 0,
 				bytes: 0,
-				extra: (),
+				extra: PermanentExtent { bytes_permanent: 0 },
 				bytes_allowance: 500,
 			},
 			"account authorization should be untouched",
@@ -1405,14 +1489,61 @@ fn authorized_storage_transactions_are_for_free() {
 	});
 }
 
+/// One-shot `renew` pre-pays the renewal at registration time: `bytes_permanent` advances by
+/// the entry's size, charged against the same `bytes_allowance` as `bytes` but tracked
+/// separately. Also pins the two composed runtime APIs, whose bodies only exist inside
+/// `impl_runtime_apis!` and are therefore unreachable from the pallets' own tests.
+#[test]
+fn renew_one_shot_prepays_bytes_permanent() {
+	use pallet_bulletin_transaction_storage_runtime_api::runtime_decl_for_bulletin_transaction_storage_api::BulletinTransactionStorageApiV1;
+
+	new_test_ext().execute_with(|| {
+		let account = Sr25519Keyring::Bob;
+		let who: AccountId = account.to_account_id();
+		let data = vec![0u8; 24];
+		let content_hash = sp_io::hashing::blake2_256(&data);
+		let entry = TransactionRef::ContentHash(content_hash);
+
+		// Two transaction slots (one `store`, one `renew`) and enough bytes for both
+		// counters, which are checked against `bytes_allowance` independently.
+		assert_ok!(TransactionStorage::authorize_account(
+			RuntimeOrigin::root(),
+			who.clone(),
+			2,
+			48,
+		));
+		assert_ok_ok(construct_and_apply_extrinsic(
+			account.pair(),
+			RuntimeCall::TransactionStorage(TxStorageCall::<Runtime>::store { data: data.clone() }),
+		));
+		advance_block();
+
+		let before = TransactionStorage::account_authorization_extent(who.clone());
+		assert!(Runtime::can_renew(who.clone(), entry.clone()));
+		assert_ok_ok(construct_and_apply_extrinsic(
+			account.pair(),
+			RuntimeCall::DataRenewal(RenewalCall::<Runtime>::renew { entry }),
+		));
+
+		let after = TransactionStorage::account_authorization_extent(who.clone());
+		assert_eq!(after.extra.bytes_permanent, before.extra.bytes_permanent + data.len() as u64);
+		assert_eq!(after.transactions, before.transactions + 1);
+		assert_eq!(after.bytes, before.bytes);
+
+		// The runtime API surfaces that same counter as `bytes_permanent_used`.
+		let summary = Runtime::account_authorization(who).expect("authorization is active");
+		assert_eq!(summary.bytes_permanent_used, after.extra.bytes_permanent);
+		assert_eq!(summary.bytes_used, after.bytes);
+		assert_eq!(summary.transactions_used, after.transactions);
+		assert_eq!(summary.bytes_allowance, after.bytes_allowance);
+	});
+}
+
 #[test]
 fn transaction_storage_runtime_sizes() {
 	// Sweep the whole valid size range through the real extrinsic pipeline (not the pallet
 	// call directly), then confirm `MaxTransactionSize + 1` is refused.
 	new_test_ext().execute_with(|| {
-		use frame_support::traits::Get;
-		use pallet_bulletin_transaction_storage::Config as TxStorageConfig;
-
 		let account = Sr25519Keyring::Alice;
 		let who: AccountId = account.to_account_id();
 		let max = <<Runtime as TxStorageConfig>::MaxTransactionSize as Get<u32>>::get() as usize;
@@ -1441,7 +1572,7 @@ fn transaction_storage_runtime_sizes() {
 				transactions: sizes.len() as u32,
 				transactions_allowance: 0,
 				bytes: total_bytes,
-				extra: (),
+				extra: PermanentExtent { bytes_permanent: 0 },
 				bytes_allowance: total_bytes,
 			},
 		);
@@ -1460,7 +1591,7 @@ fn transaction_storage_runtime_sizes() {
 				transactions: sizes.len() as u32,
 				transactions_allowance: 0,
 				bytes: total_bytes,
-				extra: (),
+				extra: PermanentExtent { bytes_permanent: 0 },
 				bytes_allowance: total_bytes + oversized,
 			},
 		);
@@ -1512,7 +1643,7 @@ fn people_chain_can_authorize_storage_with_transact() {
 				transactions: 0,
 				transactions_allowance: 0,
 				bytes: 0,
-				extra: (),
+				extra: PermanentExtent { bytes_permanent: 0 },
 				bytes_allowance: 1024,
 			},
 		);
@@ -1587,7 +1718,7 @@ fn xcm_transact_authorize_account_from_asset_hub_contract() {
 			transactions: 0,
 			transactions_allowance: txs,
 			bytes: 0,
-			extra: (),
+			extra: PermanentExtent { bytes_permanent: 0 },
 			bytes_allowance: bytes,
 		},
 	);

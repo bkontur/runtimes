@@ -16,8 +16,8 @@
 
 //! Storage-specific configurations.
 
-use crate::DAYS;
 use super::{xcm_config::PeopleLocation, Runtime, RuntimeCall, RuntimeEvent, RuntimeHoldReason};
+use crate::DAYS;
 use alloc::vec::Vec;
 use bulletin_pallets_common::inspect_utility_wrapper;
 use frame_support::{
@@ -26,10 +26,17 @@ use frame_support::{
 };
 use pallet_bulletin_transaction_storage::{
 	AsAuthorizer, CallInspector, EnsureAllowedAuthorizers, ValidTransactionParams,
-	DEFAULT_MAX_BLOCK_TRANSACTIONS, DEFAULT_MAX_TRANSACTION_SIZE,
+	DEFAULT_MAX_BLOCK_TRANSACTIONS, DEFAULT_MAX_TRANSACTION_SIZE, MAX_WRAPPER_DEPTH,
 };
 use pallet_xcm::EnsureXcm;
 use sp_runtime::transaction_validity::{TransactionLongevity, TransactionPriority};
+
+parameter_types! {
+	/// Cap on the total bytes committed to permanent storage (via `renew`) across all
+	/// authorizations on this chain. Seeded at 1.7 TiB; storage-backed so governance
+	/// (root) can raise/lower it via `system.set_storage` without a runtime upgrade.
+	pub storage MaxPermanentStorageSize: u64 = 17 * 1024 * 1024 * 1024 * 1024 / 10;
+}
 
 // Permissionless cleanup sits at the top so it always runs before stores compete for
 // blockspace.
@@ -48,6 +55,8 @@ parameter_types! {
 	// the pool.
 	pub const StoreTxParams: ValidTransactionParams =
 		ValidTransactionParams::new("TransactionStorageStore", STORE_PRIORITY, TX_LONGEVITY);
+	pub const RenewTxParams: ValidTransactionParams =
+		ValidTransactionParams::new("TransactionStorageRenew", STORE_PRIORITY, TX_LONGEVITY);
 	pub const AuthorizeTxParams: ValidTransactionParams =
 		ValidTransactionParams::new("TransactionStorageAuthorize", STORE_PRIORITY, TX_LONGEVITY);
 	pub const RemoveExpiredAccountAuthorizationTxParams: ValidTransactionParams =
@@ -75,9 +84,9 @@ parameter_types! {
 /// authorization.
 ///
 /// Also implements [`Contains<RuntimeCall>`] returning `true` for storage-mutating calls
-/// (store, store_with_cid_config). Used with `EverythingBut` as the XCM
-/// `SafeCallFilter` to block these calls from XCM dispatch — they require on-chain
-/// authorization that XCM cannot provide.
+/// (store, store_with_cid_config, renew, force_renew, enable_auto_renew). Used with
+/// `EverythingBut` as the XCM `SafeCallFilter` to block these calls from XCM dispatch — they
+/// require on-chain authorization that XCM cannot provide.
 #[derive(Clone, PartialEq, Eq, Default)]
 pub struct StorageCallInspector;
 
@@ -93,13 +102,47 @@ impl pallet_bulletin_transaction_storage::CallInspector<Runtime> for StorageCall
 	}
 }
 
-/// Returns `true` for storage-mutating TransactionStorage calls (store,
-/// store_with_cid_config). Recursively inspects wrapper calls (Utility) to prevent bypass via
-/// nesting.
+/// Returns `true` for calls that commit data to storage — the TransactionStorage stores plus
+/// the renewals that extend their retention. Recursively inspects wrapper calls (Utility) to
+/// prevent bypass via nesting.
 /// Used with `EverythingBut` as the XCM `SafeCallFilter`.
 impl Contains<RuntimeCall> for StorageCallInspector {
 	fn contains(call: &RuntimeCall) -> bool {
-		Self::is_storage_mutating_call(call, 0)
+		Self::is_storage_mutating_call(call, 0) || Self::is_renewal_committing_call(call, 0)
+	}
+}
+
+impl StorageCallInspector {
+	/// Renewal counterpart to
+	/// [`CallInspector::is_storage_mutating_call`], which only knows the storage pallet's own
+	/// calls — the pallet leaves renewals to the runtime.
+	///
+	/// These have to be claimed explicitly rather than left to each dispatchable's origin
+	/// check: `ensure_authorized` accepts Root, and `LocationAsSuperuser` hands Root to
+	/// `Transact` from the Relay Chain and Asset Hub, so `force_renew` over XCM would commit
+	/// permanent bytes against no authorization at all. `disable_auto_renew` is deliberately
+	/// absent — it releases a registration rather than committing one, and Root needs it for
+	/// governance cleanup.
+	fn is_renewal_committing_call(call: &RuntimeCall, depth: u32) -> bool {
+		use pallet_bulletin_data_renewal::Call as RenewalCall;
+		if let RuntimeCall::DataRenewal(inner) = call {
+			return matches!(
+				inner,
+				RenewalCall::renew { .. } |
+					RenewalCall::force_renew { .. } |
+					RenewalCall::enable_auto_renew { .. }
+			);
+		}
+		if depth >= MAX_WRAPPER_DEPTH {
+			// Same fail-safe as the storage-call walk: treat excessively nested wrappers as
+			// committing rather than risk letting a hidden renewal through.
+			return true;
+		}
+		<Self as CallInspector<Runtime>>::inspect_wrapper(call).is_some_and(|inner_calls| {
+			inner_calls
+				.into_iter()
+				.any(|inner| Self::is_renewal_committing_call(inner, depth + 1))
+		})
 	}
 }
 
@@ -124,11 +167,7 @@ impl pallet_bulletin_transaction_storage::Config for Runtime {
 				crate::BlockNumber,
 			>,
 			// The People Chain can authorize for storage allowances.
-			AsAuthorizer<
-				EnsureXcm<Equals<PeopleLocation>>,
-				Self::AccountId,
-				crate::BlockNumber,
-			>,
+			AsAuthorizer<EnsureXcm<Equals<PeopleLocation>>, Self::AccountId, crate::BlockNumber>,
 		>,
 		// Accounts registered in `AllowedAuthorizers` storage (managed via
 		// `add_authorizer` / `remove_authorizer`).
@@ -139,14 +178,21 @@ impl pallet_bulletin_transaction_storage::Config for Runtime {
 	type RemoveExpiredAccountAuthorizationTxParams = RemoveExpiredAccountAuthorizationTxParams;
 	type RemoveExpiredPreimageAuthorizationTxParams = RemoveExpiredPreimageAuthorizationTxParams;
 	type RemoveExhaustedAuthorizerTxParams = RemoveExhaustedAuthorizerTxParams;
-	// Renewal is not shipped on this chain: `pallet-bulletin-data-renewal` is not wired in, so
-	// the renewal-facing hooks stay at their no-op defaults and entries simply age out.
-	type EntryMeta = ();
-	type AuthorizationExtra = ();
-	type OnObsoleteTransactions = ();
+	// Opaque payloads owned by the renewal pallet: `EntryKind` marks which entries were
+	// appended by a renewal, `PermanentExtent` carries the per-authorization renewed-byte
+	// counter, and `DataRenewal` gets the expiry sweep so registered entries are requeued.
+	type EntryMeta = bulletin_transaction_storage_primitives::EntryKind;
+	type AuthorizationExtra = pallet_bulletin_data_renewal::PermanentExtent;
+	type OnObsoleteTransactions = crate::DataRenewal;
 	#[cfg(feature = "runtime-benchmarks")]
-    // TODO: just comment for me - use RenewalBenchmarkHelper when 0-9-0-draft
-	type BenchmarkHelper = pallet_bulletin_transaction_storage::benchmarking::DefaultCheckProofHelper;
+	type BenchmarkHelper = pallet_bulletin_data_renewal::RenewalBenchmarkHelper;
+}
+
+impl pallet_bulletin_data_renewal::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type WeightInfo = crate::weights::pallet_bulletin_data_renewal::WeightInfo<Runtime>;
+	type MaxPermanentStorageSize = MaxPermanentStorageSize;
+	type RenewTxParams = RenewTxParams;
 }
 
 parameter_types! {

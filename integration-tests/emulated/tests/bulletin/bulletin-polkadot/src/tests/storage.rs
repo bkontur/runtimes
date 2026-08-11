@@ -21,6 +21,7 @@ use emulated_integration_tests_common::{
 	impls::{assert_expected_events, bx, Encode},
 	macros::{pallet_message_queue, pallet_xcm, Dispatchable},
 };
+use pallet_bulletin_data_renewal::PermanentExtent;
 use pallet_bulletin_transaction_storage::AuthorizationExtent;
 
 /// The People chain authorizes an account on the Bulletin chain via XCM Transact.
@@ -100,7 +101,7 @@ fn people_chain_can_authorize_account_on_bulletin() {
 				transactions: 0,
 				transactions_allowance: transactions,
 				bytes: 0,
-				extra: (),
+				extra: PermanentExtent { bytes_permanent: 0 },
 				bytes_allowance: bytes,
 			},
 		);
