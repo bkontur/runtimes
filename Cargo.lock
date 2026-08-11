@@ -2840,7 +2840,6 @@ dependencies = [
  "emulated-integration-tests-common",
  "frame-support",
  "integration-tests-helpers",
- "pallet-bulletin-data-renewal",
  "pallet-bulletin-transaction-storage",
  "parachains-common",
  "polkadot-system-emulated-network",
