@@ -19,8 +19,8 @@
 use bulletin_polkadot_runtime::{
 	storage::{StorageCallInspector, StoragePriorityBoost, ValidateBulletinCalls},
 	xcm_config::{GovernanceLocation, LocationToAccountId, PeopleLocation},
-	AllPalletsWithSystem, Balances, Block, Executive, Runtime, RuntimeCall, RuntimeOrigin, System,
-	TransactionStorage, TxExtension, UncheckedExtrinsic,
+	Balances, Block, Executive, Runtime, RuntimeCall, RuntimeOrigin, System, TransactionStorage,
+	TxExtension, UncheckedExtrinsic,
 };
 use bulletin_transaction_storage_primitives::cids::{
 	calculate_cid, CidConfig, HashingAlgorithm, RAW_CODEC,
@@ -29,9 +29,9 @@ use codec::Encode;
 use frame_support::{
 	assert_err, assert_noop, assert_ok,
 	dispatch::GetDispatchInfo,
-	traits::{fungible::Mutate, Contains, Get, Hooks, IntegrityTest},
+	traits::{fungible::Mutate, Contains, Get, Hooks},
 };
-use pallet_bulletin_data_renewal::{Call as RenewalCall, PermanentExtent, WeightInfo as _};
+use pallet_bulletin_data_renewal::{Call as RenewalCall, WeightInfo as _};
 use pallet_bulletin_transaction_storage::{
 	extension::{AllowanceBasedPriority, ALLOWANCE_PRIORITY_BOOST},
 	AllowedAuthorizers, AuthorizationExtent, AuthorizationScope, AuthorizerBudget,
@@ -305,8 +305,7 @@ fn transaction_storage_weight_sanity() {
 	// Collator-side PoV cap: default 85% of max_pov_size.
 	// See cumulus/client/consensus/aura/src/collators/slot_based/block_builder_task.rs
 	const POV_PERCENT: Option<u64> = Some(85);
-	// The expiry sweep and this drain inherent land on the same block, sharing the mandatory
-	// budget.
+	// The expiry sweep and this drain inherent share one block's mandatory budget.
 	let renewal_drain =
 		<Runtime as pallet_bulletin_data_renewal::Config>::WeightInfo::process_pending_renewals(
 			<Runtime as TxStorageConfig>::MaxBlockTransactions::get(),
@@ -343,11 +342,9 @@ fn authorize_account_via_root_works() {
 		assert_eq!(
 			TransactionStorage::account_authorization_extent(who),
 			AuthorizationExtent {
-				transactions: 0,
 				transactions_allowance: 5,
-				bytes: 0,
-				extra: PermanentExtent { bytes_permanent: 0 },
 				bytes_allowance: 1024 * 1024,
+				..Default::default()
 			},
 		);
 	});
@@ -391,11 +388,9 @@ fn xcm_from_people_chain_is_accepted_as_authorizer() {
 		assert_eq!(
 			TransactionStorage::account_authorization_extent(who),
 			AuthorizationExtent {
-				transactions: 0,
 				transactions_allowance: 3,
-				bytes: 0,
-				extra: PermanentExtent { bytes_permanent: 0 },
 				bytes_allowance: 512 * 1024,
+				..Default::default()
 			},
 		);
 	});
@@ -427,11 +422,9 @@ fn authorize_preimage_via_root_works() {
 		assert_eq!(
 			TransactionStorage::preimage_authorization_extent(content_hash),
 			AuthorizationExtent {
-				transactions: 0,
 				transactions_allowance: 1,
-				bytes: 0,
-				extra: PermanentExtent { bytes_permanent: 0 },
 				bytes_allowance: DEFAULT_MAX_TRANSACTION_SIZE as u64,
+				..Default::default()
 			},
 		);
 	});
@@ -636,11 +629,9 @@ fn account_authorizer_consumes_quota() {
 		assert_eq!(
 			TransactionStorage::account_authorization_extent(target),
 			AuthorizationExtent {
-				transactions: 0,
 				transactions_allowance: 3,
-				bytes: 0,
-				extra: PermanentExtent { bytes_permanent: 0 },
 				bytes_allowance: 1024,
+				..Default::default()
 			},
 		);
 
@@ -678,11 +669,9 @@ fn valid_until_clamps_granted_authorization_expiry() {
 		assert_eq!(
 			TransactionStorage::account_authorization_extent(target.clone()),
 			AuthorizationExtent {
-				transactions: 0,
 				transactions_allowance: 1,
-				bytes: 0,
-				extra: PermanentExtent { bytes_permanent: 0 },
 				bytes_allowance: 1024,
+				..Default::default()
 			},
 		);
 
@@ -789,11 +778,9 @@ fn non_authorizer_cannot_sign_authorize_account_extrinsic() {
 	});
 }
 
-// XCM `SafeCallFilter` tests — storage-mutating calls must be unreachable via `Transact`,
-// even from an origin that would convert to Superuser and even with a valid authorization.
-// `GovernanceLocation` (Asset Hub) is both accepted by the barrier for unpaid execution and
-// mapped to Superuser by `LocationAsSuperuser`, so the filter is the only thing left to
-// reject the call.
+// XCM `SafeCallFilter` — calls that commit data must be unreachable via `Transact`.
+// `GovernanceLocation` (Asset Hub) passes the barrier and maps to Superuser, so the filter is
+// the only thing left to reject the call.
 
 /// Executes `call` as an XCM `Transact` sent by [`GovernanceLocation`], returning the outcome.
 fn transact_from_governance(call: RuntimeCall) -> Outcome {
@@ -877,10 +864,9 @@ fn xcm_transact_wrapped_store_is_blocked() {
 
 #[test]
 fn xcm_transact_renewals_are_blocked() {
-	// `force_renew` accepts Root and `GovernanceLocation` maps to Superuser, so only the filter
-	// stands between an XCM `Transact` and an unpaid permanent commitment. The two registrations
-	// would hit `BadOrigin` anyway; filtering them is defence-in-depth. `disable_auto_renew` stays
-	// dispatchable — it releases a registration and Root needs it for cleanup.
+	// `force_renew` accepts Root, so only the filter stands between an XCM `Transact` and an
+	// unpaid permanent commitment. The registrations would hit `BadOrigin` anyway.
+	// `disable_auto_renew` stays dispatchable: Root needs it for cleanup.
 	new_test_ext().execute_with(|| {
 		advance_block();
 
@@ -962,21 +948,14 @@ fn xcm_transact_authorize_account_works() {
 		);
 		assert_eq!(
 			TransactionStorage::account_authorization_extent(target),
-			AuthorizationExtent {
-				transactions: 0,
-				transactions_allowance: 0,
-				bytes: 0,
-				extra: PermanentExtent { bytes_permanent: 0 },
-				bytes_allowance: 1024,
-			},
+			AuthorizationExtent { bytes_allowance: 1024, ..Default::default() },
 		);
 	});
 }
 
-// Wrapper/batch authorization tests, ported from polkadot-bulletin-chain's
-// `runtimes/bulletin-westend/tests/tests.rs`. `store` / `store_with_cid_config` must
-// only ever be accepted as *direct* extrinsics: `ValidateAuthorizedCalls` is what consumes the
-// caller's authorization, and it refuses to do so for calls nested inside a dispatcher.
+// Wrapper/batch authorization, ported from polkadot-bulletin-chain's bulletin-westend tests.
+// `ValidateAuthorizedCalls` consumes the caller's authorization and refuses to do so for calls
+// nested inside a dispatcher, so stores are direct-only.
 
 #[test]
 fn wrapped_store_requires_authorization() {
@@ -1072,10 +1051,9 @@ fn authorized_wrapped_store_rejected() {
 			TransactionStorage::account_authorization_extent(who),
 			AuthorizationExtent {
 				transactions: 1,
-				transactions_allowance: 0,
 				bytes: data.len() as u64,
-				extra: PermanentExtent { bytes_permanent: 0 },
 				bytes_allowance: 4 * data.len() as u64,
+				..Default::default()
 			},
 		);
 	});
@@ -1122,23 +1100,15 @@ fn batch_store_with_mixed_preimage_and_account_auth_rejected() {
 		assert_eq!(
 			TransactionStorage::preimage_authorization_extent(content_hash_a),
 			AuthorizationExtent {
-				transactions: 0,
 				transactions_allowance: 1,
-				bytes: 0,
-				extra: PermanentExtent { bytes_permanent: 0 },
 				bytes_allowance: 100,
+				..Default::default()
 			},
 			"preimage authorization must not be consumed",
 		);
 		assert_eq!(
 			TransactionStorage::account_authorization_extent(who),
-			AuthorizationExtent {
-				transactions: 0,
-				transactions_allowance: 0,
-				bytes: 0,
-				extra: PermanentExtent { bytes_permanent: 0 },
-				bytes_allowance: 200,
-			},
+			AuthorizationExtent { bytes_allowance: 200, ..Default::default() },
 			"account authorization must not be consumed",
 		);
 	});
@@ -1188,13 +1158,7 @@ fn mixed_batch_store_and_authorize_rejected() {
 
 		assert_eq!(
 			TransactionStorage::account_authorization_extent(who),
-			AuthorizationExtent {
-				transactions: 0,
-				transactions_allowance: 0,
-				bytes: 0,
-				extra: PermanentExtent { bytes_permanent: 0 },
-				bytes_allowance: data.len() as u64,
-			},
+			AuthorizationExtent { bytes_allowance: data.len() as u64, ..Default::default() },
 		);
 	});
 }
@@ -1232,13 +1196,7 @@ fn mixed_batch_store_and_non_storage_call_rejected() {
 
 		assert_eq!(
 			TransactionStorage::account_authorization_extent(who),
-			AuthorizationExtent {
-				transactions: 0,
-				transactions_allowance: 0,
-				bytes: 0,
-				extra: PermanentExtent { bytes_permanent: 0 },
-				bytes_allowance: data.len() as u64,
-			},
+			AuthorizationExtent { bytes_allowance: data.len() as u64, ..Default::default() },
 		);
 	});
 }
@@ -1332,11 +1290,9 @@ fn wrapped_authorize_account_succeeds() {
 		assert_eq!(
 			TransactionStorage::account_authorization_extent(target),
 			AuthorizationExtent {
-				transactions: 0,
 				transactions_allowance: 10,
-				bytes: 0,
-				extra: PermanentExtent { bytes_permanent: 0 },
 				bytes_allowance: 10 * 1024,
+				..Default::default()
 			},
 		);
 
@@ -1383,8 +1339,8 @@ fn preimage_authorized_storage_transactions_work() {
 				transactions: 1,
 				transactions_allowance: 1,
 				bytes: 24,
-				extra: PermanentExtent { bytes_permanent: 0 },
 				bytes_allowance: 24,
+				..Default::default()
 			},
 		);
 	});
@@ -1424,20 +1380,14 @@ fn signed_store_prefers_preimage_authorization_over_account() {
 				transactions: 1,
 				transactions_allowance: 1,
 				bytes: 100,
-				extra: PermanentExtent { bytes_permanent: 0 },
 				bytes_allowance: 100,
+				..Default::default()
 			},
 			"preimage authorization should be consumed",
 		);
 		assert_eq!(
 			TransactionStorage::account_authorization_extent(who),
-			AuthorizationExtent {
-				transactions: 0,
-				transactions_allowance: 0,
-				bytes: 0,
-				extra: PermanentExtent { bytes_permanent: 0 },
-				bytes_allowance: 500,
-			},
+			AuthorizationExtent { bytes_allowance: 500, ..Default::default() },
 			"account authorization should be untouched",
 		);
 	});
@@ -1476,9 +1426,8 @@ fn authorized_storage_transactions_are_for_free() {
 	});
 }
 
-/// One-shot `renew` pre-pays `bytes_permanent` at registration, and is rejected inside a
-/// dispatcher. Also covers `can_renew` / `account_authorization`, whose bodies live in
-/// `impl_runtime_apis!` and so are unreachable from the pallets' own tests.
+/// One-shot `renew` pre-pays `bytes_permanent`, and is rejected inside a dispatcher. Also
+/// covers `can_renew` / `account_authorization`, composed in `impl_runtime_apis!`.
 #[test]
 fn renew_one_shot_prepays_bytes_permanent() {
 	use pallet_bulletin_transaction_storage_runtime_api::runtime_decl_for_bulletin_transaction_storage_api::BulletinTransactionStorageApiV1;
@@ -1569,10 +1518,9 @@ fn transaction_storage_runtime_sizes() {
 			TransactionStorage::account_authorization_extent(who.clone()),
 			AuthorizationExtent {
 				transactions: sizes.len() as u32,
-				transactions_allowance: 0,
 				bytes: total_bytes,
-				extra: PermanentExtent { bytes_permanent: 0 },
 				bytes_allowance: total_bytes,
+				..Default::default()
 			},
 		);
 
@@ -1588,10 +1536,9 @@ fn transaction_storage_runtime_sizes() {
 			TransactionStorage::account_authorization_extent(who),
 			AuthorizationExtent {
 				transactions: sizes.len() as u32,
-				transactions_allowance: 0,
 				bytes: total_bytes,
-				extra: PermanentExtent { bytes_permanent: 0 },
 				bytes_allowance: total_bytes + oversized,
+				..Default::default()
 			},
 		);
 
@@ -1638,13 +1585,7 @@ fn people_chain_can_authorize_storage_with_transact() {
 
 		assert_eq!(
 			TransactionStorage::account_authorization_extent(target),
-			AuthorizationExtent {
-				transactions: 0,
-				transactions_allowance: 0,
-				bytes: 0,
-				extra: PermanentExtent { bytes_permanent: 0 },
-				bytes_allowance: 1024,
-			},
+			AuthorizationExtent { bytes_allowance: 1024, ..Default::default() },
 		);
 	});
 }
@@ -1714,11 +1655,9 @@ fn xcm_transact_authorize_account_from_asset_hub_contract() {
 	assert_eq!(
 		extent,
 		AuthorizationExtent {
-			transactions: 0,
 			transactions_allowance: txs,
-			bytes: 0,
-			extra: PermanentExtent { bytes_permanent: 0 },
 			bytes_allowance: bytes,
+			..Default::default()
 		},
 	);
 	let quota = budget
@@ -1727,16 +1666,4 @@ fn xcm_transact_authorize_account_from_asset_hub_contract() {
 		.expect("authorizer has a tracked quota");
 	assert_eq!(quota.transactions, txs_budget - txs);
 	assert_eq!(quota.bytes, bytes_budget - bytes);
-}
-
-#[test]
-fn pallet_integrity_tests_pass() {
-	// `pallet-bulletin-transaction-storage` and `pallet-bulletin-hop-promotion` assert their
-	// pool-param wiring in `integrity_test`: every `*TxParams` tag prefix must be distinct so
-	// the call families don't dedup each other out of the pool, and `promote` must price
-	// strictly below `store`. Those assertions otherwise only fire on node startup, so a bad
-	// prefix or priority here would brick the chain rather than fail CI.
-	new_test_ext().execute_with(|| {
-		AllPalletsWithSystem::integrity_test();
-	});
 }

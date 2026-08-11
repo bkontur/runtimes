@@ -107,16 +107,10 @@ impl Contains<RuntimeCall> for StorageCallInspector {
 
 impl StorageCallInspector {
 	/// Renewal counterpart to [`CallInspector::is_storage_mutating_call`], which only knows the
-	/// storage pallet's own calls.
-	///
-	/// Needed because `ensure_authorized` accepts Root and `LocationAsSuperuser` hands Root to
-	/// Relay/Asset Hub `Transact` — an XCM `force_renew` would otherwise commit permanent bytes
-	/// for free.
-	///
-	/// Phrased as an allowlist so a dispatchable added by a future pallet bump is blocked, not
-	/// silently exposed.
-	// TODO(upstream): drop this once the pallets expose a composable committing-call predicate,
-	// so the walk and the call lists live in one place.
+	/// storage pallet's calls. `ensure_authorized` accepts Root and `LocationAsSuperuser` hands
+	/// Root to Relay/Asset Hub `Transact`, so an XCM `force_renew` would otherwise commit
+	/// permanent bytes for free. An allowlist, so a call added by a future bump is blocked.
+	// TODO(upstream): drop once the pallets expose a composable committing-call predicate.
 	fn is_renewal_committing_call(call: &RuntimeCall, depth: u32) -> bool {
 		use pallet_bulletin_data_renewal::Call as RenewalCall;
 		if let RuntimeCall::DataRenewal(inner) = call {
@@ -129,8 +123,8 @@ impl StorageCallInspector {
 			);
 		}
 		<Self as CallInspector<Runtime>>::inspect_wrapper(call).is_some_and(|inner_calls| {
-			// Fail-safe matching the storage-call walk: a wrapper too deep to inspect counts as
-			// committing. Only wrappers — anything else is left to that walk's own verdict.
+			// Fail-safe, as in the storage-call walk: a wrapper too deep to inspect counts as
+			// committing.
 			depth >= MAX_WRAPPER_DEPTH ||
 				inner_calls
 					.into_iter()
@@ -139,8 +133,8 @@ impl StorageCallInspector {
 	}
 }
 
-/// One extension for both pallets' authorization-gated calls: each leaf of the call tree is
-/// offered to `StorageLeaves`, then `RenewalLeaves`.
+/// Both pallets' authorization-gated calls: each leaf is offered to `StorageLeaves`, then
+/// `RenewalLeaves`.
 pub type ValidateBulletinCalls =
 	pallet_bulletin_transaction_storage::extension::ValidateAuthorizedCalls<
 		Runtime,
