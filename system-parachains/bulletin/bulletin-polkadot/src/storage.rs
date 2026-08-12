@@ -123,7 +123,7 @@ impl StorageCallInspector {
 			);
 		}
 		<Self as CallInspector<Runtime>>::inspect_wrapper(call).is_some_and(|inner_calls| {
-			// Fail-safe, as in the storage-call walk: a wrapper too deep to inspect counts as
+			// Same fail-safe as the storage-call walk: a wrapper too deep to inspect counts as
 			// committing.
 			depth >= MAX_WRAPPER_DEPTH ||
 				inner_calls
