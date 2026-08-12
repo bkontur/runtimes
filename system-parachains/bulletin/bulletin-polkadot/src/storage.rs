@@ -186,7 +186,6 @@ impl pallet_bulletin_transaction_storage::Config for Runtime {
 	type RemoveExhaustedAuthorizerTxParams = RemoveExhaustedAuthorizerTxParams;
 	type EntryMeta = bulletin_transaction_storage_primitives::EntryKind;
 	type AuthorizationExtra = pallet_bulletin_data_renewal::PermanentExtent;
-	// Hands the expiry sweep to the renewal pallet, so registered entries are requeued.
 	type OnObsoleteTransactions = crate::DataRenewal;
 	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = pallet_bulletin_data_renewal::RenewalBenchmarkHelper;
